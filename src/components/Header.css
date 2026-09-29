@@ -1,0 +1,98 @@
+.header {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1000px;
+  height: 56px;
+  background: rgba(10, 10, 12, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
+  z-index: var(--z-header);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--sp-6);
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.header--scrolled {
+  background: rgba(5, 5, 5, 0.85);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.header__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  text-decoration: none;
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-base);
+  letter-spacing: -0.01em;
+}
+
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+}
+
+.header__nav-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  transition: color var(--transition-fast);
+}
+
+.header__nav-link:hover,
+.header__nav-link.active {
+  color: var(--color-text-primary);
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.header__icon-btn {
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition-fast);
+}
+
+.header__icon-btn:hover {
+  color: var(--color-text-primary);
+}
+
+.header__mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--color-text-primary);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .header {
+    width: calc(100% - 2rem);
+    top: 1rem;
+    padding: 0 var(--sp-4);
+  }
+  .header__nav, .header__actions { display: none; }
+  .header__mobile-toggle { display: block; }
+}

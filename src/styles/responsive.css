@@ -1,0 +1,62 @@
+/* ── Responsive Breakpoints ──
+   xl   : 1280px+
+   lg   : 1024px – 1279px
+   md   : 768px  – 1023px  (tablet)
+   sm   : 480px  – 767px   (mobile)
+   xs   : < 480px          (small mobile)
+*/
+
+/* ── Large Desktop ── */
+@media (max-width: 1280px) {
+  .container {
+    padding: 0 var(--sp-8);
+  }
+}
+
+/* ── Laptop / Tablet-Large ── */
+@media (max-width: 1024px) {
+  .container {
+    padding: 0 var(--sp-6);
+  }
+
+  /* Typography scale-down */
+  :root {
+    --font-size-6xl: 3.5rem;
+    --font-size-5xl: 2.75rem;
+    --font-size-4xl: 2rem;
+  }
+}
+
+/* ── Tablet ── */
+@media (max-width: 768px) {
+  :root {
+    --font-size-6xl: 2.75rem;
+    --font-size-5xl: 2.25rem;
+    --font-size-4xl: 1.75rem;
+    --font-size-3xl: 1.5rem;
+  }
+
+  .container {
+    padding: 0 var(--sp-5);
+  }
+}
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  :root {
+    --font-size-6xl: 2.25rem;
+    --font-size-5xl: 1.875rem;
+    --font-size-4xl: 1.5rem;
+    --font-size-3xl: 1.25rem;
+  }
+
+  .container {
+    padding: 0 var(--sp-4);
+  }
+
+  .btn-primary,
+  .btn-outline {
+    padding: var(--sp-3) var(--sp-5);
+    font-size: var(--font-size-sm);
+  }
+}
