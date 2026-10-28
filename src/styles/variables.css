@@ -1,93 +1,71 @@
+/* Hallmark · shape: Console shell · genre: modern-minimal · theme: Console · redesign: full · nav: edge-aligned · signature: captured valuation form · states: complete · console: graphite · axes: dark/grotesk-sans/chromatic-amber · contrast: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P5 H5 E4 S4 R5 V4 · weakest: S, lead with the actual valuation workflow rather than synthetic dashboard art */
 :root {
-  /* ── Core Colors ── */
-  --color-bg-primary:    #030303;
-  --color-bg-secondary:  #0a0a0a;
-  --color-bg-card:       rgba(15, 15, 15, 0.6);
-  --color-bg-card-hover: rgba(25, 25, 25, 0.8);
-  --color-bg-border-card:#1a1a1a;
-  --color-bg-section:    #050505;
-
-  /* ── Cyan / Blue Accent ── */
-  --color-primary:       #00a8ff;
-  --color-primary-dim:   rgba(0, 168, 255, 0.1);
-  --color-primary-glow:  rgba(0, 168, 255, 0.25);
-  --color-accent:        #38bdf8;
-  --color-accent-bright: #00d4ff;
-
-  /* ── Text ── */
-  --color-text-primary:   #ffffff;
-  --color-text-secondary: #a1a1aa;
-  --color-text-tertiary:  #71717a;
-  --color-text-muted:     #52525b;
-
-  /* ── Semantic ── */
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-error:   #ef4444;
-  --color-red:     #f87171;
-
-  /* ── Borders ── */
-  --color-border:       rgba(255, 255, 255, 0.06);
-  --color-border-cyan:  rgba(0, 168, 255, 0.2);
-  --color-border-hover: rgba(0, 168, 255, 0.4);
-
-  /* ── Typography ── */
-  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-size-xs:   0.6875rem;  /* 11px */
-  --font-size-sm:   0.8125rem;  /* 13px */
-  --font-size-base: 0.9375rem;  /* 15px */
-  --font-size-md:   1rem;       /* 16px */
-  --font-size-lg:   1.125rem;   /* 18px */
-  --font-size-xl:   1.25rem;    /* 20px */
-  --font-size-2xl:  1.5rem;     /* 24px */
-  --font-size-3xl:  1.875rem;   /* 30px */
-  --font-size-4xl:  2.5rem;     /* 40px */
-  --font-size-5xl:  3.5rem;     /* 56px */
-  --font-size-6xl:  4.5rem;     /* 72px */
-
-  --font-weight-light:    300;
-  --font-weight-normal:   400;
-  --font-weight-medium:   500;
+  --color-bg-primary: var(--color-paper);
+  --color-bg-secondary: var(--color-paper-3);
+  --color-bg-card: var(--color-paper-2);
+  --color-bg-card-hover: var(--color-paper-2);
+  --color-bg-border-card: var(--color-rule);
+  --color-bg-section: var(--color-paper-3);
+  --color-primary: var(--color-cool);
+  --color-primary-dim: var(--color-cool-soft);
+  --color-primary-glow: var(--color-cool-soft);
+  --color-accent-bright: var(--color-cool);
+  --color-text-primary: var(--color-ink);
+  --color-text-secondary: var(--color-ink-2);
+  --color-text-tertiary: var(--color-muted);
+  --color-text-muted: var(--color-muted);
+  --color-success: var(--color-ok);
+  --color-warning: var(--color-accent);
+  --color-error: var(--color-bad);
+  --color-red: var(--color-bad);
+  --color-border: var(--color-rule);
+  --color-border-cyan: var(--color-cool-soft);
+  --color-border-hover: var(--color-cool);
+  --font-family: var(--font-body);
+  --font-size-xs: var(--text-xs);
+  --font-size-sm: var(--text-sm);
+  --font-size-base: var(--text-md);
+  --font-size-md: var(--text-md);
+  --font-size-lg: var(--text-lg);
+  --font-size-xl: var(--text-xl);
+  --font-size-2xl: var(--text-2xl);
+  --font-size-3xl: var(--text-3xl);
+  --font-size-4xl: var(--text-section);
+  --font-size-5xl: var(--text-display-s);
+  --font-size-6xl: var(--text-display);
+  --font-weight-light: 400;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
   --font-weight-semibold: 600;
-  --font-weight-bold:     700;
-  --font-weight-extrabold:800;
-
-  --line-height-tight:   1.1;
-  --line-height-snug:    1.3;
-  --line-height-normal:  1.5;
-  --line-height-relaxed: 1.75;
-
-  /* ── Spacing ── */
-  --sp-1:  0.25rem;
-  --sp-2:  0.5rem;
-  --sp-3:  0.75rem;
-  --sp-4:  1rem;
-  --sp-5:  1.25rem;
-  --sp-6:  1.5rem;
-  --sp-8:  2rem;
-  --sp-10: 2.5rem;
-  --sp-12: 3rem;
-  --sp-16: 4rem;
-  --sp-20: 5rem;
-  --sp-24: 6rem;
-  --sp-32: 8rem;
-
-  /* ── Border Radius ── */
-  --radius-sm:   4px;
-  --radius-md:   8px;
-  --radius-lg:   12px;
-  --radius-xl:   16px;
-  --radius-2xl:  24px;
-  --radius-full: 9999px;
-
-  /* ── Layout ── */
-  --max-width: 1200px;
-  --header-height: 80px;
-
-  /* ── Transitions ── */
-  --transition-fast: 150ms ease;
-  --transition-base: 250ms ease;
-  
-  /* ── Z-index ── */
-  --z-header:  200;
+  --font-weight-bold: 600;
+  --font-weight-extrabold: 600;
+  --line-height-tight: 1.08;
+  --line-height-snug: 1.3;
+  --line-height-normal: 1.55;
+  --line-height-relaxed: 1.65;
+  --sp-1: var(--space-3xs);
+  --sp-2: var(--space-xs);
+  --sp-3: var(--space-sm);
+  --sp-4: var(--space-md);
+  --sp-5: var(--space-md);
+  --sp-6: var(--space-lg);
+  --sp-8: var(--space-lg);
+  --sp-10: var(--space-xl);
+  --sp-12: var(--space-xl);
+  --sp-16: var(--space-2xl);
+  --sp-20: var(--space-2xl);
+  --sp-24: var(--space-3xl);
+  --sp-32: var(--space-4xl);
+  --radius-sm: var(--radius-control);
+  --radius-md: var(--radius-panel);
+  --radius-lg: var(--radius-panel);
+  --radius-xl: var(--radius-card);
+  --radius-2xl: var(--radius-card);
+  --radius-full: var(--radius-pill);
+  --max-width: var(--container);
+  --header-height: 72px;
+  --transition-fast: var(--dur-short) var(--ease-out);
+  --transition-base: var(--dur-long) var(--ease-out);
+  --z-header: var(--z-sticky-nav);
 }

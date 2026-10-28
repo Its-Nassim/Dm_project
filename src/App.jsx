@@ -1,5 +1,3 @@
-import './styles/global.css'
-import './styles/responsive.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -15,7 +13,8 @@ function App() {
     <Router>
       <div className="app">
         <Header />
-        <main className="main">
+        <a className="skip-link" href="#main">Skip to content</a>
+        <main className="main" id="main" tabIndex="-1">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />

@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import './Header.css'
 
 const IconBuilding = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
     <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
     <path d="M9 22v-4h6v4"></path>
     <path d="M8 6h.01"></path>
@@ -18,24 +18,8 @@ const IconBuilding = () => (
   </svg>
 )
 
-const IconMoon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-  </svg>
-)
-
-const IconGithub = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="18" cy="18" r="3"></circle>
-    <circle cx="6" cy="6" r="3"></circle>
-    <circle cx="18" cy="6" r="3"></circle>
-    <path d="M18 9v2c0 .6-.4 1-1 1H7c-.6 0-1 .4-1 1v2"></path>
-  </svg>
-)
-
 const navLinks = [
   { name: 'Home', path: '/' },
-  { name: 'Predict', path: '/prediction' },
   { name: 'Analytics', path: '/analytics' },
   { name: 'Model', path: '/model' },
   { name: 'About', path: '/about' },
@@ -43,6 +27,7 @@ const navLinks = [
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const location = useLocation()
 
   useEffect(() => {
@@ -53,35 +38,57 @@ const Header = () => {
 
   return (
     <header className={`header ${scrolled ? 'header--scrolled' : ''}`}>
-      <Link to="/" className="header__logo">
-        <IconBuilding />
-        HousePrice AI
-      </Link>
-      
-      <nav className="header__nav">
-        {navLinks.map((link) => (
+      <div className="header__inner">
+        <Link to="/" className="header__logo" aria-label="HousePrice AI home">
+          <IconBuilding />
+          <span>HousePrice AI</span>
+        </Link>
+
+        <nav
+          className={`header__nav ${menuOpen ? 'header__nav--open' : ''}`}
+          id="primary-navigation"
+          aria-label="Primary navigation"
+        >
+          {navLinks.map((link) => {
+            const active = location.pathname === link.path
+            return (
+              <Link
+                key={link.name}
+                to={link.path}
+                className={`header__nav-link ${active ? 'active' : ''}`}
+                aria-current={active ? 'page' : undefined}
+                onClick={() => setMenuOpen(false)}
+              >
+                {link.name}
+              </Link>
+            )
+          })}
+        </nav>
+
+        <div className="header__actions">
           <Link
-            key={link.name}
-            to={link.path}
-            className={`header__nav-link ${location.pathname === link.path ? 'active' : ''}`}
+            to="/prediction"
+            className="header__cta"
+            aria-current={location.pathname.startsWith('/prediction') ? 'page' : undefined}
+            onClick={() => setMenuOpen(false)}
           >
-            {link.name}
+            Predict
           </Link>
-        ))}
-      </nav>
-      
-      <div className="header__actions">
-        <button className="header__icon-btn" aria-label="Toggle theme">
-          <IconMoon />
-        </button>
-        <button className="header__icon-btn" aria-label="GitHub">
-          <IconGithub />
+        </div>
+
+        <button
+          className="header__mobile-toggle"
+          type="button"
+          aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}
+          aria-expanded={menuOpen}
+          aria-controls="primary-navigation"
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+            {menuOpen ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
+          </svg>
         </button>
       </div>
-
-      <button className="header__mobile-toggle">
-        ☰
-      </button>
     </header>
   )
 }

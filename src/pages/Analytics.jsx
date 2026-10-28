@@ -24,12 +24,6 @@ const IconExpand = () => (
   </svg>
 )
 
-const IconFilter = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
-  </svg>
-)
-
 const IconInfo = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="10"/>
@@ -38,26 +32,12 @@ const IconInfo = () => (
   </svg>
 )
 
-const IconArrow = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="5" y1="12" x2="19" y2="12"/>
-    <polyline points="12 5 19 12 12 19"/>
-  </svg>
-)
-
-const IconGrid = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-    <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
-  </svg>
-)
-
 /* ── Area Chart (SVG) ── */
 const AreaChart = () => {
   const width = 520, height = 200
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
   const prices = [410,430,440,445,475,510,530,555,570,590,605,620]
-  const maxP = 700, minP = 0
+  const maxP = 800, minP = 0
   const pts = prices.map((v, i) => {
     const x = (i / (prices.length - 1)) * width
     const y = height - ((v - minP) / (maxP - minP)) * height
@@ -67,30 +47,36 @@ const AreaChart = () => {
   const area = `0,${height} ${polyline} ${width},${height}`
 
   return (
-    <svg viewBox={`0 0 ${width} ${height + 30}`} preserveAspectRatio="none" className="area-chart-svg">
+    <svg
+      role="img"
+      aria-label="Static example line chart of monthly prices, rising from 410 to 620 on the chart's displayed scale"
+      viewBox={`0 0 ${width} ${height + 30}`}
+      preserveAspectRatio="none"
+      className="area-chart-svg"
+    >
       <defs>
         <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#00b4ff" stopOpacity="0.35"/>
-          <stop offset="100%" stopColor="#00b4ff" stopOpacity="0.02"/>
+          <stop offset="0%" stopColor="var(--color-cool)" stopOpacity="0.24"/>
+          <stop offset="100%" stopColor="var(--color-cool)" stopOpacity="0.02"/>
         </linearGradient>
       </defs>
       {[0,200,400,600,800].map(v => {
         const y = height - ((v - minP) / (maxP - minP)) * height
         return (
           <g key={v}>
-            <line x1="0" y1={y} x2={width} y2={y} stroke="rgba(255,255,255,0.06)" strokeWidth="1"/>
-            <text x="-4" y={y + 4} fontSize="10" fill="rgba(148,163,184,0.7)" textAnchor="end">
+            <line x1="0" y1={y} x2={width} y2={y} stroke="var(--color-rule)" strokeWidth="1"/>
+            <text x="-4" y={y + 4} fontSize="11" fill="var(--color-muted)" textAnchor="end">
               {v === 0 ? '$0k' : `$${v/1000 >= 1 ? v/1000 + '00k' : v+'k'}`}
             </text>
           </g>
         )
       })}
       <polygon points={area} fill="url(#areaGrad)"/>
-      <polyline points={polyline} fill="none" stroke="#00b4ff" strokeWidth="2.5"/>
+      <polyline points={polyline} fill="none" stroke="var(--color-cool)" strokeWidth="2.5"/>
       {months.map((m, i) => {
         const x = (i / (months.length - 1)) * width
         return (
-          <text key={m} x={x} y={height + 20} fontSize="10" fill="rgba(148,163,184,0.7)" textAnchor="middle">{m}</text>
+          <text key={m} x={x} y={height + 20} fontSize="11" fill="var(--color-muted)" textAnchor="middle">{m}</text>
         )
       })}
     </svg>
@@ -131,27 +117,32 @@ const ScatterChart = () => {
   const w = 400, h = 180, padL = 60, padB = 30
   const maxX = 6000, maxY = 2200000
   return (
-    <svg viewBox={`0 0 ${w + padL + 10} ${h + padB + 10}`} className="scatter-svg">
+    <svg
+      role="img"
+      aria-label="Static example scatter plot of living area and property value"
+      viewBox={`0 0 ${w + padL + 10} ${h + padB + 10}`}
+      className="scatter-svg"
+    >
       {[0,500000,1000000,1500000,2000000].map(v => {
         const y = padB + h - (v / maxY) * h
         const label = v === 0 ? '$0M' : `$${v/1000000}M`
         return (
           <g key={v}>
-            <line x1={padL} y1={y} x2={padL + w} y2={y} stroke="rgba(255,255,255,0.06)" strokeWidth="1"/>
-            <text x={padL - 5} y={y + 4} fontSize="9" fill="rgba(148,163,184,0.7)" textAnchor="end">{label}</text>
+            <line x1={padL} y1={y} x2={padL + w} y2={y} stroke="var(--color-rule)" strokeWidth="1"/>
+            <text x={padL - 5} y={y + 4} fontSize="11" fill="var(--color-muted)" textAnchor="end">{label}</text>
           </g>
         )
       })}
       {[0,1500,3000,4500,6000].map(v => {
         const x = padL + (v / maxX) * w
         return (
-          <text key={v} x={x} y={h + padB + 8} fontSize="9" fill="rgba(148,163,184,0.7)" textAnchor="middle">{v === 0 ? '0sqft' : `${v}sqft`}</text>
+          <text key={v} x={x} y={h + padB + 8} fontSize="11" fill="var(--color-muted)" textAnchor="middle">{v === 0 ? '0 sqft' : `${v} sqft`}</text>
         )
       })}
       {pts.map(([sx, sy], i) => {
         const cx = padL + (sx / 1160) * w
         const cy = padB + h - (sy / 960) * h
-        return <circle key={i} cx={cx} cy={cy} r="5" fill="#00b4ff" fillOpacity="0.7"/>
+        return <circle key={i} cx={cx} cy={cy} r="5" fill="var(--color-cool)" fillOpacity="0.7"/>
       })}
     </svg>
   )
@@ -160,7 +151,7 @@ const ScatterChart = () => {
 /* ── Correlation Matrix ── */
 const corrData = {
   rows: ['Price','Bedrooms','Bathrooms','Sqft Living','Floors','Condition','Grade'],
-  cols: ['BED','BATH','AREA','FLOOR','COND','GRADE'],
+  cols: ['Bed','Bath','Living','Floor','Condition','Grade'],
   values: [
     [0.31, 0.53, 0.70, 0.26, 0.04, 0.67],
     [1.00, 0.52, 0.58, 0.18, 0.03, 0.36],
@@ -173,29 +164,31 @@ const corrData = {
 }
 
 const getCorrelColor = v => {
-  if (v >= 0.9) return '#0ea5e9'
-  if (v >= 0.6) return '#2563eb'
-  if (v >= 0.4) return '#1d4ed8'
-  if (v >= 0.2) return '#1e3a5f'
-  if (v >= 0)   return '#172035'
-  if (v >= -0.1) return '#3d1515'
-  return '#6b1a1a'
+  if (v >= 0.9) return 'var(--color-chart-positive-strong)'
+  if (v >= 0.6) return 'var(--color-chart-positive)'
+  if (v >= 0.4) return 'var(--color-chart-positive-mid)'
+  if (v >= 0.2) return 'var(--color-chart-positive-soft)'
+  if (v >= 0) return 'var(--color-paper-3)'
+  if (v >= -0.1) return 'var(--color-chart-negative-soft)'
+  return 'var(--color-chart-negative)'
 }
 
 const CorrelMatrix = () => (
-  <div className="correl-matrix">
-    <div className="correl-matrix__header">
+  <div className="correl-matrix" role="table" aria-label="Static example feature correlations" tabIndex="0">
+    <div className="correl-matrix__header" role="row">
       {corrData.cols.map(c => (
-        <span key={c} className="correl-matrix__col-label">{c}</span>
+        <span key={c} className="correl-matrix__col-label" role="columnheader">{c}</span>
       ))}
     </div>
     {corrData.rows.map((row, ri) => (
-      <div key={row} className="correl-matrix__row">
-        <span className="correl-matrix__row-label">{row}</span>
+      <div key={row} className="correl-matrix__row" role="row">
+        <span className="correl-matrix__row-label" role="rowheader">{row}</span>
         {corrData.values[ri].map((v, ci) => (
           <div
             key={ci}
             className="correl-matrix__cell"
+            role="cell"
+            aria-label={`${corrData.cols[ci]}: ${v.toFixed(2)}`}
             style={{ background: getCorrelColor(v) }}
           >
             <span className={v >= 0.5 ? 'correl-matrix__val correl-matrix__val--light' : 'correl-matrix__val'}>
@@ -206,50 +199,42 @@ const CorrelMatrix = () => (
       </div>
     ))}
     <div className="correl-matrix__legend">
-      <span className="correl-matrix__legend-item correl-matrix__legend-neg">● Negative Impact</span>
-      <span className="correl-matrix__legend-item correl-matrix__legend-pos">● Positive Impact</span>
-      <span className="correl-matrix__legend-date">Data updated as of 21/09/2026</span>
+      <span className="correl-matrix__legend-item correl-matrix__legend-neg">Negative relationship</span>
+      <span className="correl-matrix__legend-item correl-matrix__legend-pos">Positive relationship</span>
+      <span className="correl-matrix__legend-date">Static example values</span>
     </div>
   </div>
 )
 
 const Analytics = () => (
   <div className="analytics">
-    {/* ── Hero ── */}
-    <section className="analytics-hero">
-      <img
-        src="/assets/Analytics-img.png"
-        alt=""
-        aria-hidden="true"
-        className="analytics-hero__bg-img"
-      />
-      <div className="analytics-hero__bg" />
-      <div className="container">
-        <div className="analytics-hero__content">
-          <span className="badge">Market Intelligence</span>
-          <h1 className="analytics-hero__title">
-            Property <span className="analytics-hero__accent">Analytics</span>
-          </h1>
+    <header className="analytics-hero">
+      <div className="container analytics-hero__content">
+        <div>
+          <h1 className="analytics-hero__title">Property analytics</h1>
           <p className="analytics-hero__desc">
-            Deep-dive into the King County real estate landscape. Our AI models analyze millions of data points to reveal correlations, trends, and future value trajectories.
+            Static examples from the existing interface; this dashboard is not connected to live market data.
           </p>
-          <div className="analytics-hero__buttons">
-            <button className="btn-primary"><IconDownload /> Generate Report</button>
-            <button className="btn-outline"><IconTrend /> Market Trends</button>
-          </div>
+        </div>
+        <div className="analytics-hero__buttons">
+          <button className="btn-outline" type="button" disabled aria-describedby="report-note">
+            <IconDownload /> Generate report
+          </button>
+          <a className="btn-primary" href="#market-trends"><IconTrend /> Market trends</a>
+          <p className="analytics-hero__note" id="report-note">Report export is not connected.</p>
         </div>
       </div>
-    </section>
+    </header>
 
     {/* ── KPI Cards ── */}
     <section className="analytics-kpi">
       <div className="container">
         <div className="analytics-kpi__grid">
           {[
-            { label: 'MEDIAN SALE PRICE',   value: '$735,000',   change: '+12.4%', up: true },
-            { label: 'INVENTORY GROWTH',    value: '2,412 units', change: '+3.2%', up: true },
-            { label: 'AVERAGE DAYS ON MARKET', value: '18 Days',    change: '5.1%',  up: false },
-            { label: 'AI CONFIDENCE INDEX', value: '94.2%',       change: '+0.8%', up: true },
+            { label: 'Median sale price', value: '$735,000', change: '+12.4%', up: true },
+            { label: 'Inventory growth', value: '2,412 units', change: '+3.2%', up: true },
+            { label: 'Average days on market', value: '18 days', change: '5.1%', up: false },
+            { label: 'AI confidence index', value: '94.2%', change: '+0.8%', up: true },
           ].map(kpi => (
             <div key={kpi.label} className="kpi-card">
               <div className="kpi-card__top">
@@ -266,26 +251,26 @@ const Analytics = () => (
     </section>
 
     {/* ── Charts Row 1 ── */}
-    <section className="analytics-charts">
+    <section className="analytics-charts" id="market-trends" aria-label="Static example charts">
       <div className="container">
         <div className="analytics-charts__row">
           {/* Area Chart */}
           <div className="chart-card chart-card--wide">
             <div className="chart-card__header">
               <div>
-                <h3 className="chart-card__title">Market Price Appreciation</h3>
-                <p className="chart-card__sub">Year-over-year median house price and sales volume</p>
+                <h3 className="chart-card__title">Market price example</h3>
+                <p className="chart-card__sub">Illustrative monthly values from the existing interface</p>
               </div>
               <div className="chart-card__actions">
-                <button className="chart-icon-btn"><IconExpand /></button>
-                <button className="chart-icon-btn"><IconExpand /></button>
+                <button className="chart-icon-btn" type="button" disabled aria-label="Chart expansion is unavailable">
+                  <IconExpand />
+                </button>
               </div>
             </div>
             <div className="chart-card__body">
               <AreaChart />
               <div className="chart-card__legend">
-                <span className="chart-legend-item chart-legend-item--blue">Median Price</span>
-                <span className="chart-legend-item chart-legend-item--dark">Sales Volume</span>
+                <span className="chart-legend-item chart-legend-item--blue">Illustrative values</span>
               </div>
             </div>
           </div>
@@ -305,13 +290,13 @@ const Analytics = () => (
         </div>
 
         {/* Charts Row 2 */}
-        <div className="analytics-charts__row" style={{marginTop:'var(--sp-6)'}}>
+        <div className="analytics-charts__row analytics-charts__row--second">
           {/* Scatter */}
           <div className="chart-card chart-card--wide">
             <div className="chart-card__header">
               <div>
-                <h3 className="chart-card__title">Space vs. Valuation <IconInfo /></h3>
-                <p className="chart-card__sub">Correlation between living area size and final price by building grade</p>
+                <h3 className="chart-card__title">Space and valuation example <IconInfo /></h3>
+                <p className="chart-card__sub">Illustrative points for living area and property value</p>
               </div>
             </div>
             <div className="chart-card__body">
@@ -324,9 +309,9 @@ const Analytics = () => (
             <div className="chart-card__header">
               <div>
                 <h3 className="chart-card__title">Feature Correlation Matrix</h3>
-                <p className="chart-card__sub">Impact of specific attributes on target home value</p>
+                <p className="chart-card__sub">Illustrative correlations from the existing interface</p>
               </div>
-              <a href="#" className="chart-card__link">Detailed Heatmap ↗</a>
+              <span className="chart-card__link" aria-disabled="true">Detailed heatmap unavailable</span>
             </div>
             <div className="chart-card__body">
               <CorrelMatrix />
@@ -341,14 +326,13 @@ const Analytics = () => (
       <div className="container">
         <div className="analytics-cta__box">
           <div className="analytics-cta__left">
-            <h3 className="analytics-cta__title">Ready to value your property?</h3>
+            <h3 className="analytics-cta__title">Enter property details</h3>
             <p className="analytics-cta__desc">
-              Use our advanced prediction engine to get a high-accuracy estimate based on current market trends and property features.
+              Continue to the local form. Its result is a fixed demonstration, not a live valuation.
             </p>
           </div>
           <div className="analytics-cta__right">
-            <Link to="/prediction" className="btn-primary">Start Prediction</Link>
-            <button className="chart-icon-btn"><IconFilter /></button>
+            <Link to="/prediction" className="btn-primary">Open the form</Link>
           </div>
         </div>
       </div>

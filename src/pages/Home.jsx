@@ -1,199 +1,103 @@
 import { Link } from 'react-router-dom'
 import './Home.css'
 
-const IconCheck = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <polyline points="20 6 9 17 4 12"></polyline>
-  </svg>
-)
-
-const IconDatabase = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-    <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
-    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
-    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
-  </svg>
-)
-
-const IconCpu = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-    <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
-    <rect x="9" y="9" width="6" height="6"></rect>
-    <line x1="9" y1="1" x2="9" y2="4"></line>
-    <line x1="15" y1="1" x2="15" y2="4"></line>
-    <line x1="9" y1="20" x2="9" y2="23"></line>
-    <line x1="15" y1="20" x2="15" y2="23"></line>
-    <line x1="20" y1="9" x2="23" y2="9"></line>
-    <line x1="20" y1="14" x2="23" y2="14"></line>
-    <line x1="1" y1="9" x2="4" y2="9"></line>
-    <line x1="1" y1="14" x2="4" y2="14"></line>
-  </svg>
-)
-
-const IconShield = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-  </svg>
-)
-
-const Home = () => {
-  return (
-    <div className="home">
-      {/* ── Hero Section ── */}
-      <section className="hero">
+const Home = () => (
+  <div className="home">
+    <section className="hero">
+      <div className="hero__inner container">
         <div className="hero__content">
-          <div className="hero__badge">Next-Gen Real Estate Intelligence</div>
-          <h1 className="hero__title">
-            Predict the <em>Value</em><br />of Your Home
-          </h1>
+          <h1 className="hero__title">Predict the Value of Your Home</h1>
           <p className="hero__desc">
-            AI-powered real-estate valuation using high-performance machine learning models trained on 20,000+ real-world properties.
+            Explore a property valuation demo built around King County housing data.
           </p>
-          
           <div className="hero__actions">
-            <Link to="/prediction" className="btn-primary">
-              Start Prediction →
-            </Link>
-            <Link to="/analytics" className="btn-outline">
-              View Market Data <span className="icon-search">🔍</span>
-            </Link>
-          </div>
-
-          <div className="hero__tags">
-            <span className="hero__tag"><IconDatabase /> KING COUNTY DATA</span>
-            <span className="hero__tag"><IconCpu /> ML POWERED</span>
-            <span className="hero__tag"><IconShield /> VERIFIED MODELS</span>
+            <Link to="/prediction" className="btn-primary">Start a valuation</Link>
+            <Link to="/analytics" className="btn-outline">Explore market charts</Link>
           </div>
         </div>
+        <figure className="hero__visual">
+          <img
+            src="/assets/valuation-form-preview-desktop.png"
+            alt="HousePrice AI property form showing bedroom, bathroom, floor, and waterfront inputs"
+            width="1440"
+            height="900"
+            fetchPriority="high"
+          />
+          <figcaption className="hero__caption">
+            Captured from the local demo. The result screen shows fixed example values.
+          </figcaption>
+        </figure>
+      </div>
+    </section>
 
-        <div className="hero__visual">
-          <div className="hero__img-container">
-            <img src="/assets/hero-wireframe.png" alt="Hero Architecture" className="img-placeholder" />
-          </div>
-        </div>
-      </section>
-
-      {/* ── Stats Section ── */}
-      <section className="stats">
+    <section className="stats" aria-labelledby="home-views-title">
+      <div className="container">
         <div className="stats__header">
-          <span className="stats__overline">TRANSPARENCY AT SCALE</span>
-          <h2 className="stats__title">Engineered for Precision</h2>
+          <h2 className="stats__title" id="home-views-title">Explore the interface</h2>
           <p className="stats__desc">
-            Our models are built on transparency, using thousands of verified transactions to provide the most accurate estimations in the market.
+            Open the working form, then browse the static market and model views.
           </p>
         </div>
-        
-        <div className="stats__grid">
-          {[
-            { value: '21,613', label: 'VAST DATASET', desc: 'Validated property records from the extensive King County housing dataset used for training.', icon: <IconDatabase /> },
-            { value: '20+', label: 'ML FEATURES', desc: 'Critical property variables analyzed, from square footage to neighborhood quality scores.', icon: <IconCpu /> },
-            { value: '92%', label: 'REAL-WORLD ACCURACY', desc: 'High confidence interval based on R-squared regression metrics and rigorous cross-validation.', icon: <IconShield /> },
-            { value: '15ms', label: 'AI PREDICTIONS', desc: 'Blazing fast inference time for real-time valuations using optimized neural network weights.', icon: <IconDatabase /> }
-          ].map(stat => (
-            <div key={stat.label} className="stats__card">
-              <div className="stats__card-top">
-                <span className="stats__icon">{stat.icon}</span>
-                <span className="stats__value">{stat.value}</span>
-              </div>
-              <h3 className="stats__label">{stat.label}</h3>
-              <p className="stats__card-desc">{stat.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Features Split Section ── */}
-      <section className="features-split">
-        <div className="features-split__left">
-          <h2 className="features-split__title">Advanced Property Analysis Made Simple</h2>
-          <p className="features-split__desc">
-            We've simplified complex architectural and economical data points into an intuitive platform. Whether you're an investor looking for market gaps or a homeowner curious about equity, we have the tools you need.
-          </p>
-
-          <div className="features-split__list">
-            <div className="features-split__item">
-              <IconShield />
-              <div>
-                <h4>Data-Driven Transparency</h4>
-                <p>We don't just give you a number. We explain the 'why' behind every valuation using feature impact analysis.</p>
-              </div>
-            </div>
-            <div className="features-split__item">
-              <IconCpu />
-              <div>
-                <h4>Instant Processing</h4>
-                <p>Our machine learning pipeline processes your property specs against thousands of market comps in milliseconds.</p>
-              </div>
-            </div>
-            <div className="features-split__item">
-              <IconDatabase />
-              <div>
-                <h4>Market Analytics</h4>
-                <p>Access deep-dive charts showing price distributions and regional trends across the Pacific Northwest.</p>
-              </div>
-            </div>
-          </div>
-          
-          <Link to="/model" className="features-split__link">
-            Learn more about our model <span className="arrow">›</span>
+        <nav className="stats__grid" aria-label="HousePrice AI sections">
+          <Link className="stats__card" to="/prediction">
+            <span className="stats__label">Property details</span>
+            <span className="stats__card-desc">Choose the inputs carried to the result screen.</span>
           </Link>
-        </div>
+          <Link className="stats__card" to="/analytics">
+            <span className="stats__label">Market charts</span>
+            <span className="stats__card-desc">Review illustrative charts from the existing interface.</span>
+          </Link>
+          <Link className="stats__card" to="/model">
+            <span className="stats__label">Model details</span>
+            <span className="stats__card-desc">Switch between the existing model information panels.</span>
+          </Link>
+        </nav>
+      </div>
+    </section>
 
+    <section className="features-split" aria-labelledby="dataset-title">
+      <div className="container features-split__inner">
+        <div className="features-split__left">
+          <h2 className="features-split__title" id="dataset-title">A King County reference</h2>
+          <p className="features-split__desc">
+            The project references the King County housing dataset: 21,613 historical property records from 2014–2015.
+          </p>
+          <Link to="/about" className="features-split__link">Read about the dataset</Link>
+        </div>
         <div className="features-split__right">
-          <div className="features-split__card">
-            <img src="/assets/neural-network.png" alt="Neural Engine Active" style={{width:'100%', height:'100%', objectFit:'cover', display:'block'}} />
-            <div className="features-split__card-overlay">
-              <div className="pill-status">
-                <IconCpu />
-                <div>
-                  <span className="pill-status__label">COMPUTING CORE</span>
-                  <span className="pill-status__title">Neural Engine Active</span>
-                </div>
-                <span className="pill-status__badge">Stable</span>
-              </div>
-            </div>
-          </div>
+          <p className="features-split__figure">21,613</p>
+          <p className="features-split__figure-note">records named in the project’s dataset description</p>
         </div>
-      </section>
+      </div>
+    </section>
 
-      {/* ── CTA Section ── */}
-      <section className="cta">
-        <div className="cta__bg">
-          <img src="/assets/hero-wireframe1.png" alt="Market Growth Background" className="img-placeholder" />
+    <section className="locations" aria-labelledby="locations-title">
+      <div className="container locations__inner">
+        <div className="locations__heading">
+          <h2 id="locations-title">Places in the current copy</h2>
+          <p>These city names appear in the existing HousePrice AI interface.</p>
         </div>
+        <ul className="locations__list">
+          <li>Seattle</li>
+          <li>Bellevue</li>
+          <li>Redmond</li>
+          <li>Kirkland</li>
+        </ul>
+      </div>
+    </section>
+
+    <section className="cta" aria-labelledby="home-cta-title">
+      <div className="container cta__inner">
         <div className="cta__content">
-          <h2 className="cta__title">Ready to discover your home's potential?</h2>
-          <p className="cta__desc">Get an instant, data-backed valuation in under 2 minutes. Our platform is free to use for individual homeowners.</p>
-          <div className="cta__actions">
-            <button className="btn-primary">Calculate My Value Now</button>
-            <button className="btn-outline">How It Works</button>
-          </div>
-          <p className="cta__note">NO CREDIT CARD REQUIRED • SECURE DATA PROCESSING • INSTANT RESULTS</p>
+          <h2 className="cta__title" id="home-cta-title">Try the property form</h2>
+          <p className="cta__desc">
+            The form carries your selected details to a fixed demonstration result; no live valuation runs.
+          </p>
         </div>
-      </section>
-
-      {/* ── Locations Footer Banner ── */}
-      <section className="locations">
-        <div className="locations__card">
-          <div className="locations__left">
-            <div className="locations__icon">
-              <IconDatabase />
-            </div>
-            <div>
-              <h4>Localized Intelligence</h4>
-              <p>Deeply specialized in the King County real estate market ecosystem.</p>
-            </div>
-          </div>
-          <div className="locations__right">
-            <span>SEATTLE</span>
-            <span>BELLEVUE</span>
-            <span>REDMOND</span>
-            <span>KIRKLAND</span>
-          </div>
-        </div>
-      </section>
-    </div>
-  )
-}
+        <Link to="/prediction" className="btn-primary">Open the form</Link>
+      </div>
+    </section>
+  </div>
+)
 
 export default Home

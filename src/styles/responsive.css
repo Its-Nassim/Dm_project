@@ -1,62 +1,13 @@
-/* ── Responsive Breakpoints ──
-   xl   : 1280px+
-   lg   : 1024px – 1279px
-   md   : 768px  – 1023px  (tablet)
-   sm   : 480px  – 767px   (mobile)
-   xs   : < 480px          (small mobile)
-*/
-
-/* ── Large Desktop ── */
-@media (max-width: 1280px) {
+/* Hallmark · shape: Console shell · genre: modern-minimal · theme: Console · redesign: full · nav: edge-aligned · signature: captured valuation form · states: complete · console: graphite · axes: dark/grotesk-sans/chromatic-amber · contrast: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P5 H5 E4 S4 R5 V4 · weakest: S, lead with the actual valuation workflow rather than synthetic dashboard art */
+@media (max-width: 60rem) {
   .container {
-    padding: 0 var(--sp-8);
+    padding-inline: var(--gutter);
   }
 }
 
-/* ── Laptop / Tablet-Large ── */
-@media (max-width: 1024px) {
+@media (max-width: 40rem) {
   .container {
-    padding: 0 var(--sp-6);
-  }
-
-  /* Typography scale-down */
-  :root {
-    --font-size-6xl: 3.5rem;
-    --font-size-5xl: 2.75rem;
-    --font-size-4xl: 2rem;
-  }
-}
-
-/* ── Tablet ── */
-@media (max-width: 768px) {
-  :root {
-    --font-size-6xl: 2.75rem;
-    --font-size-5xl: 2.25rem;
-    --font-size-4xl: 1.75rem;
-    --font-size-3xl: 1.5rem;
-  }
-
-  .container {
-    padding: 0 var(--sp-5);
-  }
-}
-
-/* ── Mobile ── */
-@media (max-width: 480px) {
-  :root {
-    --font-size-6xl: 2.25rem;
-    --font-size-5xl: 1.875rem;
-    --font-size-4xl: 1.5rem;
-    --font-size-3xl: 1.25rem;
-  }
-
-  .container {
-    padding: 0 var(--sp-4);
-  }
-
-  .btn-primary,
-  .btn-outline {
-    padding: var(--sp-3) var(--sp-5);
-    font-size: var(--font-size-sm);
+    padding-inline: var(--gutter);
   }
 }

@@ -1,0 +1,22 @@
+{
+  "scanned": "2026-10-28",
+  "findings": {
+    "framework": "Vite + React 19 + React Router 7; BrowserRouter in src/App.jsx; no Next.js or backend routes.",
+    "fonts": "Inter loaded by index.html; retain.",
+    "palette": "Near-black/cyan in src/styles/variables.css; retain HousePrice AI identity and tune into Console graphite plus amber action and cyan-blue data.",
+    "spacing": "Existing rem-based spacing tokens in src/styles/variables.css; establish shared Console scale and responsive gutters.",
+    "motion": "CSS transitions and pulse animation in src/styles/global.css and page styles; add reduced-motion behavior."
+  },
+  "preserve": [
+    "HousePrice AI wordmark and Inter",
+    "Routes /, /about, /analytics, /model, /prediction, /prediction/result",
+    "Existing local assets in public/assets",
+    "Prediction form state and route navigation",
+    "Model page's local tabs and all existing chart/data content, labeled as static demonstrations where not connected to a service"
+  ],
+  "introduce": [
+    "Hallmark Console tokens with restrained graphite surfaces, amber human actions and cyan-blue data",
+    "Accessible responsive navigation, page-specific hierarchies and reduced-motion support",
+    "Explicit labels for the fixed result and static dashboard/model examples"
+  ]
+}
