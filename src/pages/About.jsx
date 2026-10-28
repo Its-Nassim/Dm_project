@@ -90,7 +90,8 @@ const About = () => (
           </div>
           <div className="about-hero__right">
             <div className="about-hero__visual">
-              <div className="about-hero__visual-bg" />
+              <img src="/assets/about-img1.png" alt="About HousePrice AI" style={{width: '100%', height: '100%', objectFit: 'cover', display: 'block', position: 'relative', zIndex: 1}} />
+              <div className="about-hero__visual-bg" style={{position:'absolute', inset:0, zIndex:2, background: 'linear-gradient(to bottom, transparent 50%, rgba(5,5,8,0.85) 100%)'}} />
             </div>
           </div>
         </div>
@@ -194,9 +195,9 @@ const About = () => (
                   <div className="about-dataset__map-dot" style={{top:'28%',left:'58%'}} />
                   <div className="about-dataset__map-dot" style={{top:'52%',left:'36%'}} />
                   <div className="about-dataset__map-dot about-dataset__map-dot--large" style={{top:'45%',left:'50%'}} />
-                  <div className="about-dataset__map-label-city" style={{top:'30%',left:'38%'}}>Seattle</div>
-                  <div className="about-dataset__map-label-city" style={{top:'25%',left:'62%'}}>Bellevue</div>
-                  <div className="about-dataset__map-label-city" style={{top:'50%',left:'30%'}}>Renton</div>
+                  <div className="about-dataset__map-label-city" style={{top:'30%',left:'38%'}}>SEATTLE</div>
+                  <div className="about-dataset__map-label-city" style={{top:'25%',left:'62%'}}>BELLEVUE</div>
+                  <div className="about-dataset__map-label-city" style={{top:'50%',left:'30%'}}>RENTON</div>
                 </div>
               </div>
               <div className="about-dataset__dims">

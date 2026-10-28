@@ -35,7 +35,7 @@
   border-radius: var(--radius-full);
   padding: 4px 12px;
   margin-bottom: var(--sp-6);
-  background: rgba(255,255,255,0.03);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .hero__title {
@@ -125,6 +125,11 @@
 .hero__img-container {
   width: 100%;
   height: 100%;
+}
+
+.hero__img-container .img-placeholder {
+  transform: scale(1.7);
+  transform-origin: right center;
 }
 
 /* ── Stats ── */
@@ -239,7 +244,7 @@
   display: flex;
   gap: var(--sp-4);
   padding: var(--sp-5);
-  background: rgba(255,255,255,0.02);
+  background: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
 }
@@ -293,12 +298,14 @@
   align-items: center;
   gap: var(--sp-4);
   background: rgba(10, 10, 15, 0.9);
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 12px 20px;
   border-radius: var(--radius-full);
 }
 
-.pill-status svg { color: var(--color-primary); }
+.pill-status svg {
+  color: var(--color-primary);
+}
 
 .pill-status__label {
   display: block;
@@ -317,7 +324,7 @@
 .pill-status__badge {
   margin-left: auto;
   font-size: 10px;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   padding: 2px 8px;
   border-radius: var(--radius-full);
 }
@@ -379,7 +386,7 @@
 }
 
 .locations__card {
-  background: rgba(255,255,255,0.02);
+  background: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-full);
   display: flex;
@@ -419,15 +426,45 @@
 }
 
 @media (max-width: 768px) {
-  .hero { grid-template-columns: 1fr; text-align: center; }
-  .hero__visual { display: none; }
-  .hero__actions { justify-content: center; }
-  .hero__tags { justify-content: center; }
-  .stats__grid { grid-template-columns: 1fr 1fr; }
-  .features-split { grid-template-columns: 1fr; }
-  .locations__card { flex-direction: column; border-radius: var(--radius-xl); gap: var(--sp-6); text-align: center; }
+  .hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hero__visual {
+    display: none;
+  }
+
+  .hero__actions {
+    justify-content: center;
+  }
+
+  .hero__tags {
+    justify-content: center;
+  }
+
+  .stats__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .features-split {
+    grid-template-columns: 1fr;
+  }
+
+  .locations__card {
+    flex-direction: column;
+    border-radius: var(--radius-xl);
+    gap: var(--sp-6);
+    text-align: center;
+  }
 }
+
 @media (max-width: 480px) {
-  .stats__grid { grid-template-columns: 1fr; }
-  .cta__actions { flex-direction: column; }
+  .stats__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta__actions {
+    flex-direction: column;
+  }
 }

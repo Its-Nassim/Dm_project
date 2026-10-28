@@ -217,21 +217,25 @@ const Analytics = () => (
   <div className="analytics">
     {/* ── Hero ── */}
     <section className="analytics-hero">
+      <img
+        src="/assets/Analytics-img.png"
+        alt=""
+        aria-hidden="true"
+        className="analytics-hero__bg-img"
+      />
       <div className="analytics-hero__bg" />
       <div className="container">
         <div className="analytics-hero__content">
-          <div className="analytics-hero__left">
-            <span className="badge">Market Intelligence</span>
-            <h1 className="analytics-hero__title">
-              Property <span className="analytics-hero__accent">Analytics</span>
-            </h1>
-            <p className="analytics-hero__desc">
-              Deep-dive into the King County real estate landscape. Our AI models analyze millions of data points to reveal correlations, trends, and future value trajectories.
-            </p>
-            <div className="analytics-hero__buttons">
-              <button className="btn-primary"><IconDownload /> Generate Report</button>
-              <button className="btn-outline"><IconTrend /> Market Trends</button>
-            </div>
+          <span className="badge">Market Intelligence</span>
+          <h1 className="analytics-hero__title">
+            Property <span className="analytics-hero__accent">Analytics</span>
+          </h1>
+          <p className="analytics-hero__desc">
+            Deep-dive into the King County real estate landscape. Our AI models analyze millions of data points to reveal correlations, trends, and future value trajectories.
+          </p>
+          <div className="analytics-hero__buttons">
+            <button className="btn-primary"><IconDownload /> Generate Report</button>
+            <button className="btn-outline"><IconTrend /> Market Trends</button>
           </div>
         </div>
       </div>

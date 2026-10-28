@@ -114,6 +114,11 @@ const Model = () => {
             </div>
             <div className="model-hero__right">
               <div className="model-hero__visual">
+                <img
+                  src="/assets/neural-network.png"
+                  alt="Neural Network Visualization"
+                  style={{width:'100%', height:'100%', objectFit:'cover', display:'block', position:'relative', zIndex:0}}
+                />
                 <div className="model-hero__visual-bg" />
               </div>
             </div>
@@ -137,17 +142,19 @@ const Model = () => {
 
           <div className="model-metrics__grid">
             {[
-              { label: 'R-SQUARED SCORE', badge: '+0.02 VS V2.0', value: '0.941', unit: 'r²', desc: 'Indicates that 94.1% of the price variance is explained by the model\'s features.' },
-              { label: 'MEAN ABSOLUTE ERROR', badge: '-12% ERROR RATE', value: '$9,452', unit: 'MAE', desc: 'On average, the model\'s predictions deviate by less than $10k from actual prices.' },
-              { label: 'ROOT MEAN SQ. ERROR', badge: 'OPTIMAL RANGE', value: '$12,840', unit: 'RMSE', desc: 'Heavily penalizes larger errors, demonstrating model stability in luxury segments.' },
-              { label: 'MEDIAN ERROR', badge: '98TH PERCENTILE', value: '3.2', unit: '%', desc: 'The middle point of all percentage errors, reflecting typical user experience.' },
+              { label: 'R-SQUARED SCORE', badge: '+0.02 VS V2.0', value: '0.941', unit: 'R²', sup: true, desc: 'Indicates that 94.1% of the price variance is explained by the model\'s features.' },
+              { label: 'MEAN ABSOLUTE ERROR', badge: '-12% ERROR RATE', value: '$9,452', unit: 'MAE', sup: false, desc: 'On average, the model\'s predictions deviate by less than $10k from actual prices.' },
+              { label: 'ROOT MEAN SQ. ERROR', badge: 'OPTIMAL RANGE', value: '$12,840', unit: 'RMSE', sup: false, desc: 'Heavily penalizes larger errors, demonstrating model stability in luxury segments.' },
+              { label: 'MEDIAN ERROR', badge: '98TH PERCENTILE', value: '3.2', unit: '%', sup: false, desc: 'The middle point of all percentage errors, reflecting typical user experience.' },
             ].map(m => (
               <div key={m.label} className="metric-card">
                 <div className="metric-card__top">
                   <p className="metric-card__label">{m.label}</p>
                   <span className="metric-card__badge">{m.badge}</span>
                 </div>
-                <p className="metric-card__value">{m.value}<sup className="metric-card__unit">{m.unit}</sup></p>
+                <p className="metric-card__value">
+                  {m.value}{m.sup ? <sup className="metric-card__unit">{m.unit}</sup> : <span className="metric-card__unit" style={{fontSize:'0.6em', marginLeft:'4px', color:'var(--color-text-secondary)'}}>{m.unit}</span>}
+                </p>
                 <p className="metric-card__desc">{m.desc}</p>
               </div>
             ))}

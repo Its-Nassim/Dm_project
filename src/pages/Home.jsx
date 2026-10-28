@@ -68,7 +68,6 @@ const Home = () => {
 
         <div className="hero__visual">
           <div className="hero__img-container">
-            {/* Real placeholder for the architecture wireframe */}
             <img src="/assets/hero-wireframe.png" alt="Hero Architecture" className="img-placeholder" />
           </div>
         </div>
@@ -86,14 +85,14 @@ const Home = () => {
         
         <div className="stats__grid">
           {[
-            { value: '21,613', label: 'VAST DATASET', desc: 'Validated property records from the extensive King County housing dataset used for training.' },
-            { value: '20+', label: 'ML FEATURES', desc: 'Critical property variables analyzed, from square footage to neighborhood quality scores.' },
-            { value: '92%', label: 'REAL-WORLD ACCURACY', desc: 'High confidence interval based on R-squared regression metrics and rigorous cross-validation.' },
-            { value: '15ms', label: 'AI PREDICTIONS', desc: 'Blazing fast inference time for real-time valuations using optimized neural network weights.' }
+            { value: '21,613', label: 'VAST DATASET', desc: 'Validated property records from the extensive King County housing dataset used for training.', icon: <IconDatabase /> },
+            { value: '20+', label: 'ML FEATURES', desc: 'Critical property variables analyzed, from square footage to neighborhood quality scores.', icon: <IconCpu /> },
+            { value: '92%', label: 'REAL-WORLD ACCURACY', desc: 'High confidence interval based on R-squared regression metrics and rigorous cross-validation.', icon: <IconShield /> },
+            { value: '15ms', label: 'AI PREDICTIONS', desc: 'Blazing fast inference time for real-time valuations using optimized neural network weights.', icon: <IconDatabase /> }
           ].map(stat => (
             <div key={stat.label} className="stats__card">
               <div className="stats__card-top">
-                <span className="stats__icon"><IconDatabase /></span>
+                <span className="stats__icon">{stat.icon}</span>
                 <span className="stats__value">{stat.value}</span>
               </div>
               <h3 className="stats__label">{stat.label}</h3>
@@ -142,8 +141,7 @@ const Home = () => {
 
         <div className="features-split__right">
           <div className="features-split__card">
-            {/* Real placeholder for the neural network visualization */}
-            <img src="/assets/neural-network.png" alt="Neural Engine Active" className="img-placeholder" />
+            <img src="/assets/neural-network.png" alt="Neural Engine Active" style={{width:'100%', height:'100%', objectFit:'cover', display:'block'}} />
             <div className="features-split__card-overlay">
               <div className="pill-status">
                 <IconCpu />
@@ -161,7 +159,7 @@ const Home = () => {
       {/* ── CTA Section ── */}
       <section className="cta">
         <div className="cta__bg">
-          <img src="/assets/cta-bg.png" alt="Market Growth Background" className="img-placeholder" />
+          <img src="/assets/hero-wireframe1.png" alt="Market Growth Background" className="img-placeholder" />
         </div>
         <div className="cta__content">
           <h2 className="cta__title">Ready to discover your home's potential?</h2>

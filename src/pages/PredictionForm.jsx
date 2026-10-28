@@ -60,6 +60,12 @@ const IconTarget = () => (
   </svg>
 )
 
+const IconFilter = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+  </svg>
+)
+
 const IconMapPin = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
@@ -70,7 +76,7 @@ const IconMapPin = () => (
 const STEPS = [
   { icon: <IconGrid />,    label: 'BASICS' },
   { icon: <IconExpand />,  label: 'SPECS' },
-  { icon: <IconTarget />,  label: 'QUALITY' },
+  { icon: <IconFilter />,  label: 'QUALITY' },
   { icon: <IconMapPin />,  label: 'LOCATION' },
 ]
 
@@ -213,16 +219,19 @@ const PredictionForm = () => {
 
           {/* Right: Summary ── */}
           <div className="pred-form__right">
-            <div className="pred-form__summary-visual" style={{position: 'relative'}}>
-              <img src="/assets/skyscraper-blueprint.png" alt="Skyscraper Blueprint" className="img-placeholder" style={{position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0}} />
-              <div className="pred-form__summary-pill">
-                <span className="glow-dot" />
-                <span className="pred-form__summary-pill-text">LIVE PREDICTION PIPELINE</span>
-                <span className="pred-form__summary-pill-title">Architectural Blueprint Analysis</span>
+            <div className="pred-form__summary-visual" style={{position: 'relative', overflow: 'hidden'}}>
+              <img src="/assets/prediction-form-img.png" alt="Skyscraper Blueprint" style={{position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0}} />
+              <div style={{position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(5,5,8,0.95) 0%, rgba(5,5,8,0.4) 100%)', zIndex: 1}} />
+              <div style={{position: 'relative', zIndex: 2}}>
+                <div className="pred-form__summary-pill">
+                  <span className="glow-dot" />
+                  <span className="pred-form__summary-pill-text">LIVE PREDICTION PIPELINE</span>
+                  <span className="pred-form__summary-pill-title">Architectural Blueprint Analysis</span>
+                </div>
+                <p className="pred-form__summary-pill-desc">
+                  Our model interprets structural parameters into market value markers, ensuring every square foot is accurately accounted for.
+                </p>
               </div>
-              <p className="pred-form__summary-pill-desc">
-                Our model interprets structural parameters into market value markers, ensuring every square foot is accurately accounted for.
-              </p>
             </div>
 
             <div className="pred-form__summary-card">
