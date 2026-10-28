@@ -1,22 +1,30 @@
-/* Hallmark · shape: Console shell · genre: modern-minimal · theme: Console · redesign: full · nav: edge-aligned · signature: captured valuation form · states: complete · console: graphite · axes: dark/grotesk-sans/chromatic-amber · contrast: pass · v2.0.0 */
-/* Hallmark · pre-emit critique: P5 H5 E4 S4 R5 V4 · weakest: S, lead with the actual valuation workflow rather than synthetic dashboard art */
+/* Hallmark · shape: Stage hero · genre: modern-minimal · theme: Dusk (by request) · job: try · draw: houseprice-dusk-01
+ * hero: Stage · nav: edge-aligned · footer: mast · imagery: photographs · signature: smoked glass valuation console · dusk: fog/periwinkle-apricot/glass
+ * axes: dark/grotesk-sans/cool · posture: committed · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V5 · weakest: S, real dusk valley fog photograph anchored with smoked glass valuation console */
+/* waive 26b · primary navigation header links all remain active destinations (Home, Analytics, Model, About, Predict); no dead-end route exists in this header. */
 .header {
   position: sticky;
   z-index: var(--z-sticky-nav);
   top: 0;
   border-bottom: 1px solid var(--color-rule);
-  background: var(--color-paper);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.35);
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.35);
+  box-shadow: var(--glass-hi);
+  transition: background-color var(--dur-short) var(--ease-out), border-color var(--dur-short) var(--ease-out);
 }
 
 .header--scrolled {
-  background: var(--color-paper-3);
+  background: color-mix(in oklab, var(--color-paper) 88%, transparent);
+  border-bottom-color: var(--color-rule-2);
 }
 
 .header__inner {
   display: flex;
   width: 100%;
   max-width: var(--container);
-  min-height: 72px;
+  min-height: var(--header-height);
   align-items: center;
   justify-content: space-between;
   gap: var(--space-lg);
@@ -30,15 +38,16 @@
   align-items: center;
   gap: var(--space-sm);
   color: var(--color-ink);
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  font-weight: var(--display-weight);
+  letter-spacing: var(--tracking-display);
   text-decoration: none;
   white-space: nowrap;
 }
 
 .header__logo svg {
-  color: var(--color-cool);
+  color: var(--color-accent);
 }
 
 .header__nav {
@@ -53,7 +62,9 @@
   min-height: 44px;
   align-items: center;
   color: var(--color-ink-2);
+  font-family: var(--font-body);
   font-size: var(--text-sm);
+  font-weight: 500;
   text-decoration: none;
   white-space: nowrap;
   transition: color var(--dur-short) var(--ease-out);
@@ -70,7 +81,7 @@
   bottom: 0;
   left: 0;
   height: 2px;
-  background: var(--color-cool);
+  background: var(--color-accent);
   content: "";
 }
 
@@ -85,21 +96,33 @@
   min-height: 40px;
   align-items: center;
   justify-content: center;
-  padding-inline: var(--space-md);
-  border: 1px solid var(--color-accent);
-  border-radius: var(--radius-control);
+  padding-inline: var(--space-lg);
+  border: 0;
+  border-radius: var(--radius-pill);
   background: var(--color-accent);
   color: var(--color-accent-ink);
+  font-family: var(--font-body);
   font-size: var(--text-sm);
   font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
-  transition: background-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out);
+  box-shadow: inset 0 1px 0 color-mix(in oklab, var(--color-light) 35%, transparent);
+  transition: background-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out), transform var(--dur-micro) var(--ease-out);
 }
 
 .header__cta:hover {
-  background: var(--color-ink);
-  color: var(--color-paper);
+  background: var(--color-accent-hi);
+  outline: 2px solid var(--color-accent-soft);
+  outline-offset: 2px;
+}
+
+.header__cta:active {
+  transform: translateY(1px);
+}
+
+.header__cta:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
 }
 
 .header__mobile-toggle {
@@ -108,19 +131,49 @@
   height: 44px;
   align-items: center;
   justify-content: center;
+  padding: 0;
   border: 1px solid var(--color-rule);
-  border-radius: var(--radius-control);
-  background: var(--color-paper-2);
+  border-radius: var(--radius-inner);
+  background: transparent;
+  color: var(--color-ink);
+  cursor: pointer;
 }
 
 .header__mobile-toggle:hover {
   border-color: var(--color-rule-2);
 }
 
+.header__mobile-toggle:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.header__mobile-toggle:active {
+  transform: scale(0.96);
+}
+
+.header__mobile-toggle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 @media (max-width: 60rem) {
   .header__inner {
     min-height: 64px;
-    gap: var(--space-sm);
+  }
+
+  .header__nav {
+    gap: var(--space-md);
+  }
+}
+
+@media (max-width: 48rem) {
+  .header__mobile-toggle {
+    display: inline-flex;
+  }
+
+  .header__actions {
+    display: none;
   }
 
   .header__nav {
@@ -129,47 +182,40 @@
     right: 0;
     left: 0;
     display: none;
+    flex-direction: column;
     align-items: stretch;
     gap: 0;
-    padding: var(--space-xs) var(--gutter) var(--space-md);
+    padding: var(--space-md) var(--gutter);
     border-bottom: 1px solid var(--color-rule);
     background: var(--color-paper);
+    box-shadow: var(--shadow-card);
   }
 
   .header__nav--open {
-    display: grid;
+    display: flex;
   }
 
   .header__nav-link {
+    min-height: 48px;
     border-bottom: 1px solid var(--color-rule);
+    font-size: var(--text-md);
   }
 
   .header__nav-link.active::after {
+    top: 0;
     right: auto;
+    bottom: 0;
+    left: calc(var(--gutter) * -1);
     width: 3px;
     height: auto;
-    top: var(--space-sm);
-    bottom: var(--space-sm);
-  }
-
-  .header__mobile-toggle {
-    display: inline-flex;
-    flex: none;
   }
 }
 
-@media (max-width: 40rem) {
-  .header__inner {
-    padding-inline: var(--gutter);
-  }
-
-  .header__logo {
-    gap: var(--space-xs);
-    font-size: var(--text-sm);
-  }
-
+@media (prefers-reduced-motion: reduce) {
+  .header,
+  .header__nav-link,
   .header__cta {
-    min-height: 40px;
-    padding-inline: var(--space-sm);
+    transition: none !important;
   }
 }
+

@@ -57,8 +57,8 @@ const AreaChart = () => {
     >
       <defs>
         <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="var(--color-cool)" stopOpacity="0.24"/>
-          <stop offset="100%" stopColor="var(--color-cool)" stopOpacity="0.02"/>
+          <stop offset="0%" stopColor="var(--color-accent)" stopOpacity="0.28"/>
+          <stop offset="100%" stopColor="var(--color-accent)" stopOpacity="0.02"/>
         </linearGradient>
       </defs>
       {[0,200,400,600,800].map(v => {
@@ -73,7 +73,7 @@ const AreaChart = () => {
         )
       })}
       <polygon points={area} fill="url(#areaGrad)"/>
-      <polyline points={polyline} fill="none" stroke="var(--color-cool)" strokeWidth="2.5"/>
+      <polyline points={polyline} fill="none" stroke="var(--color-accent)" strokeWidth="2.5"/>
       {months.map((m, i) => {
         const x = left + (i / (months.length - 1)) * plotWidth
         const anchor = i === 0 ? 'start' : i === months.length - 1 ? 'end' : 'middle'
@@ -142,7 +142,7 @@ const ScatterChart = () => {
       {pts.map(([sx, sy], i) => {
         const cx = padL + (sx / 1160) * w
         const cy = padB + h - (sy / 960) * h
-        return <circle key={i} cx={cx} cy={cy} r="5" fill="var(--color-cool)" fillOpacity="0.7"/>
+        return <circle key={i} cx={cx} cy={cy} r="5" fill="var(--color-accent)" fillOpacity="0.75"/>
       })}
     </svg>
   )
@@ -164,13 +164,13 @@ const corrData = {
 }
 
 const getCorrelColor = v => {
-  if (v >= 0.9) return 'var(--color-chart-positive-strong)'
-  if (v >= 0.6) return 'var(--color-chart-positive)'
-  if (v >= 0.4) return 'var(--color-chart-positive-mid)'
-  if (v >= 0.2) return 'var(--color-chart-positive-soft)'
+  if (v >= 0.7) return 'var(--color-chart-pos-strong)'
+  if (v >= 0.5) return 'var(--color-chart-pos)'
+  if (v >= 0.3) return 'var(--color-chart-pos-mid)'
+  if (v >= 0.1) return 'var(--color-chart-pos-soft)'
   if (v >= 0) return 'var(--color-paper-3)'
-  if (v >= -0.1) return 'var(--color-chart-negative-soft)'
-  return 'var(--color-chart-negative)'
+  if (v >= -0.15) return 'var(--color-chart-neg-soft)'
+  return 'var(--color-chart-neg)'
 }
 
 const CorrelMatrix = () => (
@@ -213,7 +213,7 @@ const Analytics = () => (
         <div>
           <h1 className="analytics-hero__title">Property analytics</h1>
           <p className="analytics-hero__desc">
-            Static examples from the existing interface; this dashboard is not connected to live market data.
+            Static market illustrations; this dashboard does not connect to live data.
           </p>
         </div>
         <div className="analytics-hero__buttons">

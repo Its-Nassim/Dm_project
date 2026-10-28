@@ -36,10 +36,10 @@ function usage() {
 }
 
 function parseHeader(src, file) {
-  const m = /^---\n([\s\S]*?)\n---/.exec(src);
+  const m = /^---\r?\n([\s\S]*?)\r?\n---/.exec(src);
   if (!m) throw new Error(`${file}: no header block`);
   const h = {};
-  for (const line of m[1].split('\n')) {
+  for (const line of m[1].split(/\r?\n/)) {
     const mm = /^([a-z]+):\s*(.*)$/.exec(line.trim());
     if (mm) h[mm[1]] = mm[2].trim();
   }
@@ -440,9 +440,9 @@ function thumbOf(p, w) {
 function creditOf(p) { return `<a href="${p.page}">${p.author}</a> (${p.license}, Wikimedia Commons)`; }
 
 function tokenBlockOf(src, file) {
-  const m = /```css\s*\n:root\s*\{([\s\S]*?)\n\}\s*\n```/.exec(src);
+  const m = /```css\s*\r?\n:root\s*\{([\s\S]*?)\r?\n\}\s*\r?\n```/.exec(src);
   if (!m) throw new Error(`${file}: no :root block in a css fence`);
-  return m[1].replace(/\/\*[\s\S]*?\*\//g, '').split('\n').map((l) => l.replace(/\s+$/, '')).filter((l) => l.trim()).join('\n');
+  return m[1].replace(/\/\*[\s\S]*?\*\//g, '').split(/\r?\n/).map((l) => l.replace(/\s+$/, '')).filter((l) => l.trim()).join('\n');
 }
 
 const SCALE = `  --space-3xs: 2px; --space-2xs: 4px; --space-xs: 8px; --space-sm: 12px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px; --space-2xl: 64px; --space-3xl: 96px; --space-4xl: 144px;

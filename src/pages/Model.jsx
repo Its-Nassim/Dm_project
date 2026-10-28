@@ -68,7 +68,7 @@ const Model = () => {
             <div className="model-hero__intro">
               <h1 className="model-hero__title">Model details</h1>
               <p className="model-hero__desc">
-                The figures and descriptions below are static examples from the existing interface, not verified output from a connected model.
+                Static interface examples; no evaluation run is verified from a connected model.
               </p>
             </div>
             <dl className="model-hero__specs">
@@ -97,7 +97,7 @@ const Model = () => {
             {metrics.map(metric => (
               <article key={metric.label} className="metric-card">
                 <h3 className="metric-card__label">{metric.label}</h3>
-                <p className="metric-card__value">
+                <p className="metric-card__value num">
                   {metric.value} <span className="metric-card__unit">{metric.unit}</span>
                 </p>
                 <p className="metric-card__badge">{metric.badge}</p>
@@ -126,7 +126,8 @@ const Model = () => {
                   onClick={() => setActiveTab(index)}
                   onKeyDown={event => handleTabKeyDown(event, index)}
                 >
-                  {tab}
+                  <span className="model-tab__dot" aria-hidden="true"></span>
+                  <span>{tab}</span>
                 </button>
               ))}
             </div>
@@ -194,7 +195,7 @@ const Model = () => {
                   </text>
                 ))}
                 <polyline points="40,40 128,120 216,160 304,180 392,190 480,195" fill="none" stroke="var(--color-ink-2)" strokeWidth="2" />
-                <polyline points="40,60 128,130 216,165 304,182 392,188 480,185" fill="none" stroke="var(--color-cool)" strokeWidth="2.5" />
+                <polyline points="40,60 128,130 216,165 304,182 392,188 480,185" fill="none" stroke="var(--color-accent)" strokeWidth="2.5" />
               </svg>
               <div className="model-history-legend">
                 <span>Training loss</span>

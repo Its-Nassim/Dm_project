@@ -1,27 +1,29 @@
-/* Hallmark · shape: Console shell · genre: modern-minimal · theme: Console · redesign: full · nav: edge-aligned · signature: captured valuation form · states: complete · console: graphite · axes: dark/grotesk-sans/chromatic-amber · contrast: pass · v2.0.0 */
-/* Hallmark · pre-emit critique: P5 H5 E4 S4 R5 V4 · weakest: S, lead with the actual valuation workflow rather than synthetic dashboard art */
+/* Hallmark · shape: Stage hero · genre: modern-minimal · theme: Dusk (by request) · job: try · draw: houseprice-dusk-01
+ * hero: Stage · nav: edge-aligned · footer: mast · imagery: photographs · signature: smoked glass valuation console · dusk: fog/periwinkle-apricot/glass
+ * axes: dark/grotesk-sans/cool · posture: committed · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V5 · weakest: S, real dusk valley fog photograph anchored with smoked glass valuation console */
 :root {
   --color-bg-primary: var(--color-paper);
   --color-bg-secondary: var(--color-paper-3);
   --color-bg-card: var(--color-paper-2);
-  --color-bg-card-hover: var(--color-paper-2);
+  --color-bg-card-hover: var(--color-paper-3);
   --color-bg-border-card: var(--color-rule);
-  --color-bg-section: var(--color-paper-3);
-  --color-primary: var(--color-cool);
-  --color-primary-dim: var(--color-cool-soft);
-  --color-primary-glow: var(--color-cool-soft);
-  --color-accent-bright: var(--color-cool);
+  --color-bg-section: var(--color-paper-2);
+  --color-primary: var(--color-accent);
+  --color-primary-dim: var(--color-accent-soft);
+  --color-primary-glow: var(--color-accent-soft);
+  --color-accent-bright: var(--color-accent);
   --color-text-primary: var(--color-ink);
   --color-text-secondary: var(--color-ink-2);
   --color-text-tertiary: var(--color-muted);
   --color-text-muted: var(--color-muted);
-  --color-success: var(--color-ok);
-  --color-warning: var(--color-accent);
-  --color-error: var(--color-bad);
-  --color-red: var(--color-bad);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-accent-2);
+  --color-error: var(--color-error);
+  --color-red: var(--color-error);
   --color-border: var(--color-rule);
-  --color-border-cyan: var(--color-cool-soft);
-  --color-border-hover: var(--color-cool);
+  --color-border-cyan: var(--color-rule-2);
+  --color-border-hover: var(--color-accent);
   --line-height-tight: 1.08;
   --line-height-snug: 1.3;
   --line-height-normal: 1.55;
@@ -39,9 +41,9 @@
   --sp-20: var(--space-2xl);
   --sp-24: var(--space-3xl);
   --sp-32: var(--space-4xl);
-  --radius-sm: var(--radius-control);
-  --radius-md: var(--radius-panel);
-  --radius-lg: var(--radius-panel);
+  --radius-sm: var(--radius-inner);
+  --radius-md: var(--radius-inner);
+  --radius-lg: var(--radius-card);
   --radius-xl: var(--radius-card);
   --radius-2xl: var(--radius-card);
   --radius-full: var(--radius-pill);

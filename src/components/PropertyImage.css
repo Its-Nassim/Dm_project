@@ -1,0 +1,101 @@
+/* PropertyImage Component Styles */
+
+.prop-img-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--color-surface-2, #1b2029);
+  border-radius: var(--radius-sm, 4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Base Image */
+.prop-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  opacity: 0;
+  transition: opacity 280ms cubic-bezier(0.2, 0, 0, 1), transform 400ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.prop-img.is-visible {
+  opacity: 1;
+}
+
+/* Subtle zoom effect on interactive card hover */
+.prop-card:hover .prop-img,
+.prop-img-container.interactive:hover .prop-img {
+  transform: scale(1.03);
+}
+
+/* Shimmer Loading Skeleton */
+.prop-img-skeleton {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-1, #161a22) 0%,
+    var(--color-surface-2, #212732) 50%,
+    var(--color-surface-1, #161a22) 100%
+  );
+  background-size: 200% 100%;
+  animation: prop-skeleton-shimmer 1.8s infinite ease-in-out;
+  z-index: 1;
+}
+
+@keyframes prop-skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Dusk Ambient Scrim / Vignette */
+.prop-img-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(14, 17, 23, 0.08) 0%,
+    rgba(14, 17, 23, 0.25) 60%,
+    rgba(14, 17, 23, 0.72) 100%
+  );
+  z-index: 2;
+  transition: opacity 240ms ease;
+}
+
+/* Fallback Blueprint State */
+.prop-img-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2, 8px);
+  background: var(--color-surface-1, #14171f);
+  border: 1px dashed var(--color-rule, #262c38);
+  color: var(--color-ink-muted, #7e879b);
+  z-index: 1;
+  padding: var(--space-3, 12px);
+  text-align: center;
+}
+
+.prop-img-fallback-icon {
+  stroke: var(--color-ink-subtle, #575f70);
+  opacity: 0.8;
+}
+
+.prop-img-fallback-text {
+  font-size: var(--type-caption, 0.75rem);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--color-ink-muted, #8a94a6);
+}

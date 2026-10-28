@@ -3930,7 +3930,7 @@ const COMMONS = /upload\.wikimedia\.org\/wikipedia\/commons\/(?:thumb\/)?[0-9a-f
 const STOCK = /(?:images|plus)\.unsplash\.com\/(premium_photo|photo)-[\w-]+|images\.pexels\.com\/photos\/\d+|cdn\.pixabay\.com\/photo\//g;
 function check76(ctx) {
   const lib = library();
-  const text = ctx.docs.filter((d) => d.kind === 'html').map((d) => d.src).join('\n');
+  const text = ctx.docs.map((d) => d.src).join('\n');
   const credited = (p) => /^(CC0|Public domain|PD)/i.test(p.license) || text.includes(p.page) || text.includes(p.page.replace(/^https:/, '')) || text.includes(p.author);
   const seen = new Set();
   for (const doc of ctx.docs) {

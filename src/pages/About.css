@@ -1,8 +1,16 @@
-/* Hallmark · shape: Index-First · genre: modern-minimal · theme: Console · redesign: full · job: explain the data and demo · nav: edge-aligned · footer: statement · imagery: none · signature: dataset record · console: graphite · axes: dark/grotesk-sans/chromatic-amber · contrast: pass · v2.0.0 */
-/* Hallmark · pre-emit critique: P5 H5 E4 S4 R5 V4 · weakest: S, lead with the dataset facts and explicit demo limits */
+/* Hallmark · shape: Index-First · genre: modern-minimal · theme: Dusk (by request) · job: explain the data and demo · draw: houseprice-dusk-02
+ * hero: Stage · nav: edge-aligned · footer: mast · imagery: none · signature: dataset bone well · dusk: fog/periwinkle-apricot/glass
+ * axes: dark/grotesk-sans/cool · posture: committed · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V5 · weakest: S, high-contrast bone well for dataset metrics and clean ruled value list */
+.about {
+  min-width: 0;
+  background: var(--color-paper);
+}
+
 .about-hero {
   padding-block: var(--space-3xl);
   border-bottom: 1px solid var(--color-rule);
+  background: var(--color-paper);
 }
 
 .about-hero__content {
@@ -13,40 +21,51 @@
 }
 
 .about-hero__left {
-  display: grid;
-  justify-items: start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   gap: var(--space-lg);
 }
 
 .about-hero__title {
+  color: var(--color-ink);
+  font-family: var(--font-display);
   font-size: var(--text-display-s);
+  font-weight: var(--display-weight);
+  letter-spacing: var(--tracking-display);
+  line-height: 1.08;
 }
 
 .about-hero__desc {
-  max-width: 46ch;
+  max-width: 48ch;
   color: var(--color-ink-2);
+  font-family: var(--font-body);
   font-size: var(--text-lead);
+  line-height: 1.5;
 }
 
 .about-hero__buttons {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-sm);
-}
-
-.about a:active {
-  color: var(--color-accent);
+  margin-top: var(--space-xs);
 }
 
 .about-hero__context {
   justify-self: end;
   padding-bottom: var(--space-xs);
-  color: var(--color-cool);
+  color: var(--color-accent);
+  font-family: var(--font-display);
   font-size: var(--text-lg);
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
+/* How to read this demo: Ruled list */
 .about-values {
-  padding-block: var(--section-gap-s);
+  padding-block: var(--section-gap);
+  border-bottom: 1px solid var(--color-rule);
+  background: var(--color-paper);
 }
 
 .about-values__layout {
@@ -56,196 +75,312 @@
   gap: var(--space-2xl);
 }
 
-.about-values__layout > h2,
-.about-dataset__left > h2 {
+.about-values__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.about-section-title {
+  color: var(--color-ink);
+  font-family: var(--font-display);
   font-size: var(--text-section);
-  text-wrap: balance;
+  font-weight: var(--display-weight);
+  letter-spacing: var(--tracking-display);
+  line-height: 1.1;
+}
+
+.about-values__sub {
+  color: var(--color-muted);
+  font-size: var(--text-md);
+  max-width: 32ch;
 }
 
 .about-values__list {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   border-top: 1px solid var(--color-rule);
 }
 
 .about-value-card {
   display: grid;
-  grid-template-columns: minmax(0, 0.55fr) minmax(0, 1.45fr);
+  grid-template-columns: 24px minmax(0, 1fr);
   align-items: start;
-  gap: var(--space-lg);
-  padding-block: var(--space-lg);
+  gap: var(--space-md);
+  padding-block: var(--space-xl);
   border-bottom: 1px solid var(--color-rule);
 }
 
+.about-value-card__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+  margin-top: 8px;
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-accent) 22%, transparent);
+}
+
+.about-value-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
 .about-value-card__title {
+  color: var(--color-ink);
+  font-family: var(--font-display);
   font-size: var(--text-lg);
   font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 .about-value-card__desc {
-  max-width: 60ch;
+  max-width: 58ch;
   color: var(--color-ink-2);
+  font-size: var(--text-md);
+  line-height: 1.55;
 }
 
-.about-dataset {
+/* King County Dataset: Bone Well */
+.about-dataset-section {
   padding-block: var(--section-gap);
-  border-block: 1px solid var(--color-rule);
-  background: var(--color-paper-3);
+  background: var(--color-paper-2);
+}
+
+.about-well-frame {
+  background: var(--color-well);
+  border-radius: var(--radius-card);
+  padding: var(--space-2xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  box-shadow: 0 30px 60px -20px color-mix(in oklab, var(--color-shade) 50%, transparent);
+}
+
+.about-dataset__plate {
+  width: 100%;
+  border-radius: var(--radius-inner);
+  overflow: hidden;
+  border: 1px solid var(--color-well-rule);
+  background: var(--color-surface-2);
+}
+
+.about-well-card {
+  background: var(--color-card);
+  border-radius: var(--radius-inner);
+  border: 1px solid var(--color-well-rule);
+  padding: var(--space-2xl);
 }
 
 .about-dataset__layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   align-items: start;
   gap: var(--space-2xl);
 }
 
 .about-dataset__left {
-  display: grid;
-  align-content: start;
-  gap: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
 }
 
-.about-dataset__desc,
-.about-dataset__note {
-  max-width: 60ch;
-  color: var(--color-ink-2);
+.about-dataset__title {
+  color: var(--color-well-ink);
+  font-family: var(--font-display);
+  font-size: var(--text-section);
+  font-weight: var(--display-weight);
+  letter-spacing: var(--tracking-display);
+}
+
+.about-dataset__desc {
+  color: var(--color-well-muted);
+  font-size: var(--text-md);
+  line-height: 1.5;
+  max-width: 48ch;
 }
 
 .about-dataset__stats {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin: 0;
-  border-top: 1px solid var(--color-rule);
+  gap: var(--space-md);
+  margin: var(--space-md) 0 0;
+  padding-block: var(--space-md);
+  border-block: 1px solid var(--color-well-rule);
 }
 
 .about-dataset__stat {
-  display: grid;
-  gap: var(--space-xs);
-  padding: var(--space-md) var(--space-sm) var(--space-md) 0;
-  border-bottom: 1px solid var(--color-rule);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xs);
 }
 
 .about-dataset__stat-label {
-  color: var(--color-muted);
-  font-size: var(--text-sm);
+  color: var(--color-well-muted);
+  font-size: var(--text-xs);
 }
 
 .about-dataset__stat-value {
-  color: var(--color-ink);
-  font-size: var(--text-lg);
-  font-variant-numeric: tabular-nums;
+  margin: 0;
+  color: var(--color-well-ink);
+  font-family: var(--font-display);
+  font-size: 1.5rem;
   font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 .about-dataset__note {
-  font-size: var(--text-sm);
+  color: var(--color-well-muted);
+  font-size: var(--text-xs);
+  line-height: 1.45;
+  max-width: 46ch;
 }
 
 .about-dataset__right {
-  padding-top: var(--space-xs);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
 }
 
-.about-dataset__right h3 {
-  margin-bottom: var(--space-lg);
-  font-size: var(--text-xl);
+.about-dataset__dimensions-title {
+  color: var(--color-well-ink);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 .about-dataset__list {
-  padding: 0;
-  margin: 0;
-  border-top: 1px solid var(--color-rule-2);
   list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--color-well-rule);
 }
 
 .about-dataset__list li {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: var(--space-md);
-  padding-block: var(--space-md);
-  border-bottom: 1px solid var(--color-rule);
-}
-
-.about-dataset__list li span:last-child {
-  color: var(--color-muted);
-}
-
-.about-docs {
-  padding-block: var(--section-gap-s);
-}
-
-.about-docs__content {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+  display: flex;
   align-items: center;
-  gap: var(--space-2xl);
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--color-well-rule);
+  font-size: var(--text-sm);
 }
 
-.about-docs__content > div {
-  display: grid;
-  gap: var(--space-sm);
+.dim-label {
+  color: var(--color-well-ink);
+  font-weight: 500;
 }
 
-.about-docs__content h2 {
-  font-size: var(--text-section);
-  text-wrap: balance;
+.dim-code {
+  color: var(--color-well-muted);
+  font-size: var(--text-xs);
 }
 
-.about-docs__desc,
-.about-docs__note {
-  max-width: 55ch;
-  color: var(--color-ink-2);
+.about-well-caption {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xs);
 }
 
-.about-docs__note {
-  padding-left: var(--space-lg);
-  border-left: 1px solid var(--color-accent);
+.about-well-caption__title {
+  color: var(--color-well-ink);
+  font-weight: 600;
+  font-size: var(--text-sm);
+}
+
+.about-well-caption__desc {
+  color: var(--color-well-muted);
+  font-size: var(--text-sm);
+  max-width: 60ch;
+}
+
+/* Project Documentation in Smoked Glass */
+.about-docs {
+  padding-block: var(--section-gap);
+  border-top: 1px solid var(--color-rule);
+  background: var(--color-paper);
+}
+
+.about-docs__card {
+  padding: var(--space-2xl);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xl);
+}
+
+.about-docs__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.about-docs__title {
   color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: var(--text-section);
+  font-weight: var(--display-weight);
+  letter-spacing: var(--tracking-display);
 }
 
-@media (max-width: 60rem) {
-  .about-hero {
-    padding-block: var(--space-2xl);
-  }
+.about-docs__desc {
+  color: var(--color-ink-2);
+  font-size: var(--text-md);
+  max-width: 52ch;
+}
 
-  .about-hero__content,
-  .about-values__layout,
-  .about-dataset__layout,
-  .about-docs__content {
+.about-docs__note-pill {
+  flex-shrink: 0;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-pill);
+  background: color-mix(in oklab, var(--color-light) 4%, transparent);
+  border: 1px solid var(--color-rule);
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+}
+
+/* Responsive */
+@media (max-width: 60rem) {
+  .about-hero__content {
     grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-lg);
   }
 
   .about-hero__context {
     justify-self: start;
   }
+
+  .about-values__layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-xl);
+  }
+
+  .about-dataset__layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-xl);
+  }
+
+  .about-docs__card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 @media (max-width: 40rem) {
-  .about-hero__buttons > * {
-    flex: 1 1 100%;
+  .about-hero {
+    padding-block: var(--space-xl);
   }
 
-  .about-value-card {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-xs);
+  .about-well-frame {
+    padding: var(--space-md);
+  }
+
+  .about-well-card {
+    padding: var(--space-md);
   }
 
   .about-dataset__stats {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .about-dataset__list li {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-xs);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .about *,
-  .about *::before,
-  .about *::after {
-    animation-duration: 0.01ms;
-    animation-iteration-count: 1;
-    scroll-behavior: auto;
-    transition-duration: 0.01ms;
   }
 }
