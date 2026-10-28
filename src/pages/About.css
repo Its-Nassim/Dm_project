@@ -34,6 +34,10 @@
   gap: var(--space-sm);
 }
 
+.about a:active {
+  color: var(--color-accent);
+}
+
 .about-hero__context {
   justify-self: end;
   padding-bottom: var(--space-xs);
@@ -55,6 +59,7 @@
 .about-values__layout > h2,
 .about-dataset__left > h2 {
   font-size: var(--text-section);
+  text-wrap: balance;
 }
 
 .about-values__list {
@@ -182,6 +187,7 @@
 
 .about-docs__content h2 {
   font-size: var(--text-section);
+  text-wrap: balance;
 }
 
 .about-docs__desc,
@@ -230,5 +236,16 @@
   .about-dataset__list li {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-xs);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about *,
+  .about *::before,
+  .about *::after {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    scroll-behavior: auto;
+    transition-duration: 0.01ms;
   }
 }

@@ -2,7 +2,7 @@
 /* Hallmark · pre-emit critique: P5 H5 E4 S4 R5 V4 · weakest: S, lead with the actual valuation workflow rather than synthetic dashboard art */
 *, *::before, *::after { box-sizing: border-box; }
 html, body { overflow-x: clip; }
-html { color-scheme: dark; scroll-padding-top: var(--space-3xl); }
+html { color-scheme: dark; scroll-padding-top: var(--space-3xl); scrollbar-color: var(--color-rule-2) var(--color-paper-3); }
 body { margin: 0; background: var(--color-paper); color: var(--color-ink); font-family: var(--font-body); font-size: var(--text-md); line-height: 1.55; -webkit-font-smoothing: antialiased; caret-color: var(--color-accent); }
 ::selection { background: color-mix(in oklab, var(--color-cool) 30%, transparent); }
 :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }

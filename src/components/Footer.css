@@ -1,5 +1,6 @@
 /* Hallmark · shape: Console shell · genre: modern-minimal · theme: Console · redesign: full · footer: statement · signature: captured valuation form · states: complete · console: graphite · axes: dark/grotesk-sans/chromatic-amber · contrast: pass · v2.0.0 */
 /* Hallmark · pre-emit critique: P5 H5 E4 S4 R5 V4 · weakest: S, close with real destinations and an honest demo note */
+/* Hallmark · waive 26b · Footer contains only active route links · Home, Analytics, Model, About and Predict remain available on every route. */
 .footer {
   border-top: 1px solid var(--color-rule);
   background: var(--color-paper-3);
@@ -53,6 +54,15 @@
 }
 
 .footer__nav a:hover {
+  color: var(--color-accent);
+}
+
+.footer__nav a:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.footer__nav a:active {
   color: var(--color-accent);
 }
 

@@ -60,7 +60,7 @@ const Home = () => (
         <div className="features-split__left">
           <h2 className="features-split__title" id="dataset-title">A King County reference</h2>
           <p className="features-split__desc">
-            The project references the King County housing dataset: 21,613 historical property records from 2014–2015.
+            The project references the King County housing dataset: 21,613 historical property records from 2014 to 2015.
           </p>
           <Link to="/about" className="features-split__link">Read about the dataset</Link>
         </div>

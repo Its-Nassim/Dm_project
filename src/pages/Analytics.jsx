@@ -3,7 +3,7 @@ import './Analytics.css'
 
 /* ── Icons ── */
 const IconDownload = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
     <polyline points="7 10 12 15 17 10"/>
     <line x1="12" y1="15" x2="12" y2="3"/>
@@ -11,21 +11,21 @@ const IconDownload = () => (
 )
 
 const IconTrend = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
     <polyline points="16 7 22 7 22 13"/>
   </svg>
 )
 
 const IconExpand = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
     <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
   </svg>
 )
 
 const IconInfo = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="10"/>
     <line x1="12" y1="16" x2="12" y2="12"/>
     <line x1="12" y1="8" x2="12.01" y2="8"/>
@@ -35,23 +35,24 @@ const IconInfo = () => (
 /* ── Area Chart (SVG) ── */
 const AreaChart = () => {
   const width = 520, height = 200
+  const left = 34, right = 10
+  const plotWidth = width - left - right
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
   const prices = [410,430,440,445,475,510,530,555,570,590,605,620]
   const maxP = 800, minP = 0
   const pts = prices.map((v, i) => {
-    const x = (i / (prices.length - 1)) * width
+    const x = left + (i / (prices.length - 1)) * plotWidth
     const y = height - ((v - minP) / (maxP - minP)) * height
     return `${x},${y}`
   })
   const polyline = pts.join(' ')
-  const area = `0,${height} ${polyline} ${width},${height}`
+  const area = `${left},${height} ${polyline} ${width - right},${height}`
 
   return (
     <svg
       role="img"
       aria-label="Static example line chart of monthly prices, rising from 410 to 620 on the chart's displayed scale"
       viewBox={`0 0 ${width} ${height + 30}`}
-      preserveAspectRatio="none"
       className="area-chart-svg"
     >
       <defs>
@@ -64,9 +65,9 @@ const AreaChart = () => {
         const y = height - ((v - minP) / (maxP - minP)) * height
         return (
           <g key={v}>
-            <line x1="0" y1={y} x2={width} y2={y} stroke="var(--color-rule)" strokeWidth="1"/>
-            <text x="-4" y={y + 4} fontSize="11" fill="var(--color-muted)" textAnchor="end">
-              {v === 0 ? '$0k' : `$${v/1000 >= 1 ? v/1000 + '00k' : v+'k'}`}
+            <line x1={left} y1={y} x2={width - right} y2={y} stroke="var(--color-rule)" strokeWidth="1"/>
+            <text x={left - 4} y={y + 4} fontSize="11" fill="var(--color-muted)" textAnchor="end">
+              {v === 0 ? '$0k' : `$${v}k`}
             </text>
           </g>
         )
@@ -74,10 +75,9 @@ const AreaChart = () => {
       <polygon points={area} fill="url(#areaGrad)"/>
       <polyline points={polyline} fill="none" stroke="var(--color-cool)" strokeWidth="2.5"/>
       {months.map((m, i) => {
-        const x = (i / (months.length - 1)) * width
-        return (
-          <text key={m} x={x} y={height + 20} fontSize="11" fill="var(--color-muted)" textAnchor="middle">{m}</text>
-        )
+        const x = left + (i / (months.length - 1)) * plotWidth
+        const anchor = i === 0 ? 'start' : i === months.length - 1 ? 'end' : 'middle'
+        return <text key={m} x={x} y={height + 20} fontSize="11" fill="var(--color-muted)" textAnchor={anchor}>{m}</text>
       })}
     </svg>
   )

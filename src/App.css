@@ -1,3 +1,12 @@
 /* Hallmark · shape: Console shell · genre: modern-minimal · theme: Console · redesign: full · axes: dark/grotesk-sans/chromatic-amber · contrast: pass · v2.0.0 */
 /* Hallmark · pre-emit critique: P5 H5 E4 S4 R5 V4 · weakest: S, lead with the actual valuation workflow rather than synthetic dashboard art */
 /* Legacy entry point; active global styles are imported by src/main.jsx. */
+
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+:active:not(:disabled) {
+  transform: translateY(1px);
+}
