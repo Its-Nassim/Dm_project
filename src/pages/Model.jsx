@@ -1,50 +1,41 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { getModelInfo } from '../api/client.js'
+import { useSchema } from '../config/featureSchema.js'
+import { DEFAULT_CLASSES } from '../config/classes.js'
+import ClassBadge from '../components/ClassBadge.jsx'
 import './Model.css'
 
-const TABS = ['Architecture', 'Features', 'History']
-
-const specs = [
-  { label: 'Algorithm', value: 'XGBoost Ensemble' },
-  { label: 'Parameters', value: '1.2M Weighted Neurons' },
-  { label: 'Training set', value: '21.6K properties' },
-  { label: 'Inference', value: '< 45ms latency' },
-]
-
-const metrics = [
-  { label: 'R-squared score', badge: '+0.02 vs V2.0', value: '0.941', unit: 'R²', desc: 'Existing interface value; not verified against a connected model.' },
-  { label: 'Mean absolute error', badge: '-12% error rate', value: '$9,452', unit: 'MAE', desc: 'Existing interface value; not verified against a connected model.' },
-  { label: 'Root mean squared error', badge: 'Optimal range', value: '$12,840', unit: 'RMSE', desc: 'Existing interface value; not verified against a connected model.' },
-  { label: 'Median error', badge: '98th percentile', value: '3.2', unit: '%', desc: 'Existing interface value; not verified against a connected model.' },
-]
-
-const features = [
-  { label: 'sqft_living', value: 0.85 },
-  { label: 'grade', value: 0.72 },
-  { label: 'lat (location)', value: 0.65 },
-  { label: 'long (location)', value: 0.45 },
-  { label: 'waterfront', value: 0.38 },
-  { label: 'bathrooms', value: 0.28 },
-  { label: 'view', value: 0.22 },
-]
-
-const HealthBar = ({ label, value, level }) => (
-  <div className="health-bar">
-    <div className="health-bar__header">
-      <span>{label}</span>
-      <span className="health-bar__value">{value}</span>
-    </div>
-    <div className="health-bar__track" aria-hidden="true">
-      <div className={`health-bar__fill health-bar__fill--${level}`} />
-    </div>
-  </div>
-)
+const TABS = ['Classes', 'Features', 'Evaluation']
 
 const Model = () => {
   const [activeTab, setActiveTab] = useState(0)
+  const [modelInfo, setModelInfo] = useState(null)
+  const [loading, setLoading] = useState(true)
   const tabRefs = useRef([])
+  const { schema } = useSchema()
 
-  const selectTab = index => {
+  useEffect(() => {
+    let isMounted = true
+    getModelInfo()
+      .then((data) => {
+        if (!isMounted) return
+        setModelInfo(data)
+      })
+      .catch(() => {
+        if (!isMounted) return
+        setModelInfo(null)
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false)
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  const selectTab = (index) => {
     setActiveTab(index)
     tabRefs.current[index]?.focus()
   }
@@ -60,6 +51,32 @@ const Model = () => {
     selectTab(nextIndex)
   }
 
+  const featureCount = schema?.features?.length || '-'
+
+  const specs = [
+    { label: 'Algorithm', value: 'Decision Tree classifier (single model)' },
+    { label: 'Task', value: 'Supervised classification, 4 classes' },
+    { label: 'Input features', value: String(featureCount) },
+  ]
+
+  if (modelInfo?.sklearn_version) {
+    specs.push({ label: 'scikit-learn version', value: modelInfo.sklearn_version })
+  }
+  if (modelInfo?.training_rows) {
+    specs.push({ label: 'Training rows', value: Number(modelInfo.training_rows).toLocaleString() })
+  }
+
+  const rawMetrics = modelInfo?.metrics || null
+  const metricList = rawMetrics
+    ? Object.entries(rawMetrics).map(([k, v]) => ({
+        label: k.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
+        value: typeof v === 'number' ? (v < 1 ? (v * 100).toFixed(1) + '%' : v.toLocaleString()) : String(v),
+      }))
+    : []
+
+  const featureImportances = modelInfo?.feature_importances || null
+  const confusionMatrix = modelInfo?.confusion_matrix || null
+
   return (
     <div className="model">
       <header className="model-hero">
@@ -68,11 +85,11 @@ const Model = () => {
             <div className="model-hero__intro">
               <h1 className="model-hero__title">Model details</h1>
               <p className="model-hero__desc">
-                Static interface examples; no evaluation run is verified from a connected model.
+                Values on this page come from the backend&apos;s /model_info when it is connected.
               </p>
             </div>
             <dl className="model-hero__specs">
-              {specs.map(spec => (
+              {specs.map((spec) => (
                 <div key={spec.label} className="model-spec">
                   <dt className="model-spec__label">{spec.label}</dt>
                   <dd className="model-spec__value">{spec.value}</dd>
@@ -87,35 +104,47 @@ const Model = () => {
         <div className="container">
           <div className="model-metrics__header">
             <div>
-              <h2 className="model-metrics__title" id="model-metrics-title">Validation examples</h2>
+              <h2 className="model-metrics__title" id="model-metrics-title">Performance metrics</h2>
               <p className="model-metrics__sub">
-                Preserved values from the original UI. No evaluation run is available here.
+                Evaluated on held-out test data (stratified split, random_state=42).
               </p>
             </div>
           </div>
-          <div className="model-metrics__grid">
-            {metrics.map(metric => (
-              <article key={metric.label} className="metric-card">
-                <h3 className="metric-card__label">{metric.label}</h3>
-                <p className="metric-card__value num">
-                  {metric.value} <span className="metric-card__unit">{metric.unit}</span>
-                </p>
-                <p className="metric-card__badge">{metric.badge}</p>
-                <p className="metric-card__desc">{metric.desc}</p>
-              </article>
-            ))}
-          </div>
+
+          {loading ? (
+            <div className="model-not-connected-card">
+              <p>Checking for model diagnostics from /model_info...</p>
+            </div>
+          ) : metricList.length > 0 ? (
+            <div className="model-metrics__grid">
+              {metricList.map((metric) => (
+                <article key={metric.label} className="metric-card">
+                  <h3 className="metric-card__label">{metric.label}</h3>
+                  <p className="metric-card__value num">{metric.value}</p>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="model-not-connected-card">
+              <h3 className="model-not-connected-card__title">Model metrics are not connected yet.</h3>
+              <p className="model-not-connected-card__desc">
+                Metrics will appear here automatically when M4 exports the trained pipeline and M5 serves the /model_info endpoint.
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
-      <section className="model-tabs-section" aria-label="Model information">
+      <section className="model-tabs-section" aria-label="Model information tabs">
         <div className="container">
           <div className="model-tabs-bar">
             <div className="model-tabs" role="tablist" aria-label="Model information">
               {TABS.map((tab, index) => (
                 <button
                   key={tab}
-                  ref={element => { tabRefs.current[index] = element }}
+                  ref={(element) => {
+                    tabRefs.current[index] = element
+                  }}
                   id={`model-tab-${index}`}
                   className={`model-tab ${activeTab === index ? 'model-tab--active' : ''}`}
                   type="button"
@@ -123,84 +152,121 @@ const Model = () => {
                   aria-selected={activeTab === index}
                   aria-controls={`model-panel-${index}`}
                   tabIndex={activeTab === index ? 0 : -1}
-                  onClick={() => setActiveTab(index)}
-                  onKeyDown={event => handleTabKeyDown(event, index)}
+                  onClick={() => selectTab(index)}
+                  onKeyDown={(event) => handleTabKeyDown(event, index)}
                 >
-                  <span className="model-tab__dot" aria-hidden="true"></span>
+                  <span className="model-tab__dot" aria-hidden="true" />
                   <span>{tab}</span>
                 </button>
               ))}
             </div>
-            <p className="model-tabs__note">Static interface content</p>
           </div>
 
-          <section id="model-panel-0" className="model-arch" role="tabpanel" aria-labelledby="model-tab-0" tabIndex="0" hidden={activeTab !== 0}>
-              <div className="model-arch__layout">
-                <div className="model-arch__left">
-                  <h3 className="model-arch__title">Architecture notes</h3>
-                  <p className="model-arch__sub">
-                    The original copy refers to an XGBoost ensemble and weighted neurons. Those descriptions are inconsistent and cannot be verified without the model implementation.
-                  </p>
-                </div>
-                <div className="model-arch__right">
-                  <h3 className="model-arch__health-title">Example status values</h3>
-                  <HealthBar label="Generalization" value="99.2%" level="high" />
-                  <HealthBar label="Bias score" value="Low (0.002)" level="low" />
-                  <HealthBar label="Robustness" value="High" level="high" />
-                </div>
-              </div>
-          </section>
-
-          <section id="model-panel-1" className="model-fi" role="tabpanel" aria-labelledby="model-tab-1" tabIndex="0" hidden={activeTab !== 1}>
+          {/* Panel 0: Classes */}
+          <section
+            id="model-panel-0"
+            className="model-tab-panel"
+            role="tabpanel"
+            aria-labelledby="model-tab-0"
+            tabIndex={0}
+            hidden={activeTab !== 0}
+          >
+            <div className="model-classes-panel">
               <div className="model-panel__header">
-                <h3>Feature importance examples</h3>
-                <p>Static values retained from the original interface; not computed here.</p>
+                <h3>Target price categories</h3>
+                <p>
+                  The model classifies whether an asking price is attractive or expensive relative to comparable houses:
+                </p>
               </div>
-              <div className="model-fi__chart">
-                {features.map(feature => (
-                  <div key={feature.label} className="model-fi__row">
-                    <span className="model-fi__label">{feature.label}</span>
-                    <div className="model-fi__track" aria-hidden="true">
-                      <div className="model-fi__fill" style={{ width: `${feature.value * 100}%` }} />
-                    </div>
-                    <span className="model-fi__value">{(feature.value * 100).toFixed(0)}%</span>
+              <div className="model-classes-grid">
+                {DEFAULT_CLASSES.map((cls) => (
+                  <div key={cls.id} className="model-class-card">
+                    <ClassBadge id={cls.id} name={cls.name} />
+                    <p className="model-class-card__desc">
+                      {cls.id === 0 && 'Asking price is below the average of comparable houses.'}
+                      {cls.id === 1 && 'Asking price matches comparable benchmark houses.'}
+                      {cls.id === 2 && 'Asking price is moderately higher than comparable houses.'}
+                      {cls.id === 3 && 'Asking price is substantially higher than comparable houses.'}
+                    </p>
                   </div>
                 ))}
               </div>
+            </div>
           </section>
 
-          <section id="model-panel-2" className="model-fi" role="tabpanel" aria-labelledby="model-tab-2" tabIndex="0" hidden={activeTab !== 2}>
-              <div className="model-panel__header">
-                <h3>Training vs. validation loss</h3>
-                <p>Illustrative chart from the existing interface; no training history is connected.</p>
-              </div>
-              <svg
-                className="model-history-chart"
-                role="img"
-                aria-label="Static example chart comparing training and validation loss across six epochs"
-                viewBox="0 0 500 240"
-              >
-                <title>Static example training and validation loss</title>
-                {[0, 50, 100, 150, 200].map(y => (
-                  <g key={y}>
-                    <line x1="40" y1={y + 20} x2="480" y2={y + 20} stroke="var(--color-rule)" strokeWidth="1" />
-                    <text x="30" y={y + 24} fontSize="11" fill="var(--color-muted)" textAnchor="end">
-                      {((200 - y) / 100).toFixed(1)}
-                    </text>
-                  </g>
+          {/* Panel 1: Features */}
+          <section
+            id="model-panel-1"
+            className="model-tab-panel"
+            role="tabpanel"
+            aria-labelledby="model-tab-1"
+            tabIndex={0}
+            hidden={activeTab !== 1}
+          >
+            <div className="model-panel__header">
+              <h3>Feature importances</h3>
+              <p>Importance values reported by the fitted Decision Tree model.</p>
+            </div>
+            {featureImportances && Array.isArray(featureImportances) && featureImportances.length > 0 ? (
+              <div className="model-fi__chart">
+                {featureImportances.map((f) => (
+                  <div key={f.name || f.label} className="model-fi__row">
+                    <span className="model-fi__label">{f.name || f.label}</span>
+                    <div className="model-fi__track" aria-hidden="true">
+                      <div className="model-fi__fill" style={{ width: `${(f.importance || f.value || 0) * 100}%` }} />
+                    </div>
+                    <span className="model-fi__value num">{((f.importance || f.value || 0) * 100).toFixed(1)}%</span>
+                  </div>
                 ))}
-                {[0, 100, 200, 300, 400, 500].map((epoch, index) => (
-                  <text key={epoch} x={40 + (index * 88)} y="236" fontSize="11" fill="var(--color-muted)" textAnchor="middle">
-                    {epoch}
-                  </text>
-                ))}
-                <polyline points="40,40 128,120 216,160 304,180 392,190 480,195" fill="none" stroke="var(--color-ink-2)" strokeWidth="2" />
-                <polyline points="40,60 128,130 216,165 304,182 392,188 480,185" fill="none" stroke="var(--color-accent)" strokeWidth="2.5" />
-              </svg>
-              <div className="model-history-legend">
-                <span>Training loss</span>
-                <span>Validation loss</span>
               </div>
+            ) : (
+              <div className="model-not-connected-card">
+                <p>Feature importances will be displayed once supplied by the /model_info endpoint.</p>
+              </div>
+            )}
+          </section>
+
+          {/* Panel 2: Evaluation */}
+          <section
+            id="model-panel-2"
+            className="model-tab-panel"
+            role="tabpanel"
+            aria-labelledby="model-tab-2"
+            tabIndex={0}
+            hidden={activeTab !== 2}
+          >
+            <div className="model-panel__header">
+              <h3>Confusion matrix & evaluation breakdown</h3>
+              <p>Classification performance across the four target categories.</p>
+            </div>
+            {confusionMatrix && Array.isArray(confusionMatrix) ? (
+              <div className="model-cm-table-container">
+                <table className="model-cm-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Actual \ Predicted</th>
+                      {DEFAULT_CLASSES.map((c) => (
+                        <th key={c.id} scope="col">Class {c.id}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {confusionMatrix.map((row, rowIdx) => (
+                      <tr key={rowIdx}>
+                        <th scope="row">Class {rowIdx}</th>
+                        {row.map((val, colIdx) => (
+                          <td key={colIdx} className="num">{val}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div className="model-not-connected-card">
+                <p>Confusion matrix will be displayed once supplied by the /model_info endpoint.</p>
+              </div>
+            )}
           </section>
         </div>
       </section>
@@ -208,17 +274,13 @@ const Model = () => {
       <section className="model-cta">
         <div className="container model-cta__inner">
           <div>
-            <h2 className="model-cta__title">Continue to the form</h2>
+            <h2 className="model-cta__title">Ready to test the classifier?</h2>
             <p className="model-cta__desc">
-              The form carries its selected values to the fixed demonstration result.
+              Test asking prices using the single-house form or upload a batch CSV.
             </p>
           </div>
           <div className="model-cta__actions">
             <Link to="/prediction" className="btn-primary">Open the form</Link>
-            <button type="button" className="btn-outline" disabled aria-describedby="whitepaper-note">
-              Download whitepaper
-            </button>
-            <p id="whitepaper-note" className="model-cta__note">No whitepaper file is connected.</p>
           </div>
         </div>
       </section>

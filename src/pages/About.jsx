@@ -9,11 +9,11 @@ const About = () => (
         <div className="about-hero__left">
           <h1 className="about-hero__title">About HousePrice AI</h1>
           <p className="about-hero__desc">
-            A guide to King County housing data references and property demo behavior.
+            A guide to King County housing classification methodology and system behavior.
           </p>
           <div className="about-hero__buttons">
-            <Link to="/prediction" className="btn-primary">Try the form</Link>
-            <Link to="/analytics" className="btn-outline">View market charts</Link>
+            <Link to="/prediction" className="btn-primary">Classify a house</Link>
+            <Link to="/analytics" className="btn-outline">Dataset analytics</Link>
           </div>
         </div>
         <p className="about-hero__context">King County, Washington</p>
@@ -29,29 +29,29 @@ const About = () => (
         </div>
         <div className="about-values__list">
           <article className="about-value-card">
-            <span className="about-value-card__dot" aria-hidden="true"></span>
+            <span className="about-value-card__dot" aria-hidden="true" />
             <div className="about-value-card__body">
               <h3 className="about-value-card__title">Inputs</h3>
               <p className="about-value-card__desc">
-                The form collects bedrooms, bathrooms, square footage, grade, and waterfront status, carrying them to the result route.
+                The form is generated from feature_schema.json. The asking price is a required input.
               </p>
             </div>
           </article>
           <article className="about-value-card">
-            <span className="about-value-card__dot" aria-hidden="true"></span>
+            <span className="about-value-card__dot" aria-hidden="true" />
             <div className="about-value-card__body">
               <h3 className="about-value-card__title">Results</h3>
               <p className="about-value-card__desc">
-                The displayed valuation is fixed sample content. It illustrates result presentation rather than running live server inference.
+                The page shows the predicted price category and, when the server supplies them, class probabilities. Predictions come from a trained Decision Tree served by the Flask API. In mock mode the responses are fake and labeled as such.
               </p>
             </div>
           </article>
           <article className="about-value-card">
-            <span className="about-value-card__dot" aria-hidden="true"></span>
+            <span className="about-value-card__dot" aria-hidden="true" />
             <div className="about-value-card__body">
               <h3 className="about-value-card__title">Data</h3>
               <p className="about-value-card__desc">
-                The project references a historical King County housing corpus; the interface has no connected external database.
+                House sales dataset for King County (Kaggle). The interface is not connected to an external database.
               </p>
             </div>
           </article>
@@ -66,7 +66,7 @@ const About = () => (
           <div className="about-dataset__plate">
             <PropertyImage
               src="/images/hero/hero-dusk-residence.jpg"
-              alt="King County contemporary residential architecture"
+              alt=""
               aspectRatio="21/9"
               fallbackLabel="King County Contemporary Architecture"
               showVignette={true}
@@ -77,40 +77,43 @@ const About = () => (
               <div className="about-dataset__left">
                 <h2 id="dataset-detail-title" className="about-dataset__title">The King County housing dataset</h2>
                 <p className="about-dataset__desc">
-                  Residential sales in Seattle and surrounding municipalities from May 2014 through May 2015.
+                  Residential sales in King County, Washington utilized for housing price classification.
                 </p>
                 <dl className="about-dataset__stats">
                   <div className="about-dataset__stat">
-                    <dt className="about-dataset__stat-label">Records stated in project</dt>
-                    <dd className="about-dataset__stat-value num">21,613</dd>
+                    <dt className="about-dataset__stat-label">Columns in dataset</dt>
+                    <dd className="about-dataset__stat-value num">21</dd>
                   </div>
                   <div className="about-dataset__stat">
-                    <dt className="about-dataset__stat-label">Features stated in project</dt>
-                    <dd className="about-dataset__stat-value num">20</dd>
+                    <dt className="about-dataset__stat-label">Rows</dt>
+                    <dd className="about-dataset__stat-value num">21,000+ (project brief)</dd>
                   </div>
                   <div className="about-dataset__stat">
-                    <dt className="about-dataset__stat-label">Source named in project</dt>
-                    <dd className="about-dataset__stat-value">King County Govt</dd>
+                    <dt className="about-dataset__stat-label">Source</dt>
+                    <dd className="about-dataset__stat-value">Kaggle</dd>
                   </div>
                   <div className="about-dataset__stat">
-                    <dt className="about-dataset__stat-label">Validation split in copy</dt>
-                    <dd className="about-dataset__stat-value num">20% random</dd>
+                    <dt className="about-dataset__stat-label">Train/test split</dt>
+                    <dd className="about-dataset__stat-value num">80/20, stratified, random_state=42 (project plan; confirm with M3)</dd>
                   </div>
                 </dl>
-                <p className="about-dataset__note">
-                  Values preserved from existing project copy; model verification runs independently.
-                </p>
               </div>
 
               <div className="about-dataset__right">
-                <h3 className="about-dataset__dimensions-title">Dimensions named in interface</h3>
+                <h3 className="about-dataset__dimensions-title">Dataset features</h3>
                 <ul className="about-dataset__list">
+                  <li><span className="dim-label">Asking price</span><span className="dim-code num">price</span></li>
                   <li><span className="dim-label">Living area</span><span className="dim-code num">sqft_living</span></li>
-                  <li><span className="dim-label">Condition and grade</span><span className="dim-code">Property quality</span></li>
-                  <li><span className="dim-label">Renovation history</span><span className="dim-code num">Year renovated</span></li>
+                  <li><span className="dim-label">Area above ground</span><span className="dim-code num">sqft_above</span></li>
                   <li><span className="dim-label">Basement area</span><span className="dim-code num">sqft_basement</span></li>
-                  <li><span className="dim-label">Location</span><span className="dim-code">Latitude and longitude</span></li>
+                  <li><span className="dim-label">Year built</span><span className="dim-code num">yr_built</span></li>
+                  <li><span className="dim-label">Year renovated</span><span className="dim-code num">yr_renovated</span></li>
+                  <li><span className="dim-label">Location</span><span className="dim-code num">zipcode, lat, long</span></li>
+                  <li><span className="dim-label">Quality & condition</span><span className="dim-code num">grade, condition, view, waterfront</span></li>
                 </ul>
+                <p className="about-dataset__note">
+                  Which columns are model inputs is defined by feature_schema.json.
+                </p>
               </div>
             </div>
           </div>
@@ -132,11 +135,8 @@ const About = () => (
           <div className="about-docs__text">
             <h2 id="about-docs-title" className="about-docs__title">Project documentation</h2>
             <p className="about-docs__desc">
-              Methodology and Data Audit controls in original templates do not link to separate routes in this demo.
+              Methodology documents are part of the team report and are not linked from this interface.
             </p>
-          </div>
-          <div className="about-docs__note-pill">
-            No documentation or audit report is connected here.
           </div>
         </div>
       </div>

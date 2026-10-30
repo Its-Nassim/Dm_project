@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import ApiStatus from './ApiStatus.jsx'
 import './Footer.css'
 
 const Footer = () => (
@@ -7,7 +8,7 @@ const Footer = () => (
       <div className="footer__statement">
         <p className="footer__brand-name">HousePrice AI</p>
         <p className="footer__brand-desc">
-          King County housing dataset reference, presented through a calibrated property valuation demo.
+          Classifies whether a King County house&apos;s asking price is attractive or too expensive relative to comparable houses.
         </p>
       </div>
 
@@ -24,7 +25,9 @@ const Footer = () => (
         <p className="footer__credit">
           Photographs: <a href="https://commons.wikimedia.org/wiki/File:Vallee-brouillard.jpg" target="_blank" rel="noopener noreferrer">Thomas Bresson</a> (CC BY 3.0, Wikimedia Commons)
         </p>
-        <p className="footer__note">Static demonstration interface; no live valuation service</p>
+        <div className="footer__note">
+          <ApiStatus />
+        </div>
       </div>
     </div>
   </footer>

@@ -1,181 +1,112 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { calculateValuation } from './PredictionForm'
+import { DEFAULT_CLASSES } from '../config/classes.js'
+import { useSchema } from '../config/featureSchema.js'
+import ClassBadge from '../components/ClassBadge.jsx'
 import PropertyImage from '../components/PropertyImage'
 import './Home.css'
 
-const tourJobs = [
+const tourViews = [
   {
-    id: 'prediction',
-    title: 'Property valuation form',
-    desc: 'Configure bedrooms, bathrooms, living area, and waterfront status.',
+    id: 'single',
+    title: 'Single house classification',
+    desc: 'Enter property specifications and asking price to classify price fairness.',
     path: '/prediction',
-    previewLabel: 'Input configuration',
-    previewTitle: '18 property parameters',
-    previewDetail: 'Select bedroom counts, square footage, zip code, and grade ratings to test valuation inputs.',
-    tag: 'Interactive form',
+    previewLabel: 'Interactive form',
+    previewTitle: 'Single house evaluation',
+    previewDetail: 'Configure bedrooms, square footage, condition, grade, and asking price to see the predicted price category and class probabilities.',
+    tag: 'Single house',
     image: '/images/properties/prop-single-family.jpg',
   },
   {
-    id: 'result',
-    title: 'Valuation benchmark',
-    desc: 'Inspect the demonstration valuation benchmark and property parameter summary.',
-    path: '/prediction/result',
-    previewLabel: 'Demo calculation',
-    previewTitle: '$640,000 reference value',
-    previewDetail: 'Fixed demonstration output illustrating predicted valuation based on standard King County criteria.',
-    tag: 'Demo result',
-    image: '/images/comps/comp-phinney.jpg',
-  },
-  {
-    id: 'analytics',
-    title: 'Market distribution charts',
-    desc: 'Review historical sales distributions and grade-to-price correlations.',
-    path: '/analytics',
-    previewLabel: 'Historical analytics',
-    previewTitle: 'Price vs square footage',
-    previewDetail: 'Scatter and box plot distributions from 21,613 King County property records.',
-    tag: 'Market data',
+    id: 'csv',
+    title: 'Batch CSV classification',
+    desc: 'Upload a CSV containing multiple properties to classify all asking prices at once.',
+    path: '/prediction?mode=csv',
+    previewLabel: 'Bulk analysis',
+    previewTitle: 'CSV batch processing',
+    previewDetail: 'Upload King County property rows, inspect paginated results with class badges, and export the classified results CSV.',
+    tag: 'Batch upload',
     image: '/images/properties/prop-condo.jpg',
   },
   {
     id: 'model',
-    title: 'Model architecture',
-    desc: 'Examine Ridge regression coefficients, feature weights, and evaluation metrics.',
+    title: 'Decision Tree details',
+    desc: 'Review model architecture, feature importances, and evaluation metrics.',
     path: '/model',
     previewLabel: 'Model diagnostics',
-    previewTitle: 'Ridge regression weights',
-    previewDetail: 'Coefficients, cross-validation scoring, and feature attribution across housing attributes.',
-    tag: 'Model diagnostics',
+    previewTitle: 'Decision Tree classifier',
+    previewDetail: 'Single supervised classification model trained offline to predict price relevance against comparable houses.',
+    tag: 'Model details',
     image: '/images/properties/prop-waterfront.jpg',
   },
 ]
 
 const Home = () => {
   const [activeTourIndex, setActiveTourIndex] = useState(0)
-  const [heroSqft, setHeroSqft] = useState(2180)
-  const [heroZip, setHeroZip] = useState('98103')
+  const { schema } = useSchema()
+  const currentTour = tourViews[activeTourIndex]
 
-  const heroValuation = useMemo(() => calculateValuation({
-    zip: heroZip,
-    sqft: heroSqft,
-    lotSqft: 6400,
-    bedrooms: 3,
-    bathrooms: 2.25,
-    floors: 2,
-    grade: 8,
-    yrBuilt: 1996,
-    isRenovated: false,
-    waterfront: false,
-    view: 1,
-    condition: 4,
-  }), [heroZip, heroSqft])
-
-  const currentTour = tourJobs[activeTourIndex]
+  const featureCountDisplay = schema?.features
+    ? schema.features.length
+    : '-'
 
   return (
     <div className="home">
       {/* Dusk Stage Hero */}
-      <section className="hero" aria-label="Overview and property valuation">
+      <section className="hero" aria-label="Overview and property classification">
         <div className="hero__photo-frame" aria-hidden="true">
           <img
             src="/images/hero/hero-dusk-residence.jpg"
-            alt="Contemporary Pacific Northwest residential home at dusk"
+            alt=""
             className="hero__photo"
             width="1920"
             height="1080"
             fetchPriority="high"
           />
-          <div className="hero__scrim"></div>
-          <span className="visually-hidden">HousePrice AI architectural dusk residence valuation stage</span>
+          <div className="hero__scrim" />
         </div>
 
         <div className="hero__inner container">
           <div className="hero__lead-col">
-            <h1 className="hero__title">Predict the Value of Your Home</h1>
+            <h1 className="hero__title">Is the asking price fair for comparable houses?</h1>
             <p className="hero__desc">
-              Explore property valuations calibrated against 21,613 King County housing records.
+              Classify a King County house&apos;s asking price as cheaper than average, reasonable, over priced or too over priced.
             </p>
             <div className="hero__actions">
-              <Link to="/prediction" className="btn-primary">Start a valuation</Link>
-              <Link to="/analytics" className="btn-outline">Explore market charts</Link>
+              <Link to="/prediction" className="btn-primary">Classify a house</Link>
+              <Link to="/prediction?mode=csv" className="btn-outline">Upload a CSV</Link>
             </div>
           </div>
 
           <div className="hero__console-col">
-            <div className="glass hero__console" aria-label="Calibrated valuation preview">
-              <div className="hero__console-head">
-                <span className="hero__console-title">Valuation console</span>
+            <div className="glass hero__categories-card" aria-label="Target price categories">
+              <div className="hero__categories-head">
+                <span className="hero__categories-title">Four price categories</span>
                 <span className="hero__status-badge">
-                  <span className="hero__status-dot" aria-hidden="true"></span>
-                  Model active
+                  <span className="hero__status-dot" aria-hidden="true" />
+                  Target definition
                 </span>
               </div>
 
-              <div className="hero__param-list">
-                <div className="hero__param-row">
-                  <label htmlFor="hero-zip" className="hero__param-name">Location</label>
-                  <select
-                    id="hero-zip"
-                    value={heroZip}
-                    onChange={e => setHeroZip(e.target.value)}
-                    className="hero__quick-select"
-                  >
-                    <option value="98103">Seattle: Wallingford</option>
-                    <option value="98004">Bellevue: Downtown</option>
-                    <option value="98033">Kirkland: East Lake</option>
-                    <option value="98052">Redmond: Tech Basin</option>
-                    <option value="98040">Mercer Island</option>
-                  </select>
-                </div>
+              <p className="hero__categories-intro">
+                The classifier predicts whether an asking price is attractive or expensive relative to comparable houses:
+              </p>
 
-                <div className="hero__param-row hero__param-row--slider">
-                  <div className="hero__slider-meta">
-                    <span className="hero__param-name">Living area</span>
-                    <span className="hero__param-val num">{heroSqft.toLocaleString()} sq ft</span>
+              <div className="hero__categories-list">
+                {DEFAULT_CLASSES.map((cls) => (
+                  <div key={cls.id} className="hero__category-row">
+                    <ClassBadge id={cls.id} name={cls.name} />
                   </div>
-                  <input
-                    type="range"
-                    min="1200"
-                    max="4800"
-                    step="50"
-                    value={heroSqft}
-                    aria-label="Living area in square feet"
-                    onChange={e => setHeroSqft(Number(e.target.value))}
-                    className="hero__quick-range"
-                  />
-                </div>
-
-                <div className="hero__param-row">
-                  <span className="hero__param-name">Bedrooms and baths</span>
-                  <span className="hero__param-val num">3 bd / 2.25 ba</span>
-                </div>
-                <div className="hero__param-row">
-                  <span className="hero__param-name">Construction grade</span>
-                  <span className="hero__param-val num">8 Good finishes</span>
-                </div>
+                ))}
               </div>
 
-              <div className="hero__apricot-strip">
-                <div className="hero__apricot-meta">
-                  <span className="hero__apricot-label">Micro-estimate preview</span>
-                  <span className="hero__apricot-price num">${heroValuation.estimate.toLocaleString()}</span>
-                </div>
-                <p className="hero__apricot-note">
-                  Calculated at ${heroValuation.ppsf} per sq ft against King County records.
-                </p>
-              </div>
-
-              <div className="hero__console-foot">
-                <Link
-                  to="/prediction"
-                  state={{ form: { zip: heroZip, sqft: heroSqft, lotSqft: 6400, bedrooms: 3, bathrooms: 2.25, floors: 2, grade: 8, yrBuilt: 1996, isRenovated: false, waterfront: false, view: 1, condition: 4 } }}
-                  className="hero__console-link"
-                >
-                  Configure full appraisal dossier
+              <div className="hero__categories-foot">
+                <Link to="/prediction" className="hero__console-link">
+                  Open classification form
                   <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
                   </svg>
                 </Link>
               </div>
@@ -184,31 +115,33 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Dusk Bone Well: Dataset Reference */}
+      {/* Dataset Reference Well */}
       <section className="section-well" aria-labelledby="dataset-well-title">
         <div className="container">
           <div className="well-frame">
             <div className="well-card">
               <div className="well-card__header">
-                <h2 id="dataset-well-title" className="well-card__title">King County housing data</h2>
+                <h2 id="dataset-well-title" className="well-card__title">Classification framework</h2>
               </div>
 
               <div className="well-card__tally">
                 <div className="well-card__metric">
-                  <span className="well-card__figure num">21,613</span>
-                  <span className="well-card__label">Historical home sales</span>
+                  <span className="well-card__figure num">4</span>
+                  <span className="well-card__label">Price categories</span>
                 </div>
                 <div className="well-card__metric">
-                  <span className="well-card__figure num">70</span>
-                  <span className="well-card__label">King County ZIP codes</span>
+                  <span className="well-card__figure num">1</span>
+                  <span className="well-card__label">Decision Tree model</span>
                 </div>
                 <div className="well-card__metric">
-                  <span className="well-card__figure num">18</span>
-                  <span className="well-card__label">Predictive features</span>
+                  <span className="well-card__figure num">2</span>
+                  <span className="well-card__label">Ways to use (Form or CSV)</span>
                 </div>
                 <div className="well-card__metric">
-                  <span className="well-card__figure num">2014 to 2015</span>
-                  <span className="well-card__label">Sales recording period</span>
+                  <span className="well-card__figure num">{featureCountDisplay}</span>
+                  <span className="well-card__label">
+                    Input features {schema?.source === 'mock' ? '(mock schema active)' : ''}
+                  </span>
                 </div>
               </div>
 
@@ -225,26 +158,26 @@ const Home = () => {
             <div className="well-caption">
               <p className="well-caption__title">King County housing reference</p>
               <p className="well-caption__desc">
-                Historical property transactions from May 2014 through May 2015 utilized to calibrate valuation metrics.
+                House sales dataset for King County (Kaggle). The team documents the target definition and thresholds.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Dusk Ruled List beside One Glass Pane: Interface Tour */}
+      {/* Interface Tour */}
       <section className="section-tour" aria-labelledby="tour-heading">
         <div className="container">
           <div className="section-tour__head">
             <h2 id="tour-heading" className="section-tour__title">Interface tour</h2>
             <p className="section-tour__subtitle">
-              Explore four dedicated views calibrated for property research.
+              Explore three dedicated views calibrated for housing classification.
             </p>
           </div>
 
           <div className="section-tour__layout">
             <ul className="tour-list" role="tablist" aria-label="Interface views">
-              {tourJobs.map((job, idx) => {
+              {tourViews.map((job, idx) => {
                 const isActive = activeTourIndex === idx
                 return (
                   <li key={job.id} className="tour-list__item" role="presentation">
@@ -257,7 +190,7 @@ const Home = () => {
                       className={`tour-list__button ${isActive ? 'is-active' : ''}`}
                       onClick={() => setActiveTourIndex(idx)}
                     >
-                      <span className="tour-list__indicator" aria-hidden="true"></span>
+                      <span className="tour-list__indicator" aria-hidden="true" />
                       <span className="tour-list__text">
                         <span className="tour-list__title">{job.title}</span>
                         {isActive && (
@@ -283,7 +216,7 @@ const Home = () => {
               <div className="tour-pane__media">
                 <PropertyImage
                   src={currentTour.image}
-                  alt={currentTour.previewTitle}
+                  alt=""
                   aspectRatio="16/9"
                   fallbackLabel="King County Telemetry Preview"
                   loading="lazy"
@@ -302,51 +235,18 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Dusk Geographic Tally */}
-      <section className="section-geo" aria-labelledby="geo-title">
-        <div className="container">
-          <div className="geo-header">
-            <h2 id="geo-title" className="geo-title">King County coverage</h2>
-            <p className="geo-desc">Municipalities represented in the dataset and demo valuation models.</p>
-          </div>
-
-          <div className="geo-tally">
-            <div className="geo-row">
-              <span className="geo-city">Seattle</span>
-              <span className="geo-note">Core urban neighborhoods and historic residential tracts</span>
-              <span className="geo-code num">98101 to 98199</span>
-            </div>
-            <div className="geo-row">
-              <span className="geo-city">Bellevue</span>
-              <span className="geo-note">Eastside commercial center and lakefront residential communities</span>
-              <span className="geo-code num">98004 to 98008</span>
-            </div>
-            <div className="geo-row">
-              <span className="geo-city">Redmond</span>
-              <span className="geo-note">Lake Sammamish north and technology corridor housing</span>
-              <span className="geo-code num">98052 to 98053</span>
-            </div>
-            <div className="geo-row">
-              <span className="geo-city">Kirkland</span>
-              <span className="geo-note">Lake Washington waterfront and downtown residences</span>
-              <span className="geo-code num">98033 to 98034</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Dusk Closing CTA */}
+      {/* Closing CTA */}
       <section className="section-cta" aria-labelledby="cta-title">
         <div className="container">
           <div className="glass cta-card">
             <div className="cta-card__content">
-              <h2 id="cta-title" className="cta-card__title">Ready to test a valuation?</h2>
+              <h2 id="cta-title" className="cta-card__title">Ready to classify a house?</h2>
               <p className="cta-card__desc">
-                Select custom housing specifications in our interactive form to review calibrated property results.
+                Enter one house or upload a CSV and get its price category.
               </p>
             </div>
             <div className="cta-card__action">
-              <Link to="/prediction" className="btn-primary">Open valuation form</Link>
+              <Link to="/prediction" className="btn-primary">Open the form</Link>
             </div>
           </div>
         </div>

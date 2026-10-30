@@ -1,0 +1,52 @@
+.api-status {
+  display: inline-flex;
+  align-items: center;
+}
+
+.api-status__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 3px var(--space-sm);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  border-radius: var(--radius-pill);
+  line-height: 1.4;
+  border: 1px solid var(--color-rule);
+  background-color: var(--color-paper-3);
+  color: var(--color-muted);
+}
+
+.api-status__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-muted);
+}
+
+.api-status__pill--mock {
+  border-color: color-mix(in oklch, var(--color-accent-2) 40%, var(--color-rule));
+  color: var(--color-ink-2);
+}
+
+.api-status__pill--mock .api-status__dot {
+  background-color: var(--color-accent-2);
+}
+
+.api-status__pill--connected {
+  border-color: color-mix(in oklch, var(--color-success) 40%, var(--color-rule));
+  color: var(--color-ink);
+}
+
+.api-status__pill--connected .api-status__dot {
+  background-color: var(--color-success);
+}
+
+.api-status__pill--unreachable {
+  border-color: color-mix(in oklch, var(--color-error) 40%, var(--color-rule));
+  color: var(--color-ink);
+}
+
+.api-status__pill--unreachable .api-status__dot {
+  background-color: var(--color-error);
+}

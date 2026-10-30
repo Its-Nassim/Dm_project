@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Home from './pages/Home'
@@ -6,7 +6,6 @@ import About from './pages/About'
 import Analytics from './pages/Analytics'
 import Model from './pages/Model'
 import PredictionForm from './pages/PredictionForm'
-import PredictionResult from './pages/PredictionResult'
 
 function App() {
   return (
@@ -21,7 +20,7 @@ function App() {
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/model" element={<Model />} />
             <Route path="/prediction" element={<PredictionForm />} />
-            <Route path="/prediction/result" element={<PredictionResult />} />
+            <Route path="/prediction/result" element={<Navigate to="/prediction" replace />} />
           </Routes>
         </main>
         <Footer />

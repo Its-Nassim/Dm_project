@@ -1,0 +1,146 @@
+.pred-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  margin-bottom: var(--space-md);
+}
+
+.pred-field__label-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-xs);
+}
+
+.pred-field__label {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pred-field__required {
+  color: var(--color-error);
+  font-weight: bold;
+}
+
+.pred-field__col-tag {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  background-color: var(--color-surface-inset);
+  padding: 1px 6px;
+  border-radius: var(--radius-inner);
+  border: 1px solid var(--color-rule-subtle);
+}
+
+.pred-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 var(--space-sm);
+  background-color: var(--color-surface-inset);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-inner);
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  color: var(--color-ink);
+  transition: all var(--dur-short) var(--ease-out);
+}
+
+.pred-input:focus {
+  outline: none;
+  border-color: var(--color-focus);
+  box-shadow: 0 0 0 1px var(--color-focus);
+  background-color: var(--color-paper-2);
+}
+
+.pred-input[aria-invalid="true"] {
+  border-color: var(--color-error);
+}
+
+.pred-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pred-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.6)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+.pred-select option {
+  background-color: var(--color-paper-2);
+  color: var(--color-ink);
+}
+
+.pred-field__price-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.pred-field__currency-symbol {
+  position: absolute;
+  left: var(--space-sm);
+  color: var(--color-accent);
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.pred-field__price-input {
+  padding-left: 28px;
+  padding-right: 50px;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 500;
+}
+
+.pred-field__currency-tag {
+  position: absolute;
+  right: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  pointer-events: none;
+}
+
+.pred-binary-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--color-surface-inset);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-inner);
+}
+
+.pred-binary-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pred-binary-card__hint {
+  margin: 0;
+}
+
+.pred-field__hint {
+  margin: 2px 0 0;
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+}
+
+.pred-field__error-msg {
+  margin: 2px 0 0;
+  font-size: var(--text-xs);
+  color: var(--color-error);
+  font-weight: 500;
+}
