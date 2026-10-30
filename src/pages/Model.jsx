@@ -1,12 +1,14 @@
 import { CLASS_NAMES } from '../lib/schema.js'
 
 export default function Model() {
+  const classes = Object.entries(CLASS_NAMES)
+
   return (
     <section className="page-section">
       <div className="container">
         <header className="screen-intro">
           <h1>What the classifier returns.</h1>
-          <p>One class label, with probabilities when the response supplies them.</p>
+          <p className="lead">One class label, with probabilities when the response supplies them.</p>
         </header>
         <div className="info-layout">
           <div className="info-copy">
@@ -20,14 +22,20 @@ export default function Model() {
               <li>Current responses come from a local mock provider.</li>
             </ul>
           </div>
-          <ul className="class-reference" aria-label="Available classes">
-            {Object.entries(CLASS_NAMES).map(([classId, label]) => (
-              <li key={classId}>
-                <span className="class-id">{classId}</span>
-                <span>{label}</span>
-              </li>
-            ))}
-          </ul>
+          <div className="proof-sheet crop crop--sheet">
+            <div className="proof-sheet__head">
+              <h2 id="class-schema-title">Class schema</h2>
+              <span className="proof-sheet__readout">{classes.length} classes</span>
+            </div>
+            <ul className="class-list set" aria-labelledby="class-schema-title">
+              {classes.map(([classId, label]) => (
+                <li key={classId}>
+                  <span className="class-id">{classId}</span>
+                  <span className="class-name">{label}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </section>

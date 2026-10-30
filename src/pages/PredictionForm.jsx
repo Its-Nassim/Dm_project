@@ -94,14 +94,14 @@ export default function PredictionForm() {
   }
 
   return (
-    <section className="page-section">
+    <section className="page-section scope-app app-screen">
       <div className="container">
         <header className="screen-intro">
           <h1>Classify a listing.</h1>
           <p>Enter the property details. Asking price is required and must be in USD.</p>
         </header>
         <div className="workspace-grid">
-          <section className="form-panel" aria-labelledby="property-form-title">
+          <section className="form-panel crop crop--sheet" aria-labelledby="property-form-title">
             <div className="panel-heading">
               <h2 id="property-form-title">Property details</h2>
               <p>Local mock response</p>
@@ -153,7 +153,7 @@ export default function PredictionForm() {
             ) : null}
           </section>
 
-          <aside className="result-panel" aria-live="polite">
+          <aside className="result-panel result-sheet" aria-live="polite">
             <h2>Classification result</h2>
             {result ? (
               <div className="result-summary">

@@ -512,8 +512,16 @@ main {
 /* Shared screen pieces (restyled; recomposed per route in the next phase). */
 .screen-intro {
   display: grid;
+  justify-items: start;
   gap: var(--space-md);
   margin-bottom: var(--space-2xl);
+  padding-bottom: var(--space-xl);
+  border-bottom: var(--rule-hair) solid var(--color-ink);
+}
+
+.screen-intro h1 {
+  max-width: 16ch;
+  font-size: var(--text-display-s);
 }
 
 .screen-intro p {
@@ -521,11 +529,39 @@ main {
   color: var(--color-ink-2);
 }
 
+/* App screen: the prediction workspace, dense and fixed-scale. */
+.scope-app .screen-intro {
+  gap: var(--space-xs);
+  margin-bottom: var(--space-xl);
+  padding-bottom: var(--space-md);
+}
+
+.scope-app .screen-intro h1 {
+  font-size: var(--text-display);
+}
+
+.scope-app .screen-intro p {
+  font-size: var(--text-md);
+}
+
 .workspace-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.68fr);
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
   align-items: start;
-  gap: var(--gap-columns);
+  gap: var(--space-xl) var(--gap-columns);
+}
+
+.result-sheet {
+  position: sticky;
+  top: calc(var(--nav-h) + var(--space-lg));
+}
+
+.scope-app .schema-field__control {
+  min-height: var(--control-h);
+}
+
+.scope-app .schema-field__control input {
+  min-height: calc(var(--control-h) - 2px);
 }
 
 .class-guide,
@@ -671,6 +707,8 @@ main {
 
 .schema-field__control:focus-within {
   border-color: var(--color-ink);
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
 }
 
 .schema-field__control:focus-within::before {
@@ -696,7 +734,7 @@ main {
 }
 
 .schema-field__control input:focus-visible {
-  outline-color: var(--color-focus);
+  outline-color: transparent;
 }
 
 .schema-field__control input:disabled {
@@ -761,9 +799,21 @@ main {
   justify-items: start;
   align-content: start;
   gap: var(--space-md);
-  max-width: 52rem;
-  padding-top: var(--space-lg);
+  max-width: 36rem;
+  justify-self: start;
+}
+
+.empty-panel h2 {
+  padding-top: var(--space-md);
   border-top: var(--rule-hair) solid var(--color-ink);
+  width: 100%;
+  font-size: var(--text-title);
+  letter-spacing: var(--tracking-title);
+  line-height: 1.2;
+}
+
+.empty-panel .secondary-button {
+  margin-top: var(--space-xs);
 }
 
 .empty-panel p,
@@ -898,14 +948,22 @@ main {
 
 .info-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.65fr);
-  gap: var(--gap-columns);
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: var(--space-xl) var(--gap-columns);
   align-items: start;
 }
 
 .info-copy {
   display: grid;
-  gap: var(--space-md);
+  gap: var(--space-lg);
+  align-content: start;
+}
+
+.info-copy > p:first-child {
+  font-size: var(--text-lead);
+  line-height: 1.45;
+  max-width: 52ch;
+  color: var(--color-ink);
 }
 
 .info-copy--measure {
@@ -942,12 +1000,24 @@ main {
 }
 
 .status-line {
+  position: relative;
   display: flex;
   align-items: flex-start;
   gap: var(--space-sm);
   padding-block: var(--space-md);
+  padding-left: var(--space-lg);
   border-top: var(--rule-hair) solid var(--color-ink);
   border-bottom: var(--rule-hair) solid var(--color-rule);
+}
+
+.status-line::before {
+  content: "";
+  position: absolute;
+  top: var(--space-md);
+  bottom: var(--space-md);
+  left: 0;
+  width: var(--rule-hair);
+  background: var(--color-accent);
 }
 
 .status-line p {
@@ -1015,6 +1085,16 @@ main {
     grid-template-columns: minmax(0, 1fr);
   }
 
+  .result-sheet {
+    position: static;
+  }
+
+  .proof-sheet,
+  .empty-panel {
+    justify-self: stretch;
+    max-width: none;
+  }
+
   .proof-sheet {
     justify-self: stretch;
     max-width: none;
@@ -1073,6 +1153,11 @@ main {
 
   .form-panel {
     padding: var(--space-md);
+  }
+
+  .crop--sheet {
+    --local-l: var(--crop-len);
+    --local-o: var(--crop-gap);
   }
 
   .field-grid {

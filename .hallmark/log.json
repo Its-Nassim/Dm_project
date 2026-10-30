@@ -41,13 +41,16 @@
   "entry": "Housing classification app; individual form and pasted CSV flows",
   "fingerprint": "Left-margin|5:7 asymmetric|Hairline + crop marks|Filled orange primary|Sheet shadow|Orange guides",
   "sections": [
-   "Home: Stage hero with the class-label proof sheet (phase 2)",
-   "Prediction, Model, Analytics, About: shared Studio tokens and controls applied; recomposition in phase 3"
+   "Home: Stage hero with the class-label proof sheet",
+   "Prediction: app screen (.scope-app), crop-marked form sheet, sticky result ticket, batch CSV; states idle, error, mock result, batch results",
+   "Model: Banner head, copy on seven columns, class schema as the proof sheet",
+   "Analytics: Banner head, honest no-data sheet with the one action",
+   "About: Banner head, copy with the mock-provider disclosure as an orange-ruled status line"
   ],
   "signature": "The four real class labels set as a crop-marked proof sheet, Hedvig figures over orange baseline guides",
   "waived": [],
-  "kept": "links 6/6, fields 22/22, handlers 4/4, headings 11/11; words verbatim",
-  "finishReview": "phase 2 in progress; sloplint 0 FAIL on /, before and after in .hallmark/compare.html",
+  "kept": "links 6/6, fields 22/22, handlers 4/4, headings 11/11; words verbatim; native required on price unchanged",
+  "finishReview": "in-thread: ship \u00b7 sloplint 0 FAIL on all five routes (page scope for /, /model, /analytics, /about; app scope for /prediction) \u00b7 REFLEX 44c/79 and WARN 77 remain on the three short content pages: landing-page fold gates, the pages are intentionally one head block and one section \u00b7 before/after in .hallmark/compare.html",
   "prompt": "Redesign the HousePrice AI site with the exact Hallmark Studio theme across all routes; phase 2 is the shared system, nav, footer and homepage.",
   "date": "2026-10-30"
  }
