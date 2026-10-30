@@ -1,0 +1,29 @@
+[
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "app",
+  "shape": "task-first app screens",
+  "theme": "brand",
+  "axes": "light/roman-serif/warm",
+  "hero": "No hero; each route opens with a task-specific heading and explanatory line",
+  "nav": "Existing five-route header navigation with active route state",
+  "footer": "Existing brand line, classification-only note, and route links",
+  "imagery": "None; no real analytics data or supplied imagery",
+  "photos": [],
+  "entry": "Housing classification app; individual form and pasted CSV flows",
+  "fingerprint": "Left-margin|Two-column asymmetric|Hairline|Filled|None|None",
+  "sections": [
+   "Home: classification action and the existing four-class schema",
+   "Prediction: property fields, result state, batch CSV",
+   "Model: output explanation and existing class names",
+   "Analytics: honest no-data state",
+   "About: supported input and mock-provider disclosure"
+  ],
+  "signature": "Four real class labels beside the main classification action",
+  "waived": [],
+  "finishReview": "in-thread: ship; no new findings; before screenshots unavailable",
+  "prompt": "Redesign all five existing housing-price classification routes and audit index.html.",
+  "date": "2026-10-30"
+ }
+]

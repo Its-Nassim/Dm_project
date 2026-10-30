@@ -1,0 +1,25 @@
+export const fieldMeta = {
+  id: { label: 'Record ID', type: 'number', group: 'Identifiers' },
+  date: { label: 'Date', type: 'date', group: 'Identifiers' },
+  price: { label: 'Asking price', type: 'number', unit: 'USD', group: 'Pricing' },
+  bedrooms: { label: 'Bedrooms', type: 'number', group: 'Property' },
+  bathrooms: { label: 'Bathrooms', type: 'number', group: 'Property' },
+  sqft_living: { label: 'Living area', type: 'number', unit: 'sqft', group: 'Property' },
+  sqft_lot: { label: 'Lot size', type: 'number', unit: 'sqft', group: 'Property' },
+  floors: { label: 'Floors', type: 'number', group: 'Property' },
+  waterfront: { label: 'Waterfront', type: 'number', group: 'Property' },
+  view: { label: 'View', type: 'number', group: 'Property' },
+  condition: { label: 'Condition', type: 'number', group: 'Property' },
+  grade: { label: 'Grade', type: 'number', group: 'Property' },
+  sqft_above: { label: 'Above-ground area', type: 'number', unit: 'sqft', group: 'Property' },
+  sqft_basement: { label: 'Basement area', type: 'number', unit: 'sqft', group: 'Property' },
+  yr_built: { label: 'Year built', type: 'number', group: 'History' },
+  yr_renovated: { label: 'Year renovated', type: 'number', group: 'History' },
+  zipcode: { label: 'ZIP code', type: 'number', group: 'Location' },
+  lat: { label: 'Latitude', type: 'number', group: 'Location' },
+  long: { label: 'Longitude', type: 'number', group: 'Location' },
+  sqft_living15: { label: 'Living area (nearby)', type: 'number', unit: 'sqft', group: 'Location' },
+  sqft_lot15: { label: 'Lot size (nearby)', type: 'number', unit: 'sqft', group: 'Location' },
+}
+
+export const fieldOrder = Object.keys(fieldMeta)

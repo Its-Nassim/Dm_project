@@ -1,0 +1,18 @@
+{
+  "scanned": "2026-10-30",
+  "findings": {
+    "fonts": "Inter/Segoe UI body and Georgia display in src/styles/tokens.css:2-3",
+    "palette": "Warm OKLCH neutrals and a clay accent in src/styles/tokens.css:4-15",
+    "motion": "160ms and 220ms tokens in src/styles/tokens.css:32-33; reduced-motion rule in src/styles/base.css",
+    "spacing": "Named spacing scale in src/styles/tokens.css:22-31",
+    "framework": "React 18 + Vite 5; five routes in src/App.jsx:17-21"
+  },
+  "preserve": [
+    "Existing warm neutral/clay palette and font choices, with a darker focus token for contrast",
+    "Five route destinations, property schema, form behavior, and handlers"
+  ],
+  "introduce": [
+    "Recomposed app screens and a more task-focused arrangement",
+    "Hallmark floor fixes and clearer treatment of unsupported sample data"
+  ]
+}

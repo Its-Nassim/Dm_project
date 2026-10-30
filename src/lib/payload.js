@@ -1,0 +1,25 @@
+export function buildPredictionPayload(input) {
+  return {
+    id: input.id ?? '',
+    date: input.date ?? '',
+    price: Number(input.price ?? 0),
+    bedrooms: Number(input.bedrooms ?? 0),
+    bathrooms: Number(input.bathrooms ?? 0),
+    sqft_living: Number(input.sqft_living ?? 0),
+    sqft_lot: Number(input.sqft_lot ?? 0),
+    floors: Number(input.floors ?? 0),
+    waterfront: Number(input.waterfront ?? 0),
+    view: Number(input.view ?? 0),
+    condition: Number(input.condition ?? 0),
+    grade: Number(input.grade ?? 0),
+    sqft_above: Number(input.sqft_above ?? 0),
+    sqft_basement: Number(input.sqft_basement ?? 0),
+    yr_built: Number(input.yr_built ?? 0),
+    yr_renovated: Number(input.yr_renovated ?? 0),
+    zipcode: Number(input.zipcode ?? 0),
+    lat: Number(input.lat ?? 0),
+    long: Number(input.long ?? 0),
+    sqft_living15: Number(input.sqft_living15 ?? 0),
+    sqft_lot15: Number(input.sqft_lot15 ?? 0),
+  }
+}

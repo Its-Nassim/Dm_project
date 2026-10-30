@@ -1,0 +1,70 @@
+/* Hallmark · shape: app screen · genre: modern-minimal · theme: brand · redesign: full
+ * nav: existing top shell · signature: classification workbench · states: idle, error, mock result, batch results
+ * axes: warm paper/Georgia/clay · posture: restrained · contrast: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V3 · weakest: V, the app has no prior redesign log to rotate against */
+:root {
+  --space-3xs: 2px;
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 40px;
+  --space-2xl: 64px;
+  --space-3xl: 96px;
+  --space-4xl: 144px;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.2rem;
+  --text-xl: 1.44rem;
+  --text-2xl: 1.728rem;
+  --text-3xl: 2.074rem;
+  --text-display-s: 1.44rem;
+  --text-display: 1.728rem;
+  --text-section: 1.2rem;
+  --text-title: 1rem;
+  --text-lead: 1rem;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 120ms;
+  --dur-short: 220ms;
+  --dur-long: 420ms;
+  --container: 1180px;
+  --gutter: 32px;
+  --gap-columns: 24px;
+  --section-gap-s: 40px;
+  --section-gap: 64px;
+  --section-gap-l: 96px;
+  --z-base: 1;
+  --z-raised: 10;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-sticky-nav: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-tooltip: 600;
+  --color-paper: oklch(97.5% 0.015 90);
+  --color-paper-2: oklch(96.2% 0.016 92);
+  --color-paper-3: oklch(99.1% 0.006 87);
+  --color-ink: oklch(24% 0.02 268);
+  --color-ink-2: oklch(38% 0.018 268);
+  --color-muted: oklch(38% 0.018 268);
+  --color-rule: oklch(89% 0.02 86);
+  --color-accent: oklch(62% 0.18 35);
+  --color-accent-ink: oklch(18% 0.02 268);
+  --color-focus: oklch(48% 0.18 230);
+  --color-error: oklch(58% 0.2 24);
+  --color-success: oklch(60% 0.18 145);
+  --color-warning: oklch(70% 0.18 85);
+  --font-display: "Georgia", "Times New Roman", serif;
+  --font-body: "Inter", "Segoe UI", sans-serif;
+  --font-outlier: var(--font-body);
+  --radius-card: 1.5rem;
+  --radius-input: 0.5rem;
+  --radius-pill: 999px;
+  --rule-hair: 1px;
+  --shadow-card: none;
+  --tracking-display: -0.02em;
+}
