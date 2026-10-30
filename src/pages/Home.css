@@ -50,7 +50,7 @@
 .hero__scrim {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 58% 68% at 24% 50%, color-mix(in oklab, var(--color-fog) 86%, transparent), transparent 75%),
+  background: linear-gradient(90deg, rgba(14, 17, 23, 0.92) 0%, rgba(14, 17, 23, 0.78) 46%, rgba(14, 17, 23, 0.45) 100%),
               linear-gradient(to bottom, transparent 60%, var(--color-paper));
 }
 
@@ -74,20 +74,22 @@
 
 .hero__title {
   max-width: 13ch;
-  color: var(--color-day-ink);
+  color: var(--color-ink);
   font-family: var(--font-display);
   font-size: var(--text-display);
   font-weight: var(--display-weight);
   letter-spacing: var(--tracking-display);
   line-height: 1.04;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.6);
 }
 
 .hero__desc {
   max-width: 44ch;
-  color: var(--color-day-muted);
+  color: var(--color-ink-2);
   font-family: var(--font-body);
   font-size: var(--text-lead);
   line-height: 1.5;
+  text-shadow: 0 1px 16px rgba(0, 0, 0, 0.5);
 }
 
 .hero__actions {
@@ -95,6 +97,18 @@
   flex-wrap: wrap;
   gap: var(--space-sm);
   margin-top: var(--space-xs);
+}
+
+.hero__actions .btn-outline {
+  background: rgba(22, 26, 34, 0.8);
+  backdrop-filter: blur(8px);
+  border-color: var(--color-rule);
+  color: var(--color-ink);
+}
+
+.hero__actions .btn-outline:hover {
+  background: rgba(30, 35, 46, 0.95);
+  border-color: var(--color-accent);
 }
 
 /* Dusk Smoked Glass Console */

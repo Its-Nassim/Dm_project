@@ -21,3 +21,16 @@ The shared design system for HousePrice AI. Evolved from Dusk into a 2028-grade 
 1. **Interactive Valuation Workbench (`/prediction`)**: Full spectrum of real King County features (ZIP/Neighborhood, SqFt, Bedrooms, Bathrooms, Grade, Year Built, Waterfront, View) with instant reactive inline valuation estimation, responsive stepper/sections, and keyboard focus control.
 2. **Confidence Valuation Dossier (`/prediction/result`)**: Confident hero valuation estimate with animated tabular numbers, confidence interval range ($X – $Y), valuation drivers breakdown (Living Area, Location Factor, Grade, Waterfront), comp benchmarks, and PDF/share affordances.
 3. **Responsive & Accessible**: Strict WCAG AA contrast (minimum 4.5:1 text, 3:1 controls), visible focus rings (`2px solid var(--color-focus)`), zero layout shifts, and full viewport adaptability (375px to 1920px+).
+
+## Cohesive Imagery Layer
+- **Art Direction**: Contemporary Pacific Northwest residential architecture captured during twilight dusk. Natural cedar slats, low-e glass, blackened steel, and basalt stone foundation bathed in warm interior tungsten light (`oklch(80% 0.09 65)`) set against a deep indigo twilight sky (`oklch(15.5% 0.012 268)`). Muted, calm, realistic; zero AI artifacts, no floating elements, no stock faces, no simulated listing logos.
+- **Asset Pipeline**:
+  - Hero Stage: `/images/hero/hero-dusk-residence.jpg` (16:9, architectural residence at dusk).
+  - Archetype Presets: `/images/properties/prop-single-family.jpg`, `prop-townhouse.jpg`, `prop-condo.jpg`, `prop-waterfront.jpg` (4:3, property type cards and reactive telemetry).
+  - Comparable Sales: `/images/comps/comp-phinney.jpg`, `comp-greenwood.jpg`, `comp-45th.jpg`, `comp-bellevue.jpg` (16:10, recent transaction comps with distance and variance badges).
+- **Engineering & UX Standards**:
+  - Component: Reusable `<PropertyImage />` with explicit CSS `aspect-ratio` containers for zero cumulative layout shift (CLS).
+  - Loading: Native `loading="lazy"` on comp grids and cards; `fetchPriority="high"` on hero stage.
+  - Fallbacks: Dusk gradient shimmer skeleton while loading, and a blueprint SVG wireframe fallback on error.
+  - Materiality: Calibrated ambient gradient scrim preventing bright window glare from breaking dark slate UI contrast.
+
