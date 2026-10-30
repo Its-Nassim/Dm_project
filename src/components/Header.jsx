@@ -10,7 +10,7 @@ const navItems = [
 
 export default function Header() {
   return (
-    <header className="site-header">
+    <header className="site-header proof">
       <div className="container site-header__inner">
         <NavLink to="/" className="brand-mark" aria-label="House Price Relevance home">
           House Price Relevance

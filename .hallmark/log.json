@@ -25,5 +25,30 @@
   "finishReview": "in-thread: ship; no new findings; before screenshots unavailable",
   "prompt": "Redesign all five existing housing-price classification routes and audit index.html.",
   "date": "2026-10-30"
+ },
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "page+app",
+  "shape": "Stage hero (/) \u00b7 app screens (/prediction) \u00b7 content pages (/model, /analytics, /about)",
+  "theme": "studio",
+  "axes": "light/roman-serif/warm",
+  "hero": "Stage: Hedvig head and lead on five columns, the four class labels as a crop-marked proof sheet on seven, on the dot-grid proof",
+  "nav": "Masthead top bar on the proof: Hedvig wordmark, Geist nav, ink rule below, active route underlined in ink",
+  "footer": "Colophon on the proof: wordmark, classification-only note, router links to all four routes",
+  "imagery": "None; the ground is a generated proof (grain over a 24px dot grid), never a picture",
+  "photos": [],
+  "entry": "Housing classification app; individual form and pasted CSV flows",
+  "fingerprint": "Left-margin|5:7 asymmetric|Hairline + crop marks|Filled orange primary|Sheet shadow|Orange guides",
+  "sections": [
+   "Home: Stage hero with the class-label proof sheet (phase 2)",
+   "Prediction, Model, Analytics, About: shared Studio tokens and controls applied; recomposition in phase 3"
+  ],
+  "signature": "The four real class labels set as a crop-marked proof sheet, Hedvig figures over orange baseline guides",
+  "waived": [],
+  "kept": "links 6/6, fields 22/22, handlers 4/4, headings 11/11; words verbatim",
+  "finishReview": "phase 2 in progress; sloplint 0 FAIL on /, before and after in .hallmark/compare.html",
+  "prompt": "Redesign the HousePrice AI site with the exact Hallmark Studio theme across all routes; phase 2 is the shared system, nav, footer and homepage.",
+  "date": "2026-10-30"
  }
 ]
