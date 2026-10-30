@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import ClassBadge from '../components/ClassBadge.jsx'
 import ProbabilityList from '../components/ProbabilityList.jsx'
 import SchemaField from '../components/SchemaField.jsx'
@@ -9,6 +10,7 @@ import { validateCsvRows, validateHousingInput } from '../lib/validation.js'
 import { parseCsvText } from '../lib/csv.js'
 
 export default function PredictionForm() {
+  const navigate = useNavigate()
   const [input, setInput] = useState({})
   const [result, setResult] = useState(null)
   const [batchRows, setBatchRows] = useState([])
@@ -53,7 +55,7 @@ export default function PredictionForm() {
     setIsSubmitting(true)
     try {
       const response = await requestPrediction(payload)
-      setResult(response)
+      navigate('/prediction/result', { state: { result: response } })
       setFormErrors([])
     } catch (error) {
       setFormErrors([
