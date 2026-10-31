@@ -786,8 +786,40 @@ main {
   font-variant-numeric: tabular-nums;
 }
 
-.schema-field__control input:focus-visible {
-  outline-color: transparent;
+.schema-field__control--binary {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.binary-option {
+  padding: var(--space-xs) var(--space-sm);
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: var(--radius-control);
+  background: var(--color-paper-hi);
+  color: var(--color-ink-2);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out);
+}
+
+.binary-option:hover {
+  border-color: var(--color-ink);
+  background: var(--color-paper-2);
+  color: var(--color-ink);
+}
+
+.binary-option:has(input:checked) {
+  border-color: var(--color-ink);
+  background: var(--color-paper-hi);
+  color: var(--color-ink);
+}
+
+input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
 }
 
 .schema-field__control input:disabled {
