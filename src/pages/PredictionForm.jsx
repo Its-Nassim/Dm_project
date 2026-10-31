@@ -4,14 +4,14 @@ import ClassBadge from '../components/ClassBadge.jsx'
 import ProbabilityList from '../components/ProbabilityList.jsx'
 import SchemaField from '../components/SchemaField.jsx'
 import { fieldMeta, fieldOrder } from '../config/fieldMeta.js'
-import { requestPrediction, requestBatchPrediction } from '../api/mock.js'
+import { predictSingle, predictBatch, ApiError } from '../api/client.js'
 import { buildPredictionPayload } from '../lib/payload.js'
 import { validateCsvRows, validateHousingInput } from '../lib/validation.js'
 import { parseCsvText } from '../lib/csv.js'
 
 export default function PredictionForm() {
   const navigate = useNavigate()
-  const [searchParams] = setSearchParams({ mode: 'single' })
+  const [searchParams, setSearchParams] = useSearchParams()
   const mode = searchParams.get('mode') || 'single'
   const [input, setInput] = useState({})
   const [result, setResult] = useState(null)
@@ -55,13 +55,17 @@ export default function PredictionForm() {
     const payload = buildPredictionPayload(input)
     setIsSubmitting(true)
     try {
-      const response = await requestPrediction(payload)
+      const response = await predictSingle(payload)
       setResult(response)
       setFormErrors([])
     } catch (error) {
-      setFormErrors([
-        error instanceof Error ? error.message : 'Classification could not be completed. Try again.',
-      ])
+      if (error instanceof ApiError) {
+        setFormErrors([error.message])
+      } else {
+        setFormErrors([
+          error instanceof Error ? error.message : 'Classification could not be completed. Try again.',
+        ])
+      }
       setResult(null)
     } finally {
       setIsSubmitting(false)
@@ -77,14 +81,15 @@ export default function PredictionForm() {
   }
 
   const handleCsvParse = async (event) => {
-    const csvText = event.target.value
-    if (!csvText) {
+    const file = event.target.files[0]
+    if (!file) {
       setBatchRows([])
       setBatchErrors([])
       return
     }
 
-    const rows = parseCsvText(csvText)
+    const text = await file.text()
+    const rows = parseCsvText(text)
     const validation = validateCsvRows(rows)
     if (!validation.valid) {
       setBatchErrors(validation.errors)
@@ -93,13 +98,17 @@ export default function PredictionForm() {
     }
 
     try {
-      const response = await requestBatchPrediction(rows)
-      setBatchRows(response)
+      const response = await predictBatch(file)
+      setBatchRows(response.rows || [])
       setBatchErrors([])
     } catch (error) {
-      setBatchErrors([
-        error instanceof Error ? error.message : 'The pasted rows could not be classified. Check the CSV and try again.',
-      ])
+      if (error instanceof ApiError) {
+        setBatchErrors([error.message])
+      } else {
+        setBatchErrors([
+          error instanceof Error ? error.message : 'The pasted rows could not be classified. Check the CSV and try again.',
+        ])
+      }
       setBatchRows([])
     }
   }
@@ -225,17 +234,17 @@ export default function PredictionForm() {
             <h2>Upload CSV</h2>
             <section className="batch-panel" aria-labelledby="batch-title">
               <h3 id="batch-title">Classify several listings</h3>
-              <p>Paste a CSV with a header row. Include a price column in USD.</p>
-              <label className="visually-hidden" htmlFor="batch-csv">CSV rows</label>
-              <textarea
-                id="batch-csv"
-                name="batchCsv"
-                rows="6"
-                placeholder="id,price,bedrooms,bathrooms,sqft_living"
-                onChange={handleCsvParse}
-                aria-invalid={batchErrors.length > 0 || undefined}
-                aria-describedby={batchErrors.length ? 'batch-errors' : undefined}
-              />
+              <p>Upload a CSV file with a header row. Include a price column in USD.</p>
+              <label className="dropzone">
+                <input
+                  type="file"
+                  accept=".csv,text/csv"
+                  onChange={handleCsvParse}
+                  aria-invalid={batchErrors.length > 0 || undefined}
+                  aria-describedby={batchErrors.length ? 'batch-errors' : undefined}
+                />
+                <span>Choose a CSV file or drag and drop</span>
+              </label>
               {batchErrors.length ? (
                 <div id="batch-errors" className="error-box" role="alert">
                   {batchErrors.map((message) => (
@@ -246,9 +255,15 @@ export default function PredictionForm() {
               {batchRows.length ? (
                 <div className="batch-results" aria-label="Batch classifications">
                   {batchRows.map((row, index) => (
-                    <div key={`${row.id}-${index}`} className="batch-row">
-                      <span>#{row.id}</span>
-                      <ClassBadge classId={row.class_id} />
+                    <div key={`${row.row}-${index}`} className="batch-row">
+                      <span>#{row.row}</span>
+                      {row.price && <span>${Number(row.price).toLocaleString()}</span>}
+                      {row.error ? (
+                        <span className="error-text">{row.error}</span>
+                      ) : (
+                        <ClassBadge classId={row.class_id} />
+                      )}
+                      {row.mock && <span className="mock-badge">Mock</span>}
                     </div>
                   ))}
                 </div>

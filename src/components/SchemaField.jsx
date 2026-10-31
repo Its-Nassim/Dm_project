@@ -26,7 +26,7 @@ export default function SchemaField({
             onChange={onChange}
             aria-required={required || undefined}
           />
-          <label htmlFor={`${name}-no` className="binary-option">No</label>
+          <label htmlFor={`${name}-no`} className="binary-option">No</label>
           <input
             id={`${name}-yes`}
             name={name}
