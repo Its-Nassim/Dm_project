@@ -46,14 +46,8 @@ export default function Home() {
       </section>
 
       <section className="home-classes" aria-labelledby="class-guide-title">
-        <div className="container home-classes__grid">
-          {/* Decorative: the mortgage image fills the empty left side, held at the card's height. */}
-          <div className="home-classes__photo crop crop--sheet" aria-hidden="true" />
-
-          <section
-            className="proof-sheet crop crop--sheet"
-            aria-labelledby="class-guide-title"
-          >
+        <div className="container home-classes__inner">
+          <div className="proof-sheet crop crop--sheet home-classes__card">
             <div className="proof-sheet__head">
               <h2 id="class-guide-title">The four class labels</h2>
               <span className="proof-sheet__readout">{classes.length} classes</span>
@@ -76,7 +70,7 @@ export default function Home() {
                 <span>Geist 500</span>
               </div>
             </div>
-          </section>
+          </div>
         </div>
       </section>
     </>

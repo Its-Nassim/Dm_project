@@ -468,30 +468,63 @@ main {
   max-width: 32ch;
 }
 
-/* Second screen: the mortgage image fills the left side (columns 1-7), held at the height of
- * the class-label sheet, which takes columns 8-12. */
+/* Second screen: the class guide sits over a softened classification illustration. */
 .home-classes {
-  padding-block: var(--section-gap-s);
-}
-
-.home-classes__grid {
+  position: relative;
+  isolation: isolate;
   display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  align-items: stretch;
-  column-gap: var(--gap-columns);
+  place-items: center;
+  min-height: clamp(38rem, 76svh, 54rem);
+  padding-block: var(--section-gap-s);
+  background-color: var(--color-paper);
+  background-image:
+    var(--grain),
+    radial-gradient(circle at 1px 1px, var(--color-dot) 1px, transparent 1.4px),
+    linear-gradient(
+      color-mix(in oklab, var(--color-paper) 78%, transparent),
+      color-mix(in oklab, var(--color-paper) 78%, transparent)
+    ),
+    url("../assets/class-price-reference.png");
+  background-size: 160px 160px, 24px 24px, 100% 100%, cover;
+  background-position: center, center, center, center;
+  background-repeat: repeat, repeat, no-repeat, no-repeat;
 }
 
-.home-classes__photo {
-  grid-column: 1 / span 7;
-  min-height: 20rem;
-  border-radius: var(--radius-card);
-  background: var(--color-paper-2) url("../assets/mortgage-rate-forecast.webp") center / cover no-repeat;
-}
-
-.home-classes__grid .proof-sheet {
-  grid-column: 8 / -1;
-  justify-self: stretch;
+.home-classes__inner {
+  display: grid;
+  width: 100%;
   max-width: none;
+  padding-inline: 0;
+}
+
+.home-classes__card {
+  justify-self: start;
+  margin-left: 75%;
+  transform: translateX(-50%);
+  max-width: 40rem;
+  padding: var(--space-2xl);
+  background: color-mix(in oklab, var(--color-paper-hi) 96%, transparent);
+  box-shadow: var(--shadow-sheet);
+  backdrop-filter: blur(3px);
+}
+
+@media (max-width: 40rem) {
+  .home-classes {
+    min-height: 0;
+    padding-block: var(--space-2xl);
+    background-position: center, center, center, 54% center;
+  }
+
+  .home-classes__card {
+    justify-self: center;
+    margin-left: 0;
+    transform: none;
+    padding: var(--space-xl) var(--space-lg);
+  }
+
+  .home-classes__inner {
+    justify-items: center;
+  }
 }
 
 .tabs {
@@ -604,6 +637,12 @@ main {
   background: var(--color-paper-hi);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-sheet);
+}
+
+.home-classes__inner > .home-classes__card {
+  justify-self: center;
+  width: min(100%, 40rem);
+  max-width: none;
 }
 
 .proof-sheet__head {
@@ -1751,26 +1790,14 @@ input[type="radio"] {
   }
 
   .home-grid,
-  .home-classes__grid,
   .workspace-grid,
   .info-layout {
     grid-template-columns: minmax(0, 1fr);
   }
 
   .home-primary,
-  .home-primary__side,
-  .home-classes__photo,
-  .home-classes__grid .proof-sheet {
+  .home-primary__side {
     grid-column: auto;
-  }
-
-  .home-classes__grid {
-    row-gap: var(--space-xl);
-  }
-
-  .home-classes__photo {
-    min-height: 0;
-    aspect-ratio: 16 / 9;
   }
 
   .result-sheet {
@@ -1850,10 +1877,6 @@ input[type="radio"] {
 
   .home-primary h1 span {
     display: inline;
-  }
-
-  .home-classes {
-    padding-block: var(--space-2xl);
   }
 
   .proof-sheet {
