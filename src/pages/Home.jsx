@@ -11,35 +11,45 @@ export default function Home() {
   return (
     <>
       <section className="home-hero proof">
-        <MeasureSheet className="container home-sheet" title="HousePrice AI · Wordmark" metrics={metrics}>
-          <Wordmark text="HousePrice AI" metrics={metrics} />
+        <div className="container home-stage">
+          {/* The sheet is the crop-marked page: its edges are the content edges, the registration
+              targets sit in the gutters at the middle of its sides. */}
+          <MeasureSheet className="home-sheet crop crop--sheet" title="HousePrice AI · Wordmark" metrics={metrics}>
+            <span className="reg reg--left" aria-hidden="true" />
+            <span className="reg reg--right" aria-hidden="true" />
 
-          <div className="home-grid">
-            <div className="home-primary">
-              <h1 data-measure="Headline">
-                <span>Review a home's </span>
-                <span>price classification.</span>
-              </h1>
-            </div>
-            <div className="home-primary__side">
-              <p className="lead" data-measure="Line">
-                Enter listing details for a class label and any available probabilities.
-              </p>
-              <div className="home-links">
-                <Link to="/prediction" className="primary-button" data-measure="Primary action">
-                  Classify a property
-                </Link>
-                <Link to="/model" className="secondary-button" data-measure="Second action">
-                  Model details
-                </Link>
+            <Wordmark text="HousePrice AI" metrics={metrics} />
+
+            <div className="home-grid">
+              <div className="home-primary">
+                <h1 data-measure="Headline">
+                  <span>Review a home's </span>
+                  <span>price classification.</span>
+                </h1>
+              </div>
+              <div className="home-primary__side">
+                <p className="lead" data-measure="Line">
+                  Enter listing details for a class label and any available probabilities.
+                </p>
+                <div className="home-links">
+                  <Link to="/prediction" className="primary-button" data-measure="Primary action">
+                    Classify a property
+                  </Link>
+                  <Link to="/model" className="secondary-button" data-measure="Second action">
+                    Model details
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
-        </MeasureSheet>
+          </MeasureSheet>
+        </div>
       </section>
 
       <section className="home-classes" aria-labelledby="class-guide-title">
-        <div className="container">
+        <div className="container home-classes__grid">
+          {/* Decorative: the mortgage image fills the empty left side, held at the card's height. */}
+          <div className="home-classes__photo crop crop--sheet" aria-hidden="true" />
+
           <section
             className="proof-sheet crop crop--sheet"
             aria-labelledby="class-guide-title"

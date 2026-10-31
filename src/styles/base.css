@@ -228,12 +228,30 @@ main {
 
 .site-header--home .primary-nav {
   margin-left: auto;
-  margin-right: var(--space-xl);
+  margin-right: var(--space-md);
 }
 
 .site-header--home .secondary-button {
-  min-height: 40px;
+  min-height: 44px;
   padding-inline: var(--space-md);
+  font-size: var(--text-sm);
+}
+
+/* The masthead button on every other page: the same 44px and 14px as on Home. */
+.site-header .primary-button--small {
+  min-height: 44px;
+  padding-inline: var(--space-md);
+  font-size: var(--text-sm);
+}
+
+@media (min-width: 40.001rem) {
+  .site-header--home .primary-nav {
+    gap: var(--space-xl);
+  }
+
+  .site-header--home .nav-link {
+    padding-inline: 0;
+  }
 }
 
 .site-header__inner,
@@ -348,6 +366,12 @@ main {
   transition: opacity var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out);
 }
 
+.site-header--home .secondary-button::before,
+.home-hero .primary-button::before,
+.home-hero .secondary-button::before {
+  opacity: 1;
+}
+
 .primary-button:hover::before,
 .secondary-button:hover::before,
 .primary-button:focus-visible::before,
@@ -396,32 +420,37 @@ main {
   cursor: progress;
 }
 
-/* Home: Stage hero on the proof, the class labels as the sheet beside it. */
+/* Home: Stage hero on the proof, the class labels as the sheet beside it.
+ * The hero is one screen: 40px of paper above and below a crop-marked sheet, and the sheet is
+ * drawn on the same 12-column grid as the rest of the page (headline in 1-7, text from 8). */
 .home-hero {
   position: relative;
   display: grid;
   align-content: stretch;
-  height: calc(100svh - var(--nav-h));
   min-height: calc(100svh - var(--nav-h));
-  padding-block: 0;
+  padding-block: var(--space-xl);
+}
+
+.home-stage {
+  display: grid;
 }
 
 .home-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   align-items: end;
-  justify-content: space-between;
-  column-gap: clamp(4rem, 15vw, 16rem);
+  column-gap: var(--gap-columns);
 }
 
 .home-primary {
+  grid-column: 1 / span 7;
   min-width: 0;
 }
 
 .home-primary h1 {
   max-width: 18ch;
-  font-size: clamp(2.5rem, 3.66vw + 0.25rem, 3.25rem);
-  line-height: 1;
+  font-size: var(--text-display-s);
+  line-height: 1.04;
 }
 
 .home-primary h1 span {
@@ -429,24 +458,40 @@ main {
 }
 
 .home-primary__side {
+  grid-column: 8 / -1;
   display: grid;
   justify-items: start;
-  gap: var(--space-sm);
+  gap: var(--space-lg);
 }
 
 .home-primary__side .lead {
-  max-width: 38ch;
-  line-height: 1.28;
+  max-width: 32ch;
 }
 
-.home-links .primary-button,
-.home-links .secondary-button {
-  min-height: 40px;
-  padding-inline: var(--space-md);
-}
-
+/* Second screen: the mortgage image fills the left side (columns 1-7), held at the height of
+ * the class-label sheet, which takes columns 8-12. */
 .home-classes {
   padding-block: var(--section-gap-s);
+}
+
+.home-classes__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: stretch;
+  column-gap: var(--gap-columns);
+}
+
+.home-classes__photo {
+  grid-column: 1 / span 7;
+  min-height: 20rem;
+  border-radius: var(--radius-card);
+  background: var(--color-paper-2) url("../assets/mortgage-rate-forecast.webp") center / cover no-repeat;
+}
+
+.home-classes__grid .proof-sheet {
+  grid-column: 8 / -1;
+  justify-self: stretch;
+  max-width: none;
 }
 
 .tabs {
@@ -989,6 +1034,64 @@ input[type="radio"] {
   color: var(--color-ink-2);
 }
 
+/* Analytics: the intro and the content sit on the same 12-column grid as Home. The title takes
+ * columns 1-7, the line of text starts at column 8 on the title's baseline, and the empty state
+ * is a sheet in columns 1-7, the place the figures will take. */
+.page-analytics .analytics-intro {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gap-columns);
+  align-items: end;
+  align-items: last baseline;
+}
+
+.page-analytics .analytics-intro h1 {
+  grid-column: 1 / span 7;
+  line-height: 1.04;
+}
+
+.page-analytics .analytics-intro .lead {
+  grid-column: 8 / -1;
+  max-width: 32ch;
+}
+
+.page-analytics .analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gap-columns);
+}
+
+.page-analytics .analytics-grid .proof-sheet {
+  grid-column: 1 / span 7;
+  justify-self: stretch;
+  max-width: none;
+}
+
+/* The sheet already has its crop marks and shadow, so the heading is closed by a rule under it
+ * (as on the Home sheet) instead of carrying a second one above. */
+.page-analytics .proof-sheet.empty-panel h2 {
+  max-width: none;
+  padding: 0 0 var(--space-md);
+  border-top: 0;
+  border-bottom: var(--rule-hair) solid var(--color-ink);
+}
+
+@media (max-width: 60rem) {
+  .page-analytics .analytics-intro {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .page-analytics .analytics-intro h1,
+  .page-analytics .analytics-intro .lead,
+  .page-analytics .analytics-grid .proof-sheet {
+    grid-column: auto;
+  }
+
+  .page-analytics .analytics-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .result-summary {
   display: grid;
   gap: var(--space-xs);
@@ -1227,17 +1330,43 @@ input[type="radio"] {
  * Orange draws lines only; every number on screen is read from the page at the moment of the pointer. */
 .home-sheet {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  height: calc(100svh - var(--nav-h));
-  min-height: calc(100svh - var(--nav-h));
+  grid-template-rows: auto 1fr auto;
   gap: 0;
-  padding-block: var(--space-md) var(--space-xs);
+}
+
+/* Registration targets: a ring and a crosshair in the gutter, at the middle of each side. */
+.reg {
+  position: absolute;
+  top: 50%;
+  width: 32px;
+  height: 32px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  background:
+    linear-gradient(var(--color-mark), var(--color-mark)) center / 100% 1px no-repeat,
+    linear-gradient(var(--color-mark), var(--color-mark)) center / 1px 100% no-repeat;
+}
+
+.reg::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: var(--rule-hair) solid var(--color-mark);
+  border-radius: 50%;
+}
+
+.reg--left {
+  left: calc(var(--gutter) / -2);
+}
+
+.reg--right {
+  left: calc(100% + var(--gutter) / 2);
 }
 
 .home-links {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-md);
+  gap: var(--space-sm);
 }
 
 /* Pointer shapes: crosshair on the wordmark, text cursor on running type, hand on controls. */
@@ -1252,7 +1381,7 @@ input[type="radio"] {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: baseline;
   column-gap: var(--gap-columns);
-  padding-bottom: var(--space-sm);
+  padding-bottom: var(--space-xs);
   border-bottom: var(--rule-hair) solid var(--color-ink);
   color: var(--color-muted);
   font-size: var(--text-sm);
@@ -1300,14 +1429,17 @@ input[type="radio"] {
 }
 
 .wordmark {
-  --wordmark-size: clamp(4rem, min(calc((min(100vw, var(--container)) - 2 * var(--gutter) - 150px) / 6.35), 10rem), 10rem);
+  /* Room kept free on the right of the sheet for the guide readouts. The size itself is fitted
+   * to the width in Wordmark.jsx; this clamp is what shows until the face has loaded. */
+  --wordmark-gutter: 124px;
+  --wordmark-size: clamp(2.5rem, 11vw, 10rem);
   position: relative;
   display: grid;
   align-self: stretch;
-  place-items: center;
-  translate: 0 -23px;
+  align-content: center;
+  justify-items: start;
   margin: 0;
-  margin-block: clamp(5rem, 17vh, 10rem);
+  margin-block: var(--space-xl);
   color: var(--color-ink);
   font-family: var(--font-display);
   font-size: var(--wordmark-size);
@@ -1318,13 +1450,20 @@ input[type="radio"] {
 }
 
 /* The clear space: one x-height of room around the name, a dashed box with an x square in each
- * corner. Padding is in em so it scales with the name; the squares take the measured x-height. */
+ * corner. The room is measured from the cap height down to the baseline, so the line below is
+ * trimmed to exactly that. Padding is in em so it scales with the name; the squares take the
+ * measured x-height, which is also the padding. */
 .wordmark__box {
   position: relative;
   width: max-content;
-  margin-inline: auto;
-  padding: 0.46em 0.4em;
+  padding: calc(var(--x-height, 0.52) * 1em);
   line-height: 1;
+}
+
+.wordmark__line {
+  display: block;
+  line-height: 0.7;
+  text-box: trim-both cap alphabetic;
 }
 
 .wordmark__box::before {
@@ -1418,11 +1557,6 @@ input[type="radio"] {
   line-height: 1;
   font-variant-numeric: tabular-nums;
   animation: appear 600ms var(--ease-out) 1000ms both;
-}
-
-.wordmark__guide-label--below {
-  top: 3px;
-  bottom: auto;
 }
 
 /* The gap between the words, dimensioned in font units. */
@@ -1565,8 +1699,13 @@ input[type="radio"] {
 
   .measure-head__note,
   .wordmark__guide-label,
-  .wordmark__gap {
+  .wordmark__gap,
+  .reg {
     display: none;
+  }
+
+  .wordmark {
+    --wordmark-gutter: 0px;
   }
 }
 
@@ -1608,21 +1747,30 @@ input[type="radio"] {
   }
 
   .home-hero {
-    height: calc(100svh - var(--nav-h));
-    min-height: calc(100svh - var(--nav-h));
-    padding-block: 0;
-  }
-
-  .home-sheet {
-    height: calc(100svh - var(--nav-h));
-    min-height: calc(100svh - var(--nav-h));
-    padding-block: var(--space-md) var(--space-xl);
+    padding-block: var(--space-lg);
   }
 
   .home-grid,
+  .home-classes__grid,
   .workspace-grid,
   .info-layout {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .home-primary,
+  .home-primary__side,
+  .home-classes__photo,
+  .home-classes__grid .proof-sheet {
+    grid-column: auto;
+  }
+
+  .home-classes__grid {
+    row-gap: var(--space-xl);
+  }
+
+  .home-classes__photo {
+    min-height: 0;
+    aspect-ratio: 16 / 9;
   }
 
   .result-sheet {
@@ -1683,20 +1831,17 @@ input[type="radio"] {
   }
 
   .home-hero {
-    height: auto;
     min-height: 0;
     padding-block: var(--space-lg) var(--space-xl);
   }
 
   .home-sheet {
-    height: auto;
-    min-height: 0;
     gap: var(--space-xl);
-    padding-block: var(--space-md) 0;
   }
 
   .wordmark {
     --wordmark-size: clamp(2.25rem, 12vw, 3.25rem);
+    margin-block: 0;
   }
 
   .home-grid {

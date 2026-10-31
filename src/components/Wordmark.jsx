@@ -2,11 +2,16 @@ import { useEffect, useRef, useState } from 'react'
 
 const GUIDES = [
   { key: 'ascender', label: 'Ascender', soft: true },
-  { key: 'capHeight', label: 'Cap height', below: true },
-  { key: 'xHeight', label: 'x-height', below: true },
+  { key: 'capHeight', label: 'Cap height' },
+  { key: 'xHeight', label: 'x-height' },
   { key: 'baseline', label: 'Baseline' },
   { key: 'descender', label: 'Descender', soft: true },
 ]
+
+// The name is set as large as the sheet allows: from 2rem on a phone up to 12rem, the size the
+// reference holds on a wide screen. The size inside that range is fitted to the width (below).
+const FIT_MIN = 32
+const FIT_MAX = 192
 
 const CORNERS = ['tl', 'tr', 'bl', 'br']
 
@@ -20,8 +25,10 @@ const units = (value) => (value < 0 ? `\u2212${Math.abs(value)}` : String(value)
 // rendered line, never from a typed offset.
 export default function Wordmark({ text = 'HousePrice AI', metrics }) {
   const wrapRef = useRef(null)
+  const boxRef = useRef(null)
   const probeRef = useRef(null)
   const [layout, setLayout] = useState(null)
+  const [size, setSize] = useState(null)
 
   useEffect(() => {
     const wrap = wrapRef.current
@@ -30,7 +37,24 @@ export default function Wordmark({ text = 'HousePrice AI', metrics }) {
 
     const measure = () => {
       const wrapRect = wrap.getBoundingClientRect()
-      const fontSize = parseFloat(getComputedStyle(wrap).fontSize)
+      const styles = getComputedStyle(wrap)
+      const fontSize = parseFloat(styles.fontSize)
+
+      // Fit the name to the sheet. The clear-space box is a fixed number of ems wide (its padding
+      // and the tracking are in em), so the size that fills the sheet up to the gutter kept free
+      // for the readouts is: width available / width of the box in ems. Everything below is
+      // measured again once the new size has been laid out.
+      const box = boxRef.current
+      if (box && fontSize > 0) {
+        const gutter = parseFloat(styles.getPropertyValue('--wordmark-gutter')) || 0
+        const boxEm = box.getBoundingClientRect().width / fontSize
+        const fit = Math.min(FIT_MAX, Math.max(FIT_MIN, (wrap.clientWidth - gutter) / boxEm))
+        if (Math.abs(fit - fontSize) > 0.5) {
+          setSize(fit)
+          return
+        }
+      }
+
       const baseline = probe.getBoundingClientRect().bottom - wrapRect.top
 
       // Land every rule on a whole device pixel, counted from the top of the page, so a 1px
@@ -62,7 +86,7 @@ export default function Wordmark({ text = 'HousePrice AI', metrics }) {
     const observer = new ResizeObserver(measure)
     observer.observe(wrap)
     return () => observer.disconnect()
-  }, [metrics])
+  }, [metrics, size])
 
   const words = text.split(' ')
 
@@ -72,9 +96,13 @@ export default function Wordmark({ text = 'HousePrice AI', metrics }) {
       ref={wrapRef}
       role="img"
       aria-label={text}
-      style={metrics ? { '--x-height': metrics.xHeight / metrics.upem } : undefined}
+      style={
+        metrics
+          ? { '--x-height': metrics.xHeight / metrics.upem, '--wordmark-size': size ? `${size}px` : undefined }
+          : undefined
+      }
     >
-      <div className="wordmark__box" data-measure="Clear space" aria-hidden="true">
+      <div className="wordmark__box" ref={boxRef} data-measure="Clear space" aria-hidden="true">
         {CORNERS.map((corner) => (
           <span key={corner} className={`wordmark__unit wordmark__unit--${corner}`}>
             x
@@ -105,7 +133,7 @@ export default function Wordmark({ text = 'HousePrice AI', metrics }) {
               className={guide.soft ? 'wordmark__guide wordmark__guide--soft' : 'wordmark__guide'}
               style={{ top: `${layout.guides[guide.key]}px`, animationDelay: `${150 + index * 80}ms` }}
             >
-              <span className={guide.below ? 'wordmark__guide-label wordmark__guide-label--below' : 'wordmark__guide-label'}>
+              <span className="wordmark__guide-label">
                 {guide.label} {units(metrics[guide.key])}
               </span>
             </div>
