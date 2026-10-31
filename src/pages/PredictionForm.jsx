@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import ClassBadge from '../components/ClassBadge.jsx'
 import ProbabilityList from '../components/ProbabilityList.jsx'
 import SchemaField from '../components/SchemaField.jsx'
@@ -11,6 +11,8 @@ import { parseCsvText } from '../lib/csv.js'
 
 export default function PredictionForm() {
   const navigate = useNavigate()
+  const [searchParams] = setSearchParams({ mode: 'single' })
+  const mode = searchParams.get('mode') || 'single'
   const [input, setInput] = useState({})
   const [result, setResult] = useState(null)
   const [batchRows, setBatchRows] = useState([])
@@ -20,11 +22,10 @@ export default function PredictionForm() {
 
   const groupedFields = useMemo(() => {
     const groups = {
-      Pricing: [],
-      Property: [],
-      History: [],
+      Price: [],
       Location: [],
-      Identifiers: [],
+      'Size and layout': [],
+      'Quality and history': [],
     }
 
     fieldOrder.forEach((key) => {
@@ -55,7 +56,7 @@ export default function PredictionForm() {
     setIsSubmitting(true)
     try {
       const response = await requestPrediction(payload)
-      navigate('/prediction/result', { state: { result: response } })
+      setResult(response)
       setFormErrors([])
     } catch (error) {
       setFormErrors([
@@ -65,6 +66,14 @@ export default function PredictionForm() {
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  const handleReset = () => {
+    setInput({})
+    setResult(null)
+    setFormErrors([])
+    setBatchRows([])
+    setBatchErrors([])
   }
 
   const handleCsvParse = async (event) => {
@@ -99,77 +108,121 @@ export default function PredictionForm() {
     <section className="page-section scope-app app-screen">
       <div className="container">
         <header className="screen-intro">
-          <h1>Classify a listing.</h1>
-          <p>Enter the property details. Asking price is required and must be in USD.</p>
+          <p className="eyebrow">King County · Decision Tree classifier</p>
+          <h1>Classify an asking price</h1>
+          <p className="lead">Check whether a house's asking price is attractive or too expensive relative to comparable houses.</p>
         </header>
-        <div className="workspace-grid">
-          <section className="form-panel crop crop--sheet" aria-labelledby="property-form-title">
-            <div className="panel-heading">
-              <h2 id="property-form-title">Property details</h2>
-              <p>Local mock response</p>
-            </div>
-            <form id="property-inputs" onSubmit={handleSubmit} className="property-form">
-            {Object.entries(groupedFields).map(([group, items]) => (
-              <fieldset key={group} className="field-group">
-                <legend>{group}</legend>
-                <div className="field-grid">
-                  {items.map((item) => (
-                    <SchemaField
-                      key={item.key}
-                      label={item.label}
-                      name={item.key}
-                      value={input[item.key] ?? ''}
-                      onChange={handleChange}
-                      type={item.type}
-                      unit={item.unit}
-                      required={item.key === 'price'}
-                      invalid={item.key === 'price' && priceInvalid}
-                    />
+
+        <div className="tabs">
+          <button
+            className={mode === 'single' ? 'tab-button active' : 'tab-button'}
+            onClick={() => setSearchParams({ mode: 'single' })}
+          >
+            Single house
+          </button>
+          <button
+            className={mode === 'csv' ? 'tab-button active' : 'tab-button'}
+            onClick={() => setSearchParams({ mode: 'csv' })}
+          >
+            Upload CSV
+          </button>
+        </div>
+
+        {mode === 'single' ? (
+          <div className="workspace-grid">
+            <section className="form-panel crop crop--sheet" aria-labelledby="property-form-title">
+              <div className="panel-heading">
+                <h2 id="property-form-title">Property details</h2>
+                <p>Local mock response</p>
+              </div>
+              <form id="property-inputs" onSubmit={handleSubmit} className="property-form">
+              {Object.entries(groupedFields).map(([group, items]) => (
+                <fieldset key={group} className="field-group">
+                  <legend>{group}</legend>
+                  <div className="field-grid">
+                    {items.map((item) => (
+                      <SchemaField
+                        key={item.key}
+                        label={item.label}
+                        name={item.key}
+                        value={input[item.key] ?? ''}
+                        onChange={handleChange}
+                        type={item.type}
+                        unit={item.unit}
+                        required={item.key === 'price'}
+                        invalid={item.key === 'price' && priceInvalid}
+                        help={item.help}
+                      />
+                    ))}
+                  </div>
+                </fieldset>
+              ))}
+
+                <div className="form-actions">
+                  <button
+                    type="submit"
+                    className="primary-button"
+                    disabled={isSubmitting}
+                    aria-busy={isSubmitting}
+                  >
+                    {isSubmitting ? 'Predicting…' : 'Predict'}
+                  </button>
+                  <button
+                    type="button"
+                    className="secondary-button"
+                    onClick={handleReset}
+                    disabled={isSubmitting}
+                  >
+                    Reset
+                  </button>
+                </div>
+              </form>
+
+              {formErrors.length ? (
+                <div
+                  id={priceInvalid ? 'price-error' : undefined}
+                  className="error-box"
+                  role="alert"
+                >
+                  {formErrors.map((message) => (
+                    <p key={message}>{message}</p>
                   ))}
                 </div>
-              </fieldset>
-            ))}
+              ) : null}
+            </section>
 
-              <div className="form-actions">
-                <button
-                  type="submit"
-                  className="primary-button"
-                  disabled={isSubmitting}
-                  aria-busy={isSubmitting}
-                >
-                  {isSubmitting ? 'Classifying…' : 'Classify property'}
-                </button>
-              </div>
-            </form>
-
-            {formErrors.length ? (
-              <div
-                id={priceInvalid ? 'price-error' : undefined}
-                className="error-box"
-                role="alert"
-              >
-                {formErrors.map((message) => (
-                  <p key={message}>{message}</p>
-                ))}
-              </div>
-            ) : null}
-          </section>
-
-          <aside className="result-panel result-sheet" aria-live="polite">
-            <h2>Classification result</h2>
-            {result ? (
-              <div className="result-summary">
-                <ClassBadge classId={result.class_id} />
-                <p>Generated by the local mock provider, not a connected trained model.</p>
-                <ProbabilityList probabilities={result.probabilities} />
-              </div>
-            ) : (
-              <div className="empty-state">
-                <h3>No classification yet</h3>
-                <p>Submit property details to see the class label here.</p>
-              </div>
-            )}
-
+            <aside className="result-panel result-sheet" aria-live="polite">
+              <h2>Classification result</h2>
+              {!result && !isSubmitting && (
+                <div className="empty-state">
+                  <p>Fill in the form and press Predict.</p>
+                </div>
+              )}
+              {isSubmitting && (
+                <div className="empty-state" aria-busy="true">
+                  <p>Predicting…</p>
+                </div>
+              )}
+              {result && (
+                <div className="result-summary">
+                  <h3 tabIndex={-1}>
+                    <ClassBadge classId={result.class_id} />
+                  </h3>
+                  <p className="result-price">
+                    Echoed asking price: ${Number(input.price).toLocaleString()} USD
+                  </p>
+                  <p>The category compares the asking price with comparable houses, as defined by the project's target.</p>
+                  {result.mock && (
+                    <span className="mock-badge">Mock response, not a model output</span>
+                  )}
+                  <ProbabilityList probabilities={result.probabilities} />
+                </div>
+              )}
+            </aside>
+          </div>
+        ) : (
+          <div className="csv-panel">
+            <h2>Upload CSV</h2>
             <section className="batch-panel" aria-labelledby="batch-title">
               <h3 id="batch-title">Classify several listings</h3>
               <p>Paste a CSV with a header row. Include a price column in USD.</p>
@@ -202,8 +255,8 @@ export default function PredictionForm() {
               ) : null}
               <p className="batch-note">Batch responses also use the local mock provider.</p>
             </section>
-          </aside>
-        </div>
+          </div>
+        )}
       </div>
     </section>
   )
