@@ -3,8 +3,6 @@
  * axes: light/roman-serif/warm · posture: restrained · contrast: pass · hero: Stage (/) · v2.0.0 */
 /* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V4 · weakest: E, the proof texture must stay off running text and the orange on one action */
 /* Hallmark · kept every link, field, handler, heading and figure of the brand-theme build · the system and composition change, the wiring and words stay */
-/* Hallmark · added subtle cursor parallax on proof sheet (12px X, 8px Y range) · motion respects prefers-reduced-motion · transforms only on transform property per 10a */
-/* Hallmark · added h1 construction guides (ascender, cap, x-height, baseline, descender) · orange construction lines only · respects prefers-reduced-motion */
 :root {
   color-scheme: light;
   --space-3xs: 2px;

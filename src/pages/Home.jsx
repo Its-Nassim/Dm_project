@@ -1,76 +1,14 @@
-import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { CLASS_NAMES } from '../lib/schema.js'
 
 export default function Home() {
   const classes = Object.entries(CLASS_NAMES)
-  const heroRef = useRef(null)
-  const headingRef = useRef(null)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [sheetTransform, setSheetTransform] = useState({ x: 0, y: 0 })
-  const [showHeadingGuides, setShowHeadingGuides] = useState(false)
-
-  useEffect(() => {
-    const handleMouseMove = (event) => {
-      if (!heroRef.current) return
-
-      const rect = heroRef.current.getBoundingClientRect()
-      const x = (event.clientX - rect.left) / rect.width
-      const y = (event.clientY - rect.top) / rect.height
-
-      setMousePosition({ x, y })
-
-      // Subtle parallax on the proof sheet
-      const sheetX = (x - 0.5) * 12
-      const sheetY = (y - 0.5) * 8
-      setSheetTransform({ x: sheetX, y: sheetY })
-
-      // Show heading guides when cursor is near the h1
-      if (headingRef.current) {
-        const headingRect = headingRef.current.getBoundingClientRect()
-        const isNearHeading =
-          event.clientX >= headingRect.left - 100 &&
-          event.clientX <= headingRect.right + 100 &&
-          event.clientY >= headingRect.top - 100 &&
-          event.clientY <= headingRect.bottom + 100
-        setShowHeadingGuides(isNearHeading)
-      }
-    }
-
-    const hero = heroRef.current
-    if (hero) {
-      hero.addEventListener('mousemove', handleMouseMove)
-    }
-
-    return () => {
-      if (hero) {
-        hero.removeEventListener('mousemove', handleMouseMove)
-      }
-    }
-  }, [])
 
   return (
-    <section className="home-hero proof" ref={heroRef}>
+    <section className="home-hero proof">
       <div className="container home-grid">
         <div className="home-primary">
-          <div className="heading-wrapper" ref={headingRef}>
-            <h1>Review a home's price classification.</h1>
-            {showHeadingGuides && (
-              <div className="heading-guides">
-                <div className="guide-line guide-line--ascender" />
-                <div className="guide-line guide-line--cap" />
-                <div className="guide-line guide-line--x" />
-                <div className="guide-line guide-line--baseline" />
-                <div className="guide-line guide-line--descender" />
-                <div className="guide-readout guide-readout--ascender">Ascender 800</div>
-                <div className="guide-readout guide-readout--cap">Cap height 700</div>
-                <div className="guide-readout guide-readout--x">x-height 520</div>
-                <div className="guide-readout guide-readout--baseline">Baseline 0</div>
-                <div className="guide-readout guide-readout--descender">Descender -247</div>
-                <div className="guide-label">Hedvig Letters Serif, in units of 1000</div>
-              </div>
-            )}
-          </div>
+          <h1>Review a home's price classification.</h1>
           <p className="lead">
             Enter a listing's details to receive a class label, with probabilities when the response includes them.
           </p>
@@ -80,13 +18,7 @@ export default function Home() {
           </div>
         </div>
 
-        <section
-          className="proof-sheet crop crop--sheet"
-          aria-labelledby="class-guide-title"
-          style={{
-            transform: `translate(${sheetTransform.x}px, ${sheetTransform.y}px)`,
-          }}
-        >
+        <section className="proof-sheet crop crop--sheet" aria-labelledby="class-guide-title">
           <div className="proof-sheet__head">
             <h2 id="class-guide-title">The four class labels</h2>
             <span className="proof-sheet__readout">{classes.length} classes</span>
