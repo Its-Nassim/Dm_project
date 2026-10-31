@@ -2,9 +2,8 @@ import { NavLink } from 'react-router-dom'
 
 const navItems = [
   { to: '/', label: 'Home' },
-  { to: '/prediction', label: 'Prediction' },
-  { to: '/model', label: 'Model' },
   { to: '/analytics', label: 'Analytics' },
+  { to: '/model', label: 'Model' },
   { to: '/about', label: 'About' },
 ]
 
@@ -12,8 +11,8 @@ export default function Header() {
   return (
     <header className="site-header proof">
       <div className="container site-header__inner">
-        <NavLink to="/" className="brand-mark" aria-label="House Price Relevance home">
-          House Price Relevance
+        <NavLink to="/" className="brand-mark" aria-label="HousePrice AI home">
+          HousePrice AI
         </NavLink>
         <nav className="primary-nav" aria-label="Main navigation">
           {navItems.map((item) => (
@@ -26,6 +25,9 @@ export default function Header() {
             </NavLink>
           ))}
         </nav>
+        <NavLink to="/prediction" className="primary-button primary-button--small">
+          Predict
+        </NavLink>
       </div>
     </header>
   )

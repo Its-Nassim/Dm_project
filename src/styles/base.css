@@ -407,12 +407,65 @@ main {
   max-width: 12ch;
 }
 
-.home-links {
+.tabs {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-md);
-  align-items: center;
-  margin-top: var(--space-xs);
+  gap: var(--space-xs);
+  margin-bottom: var(--space-lg);
+}
+
+.tab-button {
+  min-height: 44px;
+  padding: 0 var(--space-md);
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: var(--radius-control);
+  background: var(--color-paper-hi);
+  color: var(--color-ink-2);
+  font-size: var(--text-md);
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out);
+}
+
+.tab-button:hover {
+  border-color: var(--color-ink);
+  background: var(--color-paper-2);
+  color: var(--color-ink);
+}
+
+.tab-button.active {
+  border-color: var(--color-ink);
+  background: var(--color-paper-hi);
+  color: var(--color-ink);
+}
+
+.eyebrow {
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  margin-bottom: var(--space-xs);
+}
+
+.result-price {
+  margin-bottom: var(--space-sm);
+  color: var(--color-ink-2);
+  font-size: var(--text-md);
+}
+
+.mock-badge {
+  display: inline-block;
+  padding: var(--space-2xs) var(--space-xs);
+  border: var(--rule-hair) solid var(--color-muted);
+  border-radius: var(--radius-pill);
+  background: var(--color-paper-2);
+  color: var(--color-muted);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  margin-bottom: var(--space-md);
+}
+
+.csv-panel {
+  max-width: 48rem;
+  margin: 0 auto;
 }
 
 .proof-sheet {
