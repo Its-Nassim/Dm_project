@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 
 const navItems = [
   { to: '/', label: 'Home' },
@@ -8,8 +8,10 @@ const navItems = [
 ]
 
 export default function Header() {
+  const isHome = useLocation().pathname === '/'
+
   return (
-    <header className="site-header proof">
+    <header className={`site-header proof${isHome ? ' site-header--home' : ''}`}>
       <div className="container site-header__inner">
         <NavLink to="/" className="brand-mark" aria-label="HousePrice AI home">
           HousePrice AI
@@ -25,7 +27,10 @@ export default function Header() {
             </NavLink>
           ))}
         </nav>
-        <NavLink to="/prediction" className="primary-button primary-button--small">
+        <NavLink
+          to="/prediction"
+          className={isHome ? 'secondary-button' : 'primary-button primary-button--small'}
+        >
           Predict
         </NavLink>
       </div>
