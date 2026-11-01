@@ -1,12 +1,16 @@
+import { lazy, Suspense, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CLASS_NAMES } from '../lib/schema.js'
 import { useFontMetrics } from '../lib/fontMetrics.js'
 import MeasureSheet from '../components/MeasureSheet.jsx'
 import Wordmark from '../components/Wordmark.jsx'
 
+const House3D = lazy(() => import('../components/House3D.jsx'))
+
 export default function Home() {
   const classes = Object.entries(CLASS_NAMES)
   const metrics = useFontMetrics()
+  const [active, setActive] = useState(1)
 
   return (
     <>
@@ -50,25 +54,30 @@ export default function Home() {
           <div className="proof-sheet crop crop--sheet home-classes__card">
             <div className="proof-sheet__head">
               <h2 id="class-guide-title">The four class labels</h2>
-              <span className="proof-sheet__readout">{classes.length} classes</span>
+              <span className="proof-sheet__readout" aria-live="polite">
+                Class {active}: {CLASS_NAMES[active]}
+              </span>
             </div>
-            <ul className="class-list set">
-              {classes.map(([classId, label]) => (
-                <li key={label}>
-                  <span className="class-id">{classId}</span>
-                  <span className="class-name">{label}</span>
-                </li>
-              ))}
-            </ul>
-            <div className="proof-sheet__foot">
-              <div className="sheet-spec">
-                <span className="sheet-label">Class id</span>
-                <span>Hedvig Letters Serif 400</span>
-              </div>
-              <div className="sheet-spec">
-                <span className="sheet-label">Label</span>
-                <span>Geist 500</span>
-              </div>
+            <div className="home-model__stage">
+              <Suspense fallback={null}>
+                <House3D classIndex={active} label={`Price class ${active}: ${CLASS_NAMES[active]}.`} />
+              </Suspense>
+            </div>
+            <div className="home-model__picks" role="group" aria-label="Price class">
+              {classes.map(([classId, label]) => {
+                const id = Number(classId)
+                return (
+                  <button
+                    key={label}
+                    type="button"
+                    className={id === active ? 'primary-button' : 'secondary-button'}
+                    aria-pressed={id === active}
+                    onClick={() => setActive(id)}
+                  >
+                    {classId} · {label}
+                  </button>
+                )
+              })}
             </div>
           </div>
         </div>
