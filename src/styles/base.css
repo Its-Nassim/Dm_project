@@ -502,6 +502,8 @@ main {
   margin-left: 75%;
   transform: translateX(-50%);
   max-width: 40rem;
+  aspect-ratio: 3 / 2;
+  min-height: 320px;
   padding: var(--space-2xl);
   background: color-mix(in oklab, var(--color-paper-hi) 96%, transparent);
   box-shadow: var(--shadow-sheet);
