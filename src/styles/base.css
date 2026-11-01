@@ -479,15 +479,10 @@ main {
   background-color: var(--color-paper);
   background-image:
     var(--grain),
-    radial-gradient(circle at 1px 1px, var(--color-dot) 1px, transparent 1.4px),
-    linear-gradient(
-      color-mix(in oklab, var(--color-paper) 78%, transparent),
-      color-mix(in oklab, var(--color-paper) 78%, transparent)
-    ),
-    url("../assets/class-price-reference.png");
-  background-size: 160px 160px, 24px 24px, 100% 100%, cover;
-  background-position: center, center, center, center;
-  background-repeat: repeat, repeat, no-repeat, no-repeat;
+    radial-gradient(circle at 1px 1px, var(--color-dot) 1px, transparent 1.4px);
+  background-size: 160px 160px, 24px 24px;
+  background-position: center, center;
+  background-repeat: repeat, repeat;
 }
 
 .home-classes__inner {
