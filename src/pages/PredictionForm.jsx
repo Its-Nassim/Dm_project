@@ -114,7 +114,7 @@ export default function PredictionForm() {
   }
 
   return (
-    <section className="page-section scope-app app-screen">
+    <section className="page-section scope-app app-screen page-prediction">
       <div className="container">
         <header className="screen-intro">
           <p className="eyebrow">King County · Decision Tree classifier</p>

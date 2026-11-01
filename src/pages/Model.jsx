@@ -4,7 +4,7 @@ export default function Model() {
   const classes = Object.entries(CLASS_NAMES)
 
   return (
-    <section className="page-section">
+    <section className="page-section page-model">
       <div className="container">
         <header className="screen-intro">
           <h1>What the classifier returns.</h1>

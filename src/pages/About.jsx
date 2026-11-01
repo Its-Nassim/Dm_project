@@ -1,6 +1,6 @@
 export default function About() {
   return (
-    <section className="page-section">
+    <section className="page-section page-about">
       <div className="container">
         <header className="screen-intro">
           <h1>About this classification tool.</h1>
