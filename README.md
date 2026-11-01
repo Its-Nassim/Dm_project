@@ -1,21 +1,23 @@
 # House Price AI
 
-A housing price classification application built with React, Vite, and React Router. Features a refined design system using the Hallmark Studio theme.
+A housing price classification application built with React, Vite, and React Router. Features an interactive 3D visualization and a refined design system using the Hallmark Studio theme.
 
 ## Features
 
 - **Price Classification**: Classify property listings into four price-relevance categories
+- **Interactive 3D Model**: Visualize each price class on an interactive 3D house model with Three.js
+- **Class Selection**: Switch between the four price categories (Cheaper than average, Reasonable price, Over priced, Too over priced)
+- **Typography Measurement**: Interactive wordmark with font metrics and construction guides
 - **Interactive Form**: Detailed property input with validation
-- **Batch Processing**: Paste CSV data to classify multiple listings at once
+- **Batch Processing**: Upload CSV files to classify multiple listings at once
 - **Model Documentation**: View the classification schema and model details
 - **Analytics Dashboard**: View class distribution (data placeholder)
-- **Studio Theme**: Design system inspired by Hallmark's Studio theme
+- **Studio Theme**: Design system inspired by Hallmark's Studio theme with proof paper aesthetics
 
 ## Routes
 
-- `/` - Homepage with classification overview
-- `/prediction` - Property classification form
-- `/prediction/result` - Classification result display
+- `/` - Homepage with 3D class visualization and typography measurement
+- `/prediction` - Property classification form with Single house / Upload CSV tabs
 - `/model` - Model details and class schema
 - `/analytics` - Class distribution analytics
 - `/about` - About the classification tool
@@ -23,8 +25,9 @@ A housing price classification application built with React, Vite, and React Rou
 ## Tech Stack
 
 - **React 18.3.1** - UI library
-- **Vite 5.4.10** - Build tool and dev server
+- **Vite 8.3.5** - Build tool and dev server
 - **React Router 6.28.0** - Client-side routing
+- **Three.js** - 3D rendering library for house model visualization
 - **Node.js** - Runtime environment
 
 ## Design System
@@ -34,7 +37,8 @@ This project uses the Hallmark Studio theme with:
 - **Typography**: Hedvig Letters Serif (display), Geist (body), Sofia Sans Extra Condensed (outlier)
 - **Color**: Cool studio-white paper, blue-black ink, cadmium orange accent
 - **Surfaces**: Proof texture with dot grid and grain, crop marks on printed pieces
-- **Motion**: Subtle cursor parallax on homepage (respects `prefers-reduced-motion`)
+- **Interactive Elements**: Font measurement tool, construction guides, registration marks
+- **Motion**: Subtle transitions respecting `prefers-reduced-motion`
 
 ## Getting Started
 
@@ -85,27 +89,34 @@ npm run test
 ```
 src/
 ├── api/              # API layer (mock provider)
+│   ├── client.js     # API client with error handling
+│   └── mock.js       # Mock prediction service
 ├── components/       # Reusable components
 │   ├── ClassBadge.jsx
 │   ├── Footer.jsx
 │   ├── Header.jsx
+│   ├── House3D.jsx   # Three.js 3D house model
+│   ├── MeasureSheet.jsx
 │   ├── ProbabilityList.jsx
-│   └── SchemaField.jsx
+│   ├── SchemaField.jsx
+│   └── Wordmark.jsx  # Interactive wordmark
 ├── config/           # Configuration files
+│   ├── classes.js    # Class definitions
 │   ├── featureSchema.js
 │   └── fieldMeta.js
 ├── lib/              # Utility functions
 │   ├── csv.js
+│   ├── fontMetrics.js
+│   ├── measure.js
 │   ├── payload.js
 │   ├── schema.js
 │   └── validation.js
 ├── pages/            # Page components
 │   ├── About.jsx
 │   ├── Analytics.jsx
-│   ├── Home.jsx
+│   ├── Home.jsx      # Homepage with 3D model
 │   ├── Model.jsx
-│   ├── PredictionForm.jsx
-│   └── PredictionResult.jsx
+│   └── PredictionForm.jsx
 ├── styles/           # Design system
 │   ├── base.css
 │   └── tokens.css
@@ -117,32 +128,32 @@ src/
 
 The model classifies properties into four categories:
 
-| Class ID | Label | Description |
-|----------|-------|-------------|
-| 0 | Cheaper than average | Below market price |
-| 1 | Reasonable price | At market price |
-| 2 | Over priced | Above market price |
-| 3 | Too over priced | Significantly above market price |
+|| Class ID | Label | Description |
+||----------|-------|-------------|
+|| 0 | Cheaper than average | Below market price |
+|| 1 | Reasonable price | At market price |
+|| 2 | Over priced | Above market price |
+|| 3 | Too over priced | Significantly above market price |
+
+The homepage features an interactive 3D house model that changes appearance based on the selected class category.
 
 ## API Integration
 
 Currently uses a local mock provider for predictions. To connect to a real API:
 
-1. Update `src/api/mock.js` with your API endpoint
-2. Modify `requestPrediction` and `requestBatchPrediction` functions
-3. Update the response format validation in `src/lib/validation.js`
+1. Set `VITE_USE_MOCK=false` in `.env.local`
+2. Configure `VITE_API_BASE_URL` and `VITE_DEV_PROXY_TARGET` in `.env.local`
+3. Update `src/api/client.js` endpoints if needed
+4. The dev server proxies API requests to the Flask backend
 
 ## Field Schema
 
 The classification uses the following property fields:
 
-- **Pricing**: price (required)
-- **Property**: bedrooms, bathrooms, sqft_living, sqft_lot, floors
-- **History**: yr_built, yr_renovated
+- **Price**: price (required, USD)
 - **Location**: zipcode, lat, long
-- **Identifiers**: id, date
-- **Quality**: waterfront, view, condition, grade, sqft_above, sqft_basement
-- **Neighborhood**: sqft_living15, sqft_lot15
+- **Size and layout**: bedrooms, bathrooms, floors, sqft_living, sqft_lot, sqft_above, sqft_basement, sqft_living15, sqft_lot15
+- **Quality and history**: waterfront, view, condition, grade, yr_built, yr_renovated
 
 ## Browser Support
 
@@ -163,3 +174,4 @@ This is a client project. Please contact the maintainers before making changes.
 
 - Design system inspired by [Hallmark](https://github.com/cognition-artifex/hallmark)
 - Theme: Studio (proof paper with construction guides)
+- 3D rendering powered by Three.js

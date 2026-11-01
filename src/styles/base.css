@@ -502,6 +502,7 @@ main {
   background: color-mix(in oklab, var(--color-paper-hi) 96%, transparent);
   box-shadow: var(--shadow-sheet);
   backdrop-filter: blur(3px);
+  min-height: 600px;
 }
 
 .bis_skin_checked {
