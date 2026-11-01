@@ -51,7 +51,7 @@ export default function Home() {
 
       <section className="home-classes" aria-labelledby="class-guide-title">
         <div className="container home-classes__inner">
-          <div className="proof-sheet crop crop--sheet home-classes__card">
+          <div className="proof-sheet crop crop--sheet home-classes__card bis_skin_checked">
             <div className="proof-sheet__head">
               <h2 id="class-guide-title">The four class labels</h2>
               <span className="proof-sheet__readout" aria-live="polite">

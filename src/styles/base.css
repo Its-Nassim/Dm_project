@@ -493,14 +493,19 @@ main {
 }
 
 .home-classes__card {
-  justify-self: start;
-  margin-left: 75%;
-  transform: translateX(-50%);
-  max-width: 40rem;
+  justify-self: center;
+  margin-left: 0;
+  transform: none;
+  width: 100%;
+  max-width: none;
   padding: var(--space-2xl);
   background: color-mix(in oklab, var(--color-paper-hi) 96%, transparent);
   box-shadow: var(--shadow-sheet);
   backdrop-filter: blur(3px);
+}
+
+.bis_skin_checked {
+  min-width: 100rem;
 }
 
 .home-model__stage {
