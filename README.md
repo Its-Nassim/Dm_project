@@ -54,8 +54,16 @@ This project uses the Hallmark Studio theme with:
 git clone https://github.com/Its-Nassim/Dm_project.git
 cd Dm_project
 
-# Install dependencies
+# Install dependencies (includes Three.js for 3D model)
 npm install
+```
+
+### Installing Three.js Separately
+
+If you need to install Three.js separately (already included in package.json):
+
+```bash
+npm install three
 ```
 
 ### Development
