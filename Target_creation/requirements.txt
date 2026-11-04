@@ -1,5 +1,5 @@
 # Python libraries needed for the M2 target creation notebook
-# Tested on Python 3.13 with pandas 3.0.5, numpy 2.5.3, scikit-learn 1.9.1, matplotlib 3.11.2, seaborn 0.13.2
+# Tested on Python 3.13.11 with pandas 3.0.2, numpy 2.4.4, scikit-learn 1.9.1, matplotlib 3.10.9, seaborn 0.13.2
 # scikit-learn must match the version recorded in the project's root requirements.txt
 
 pandas>=2.2
