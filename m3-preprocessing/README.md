@@ -23,6 +23,7 @@ m3-preprocessing/
 ## Utilisation rapide
 ```python
 import sys; sys.path.insert(0, "../m3-preprocessing/src")
+from sklearn.model_selection import train_test_split
 from m3_tools import *
 
 df = load_labeled("../m3-preprocessing/data/labeled/house_labeled.csv")   # zipcode en texte
@@ -32,6 +33,14 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratif
 pipe = make_model_pipeline("SVM")        # KNN, Decision Tree, Random Forest, GaussianNB, MultinomialNB, SVM, Zero-R
 res  = evaluate_model(pipe, X_train, y_train, X_test, y_test, name="SVM")
 best = tune_model("SVM", X_train, y_train, search="grid", cv=5)   # GridSearchCV, K>=5, F1 macro
+```
+
+## Relire le découpage sauvegardé
+`zipcode` doit être lu comme texte, sinon le modèle est entraîné sur des entiers puis reçoit du texte côté serveur :
+les codes postaux sont alors traités comme inconnus **sans erreur** (environ 13 % de prédictions différentes mesurées).
+```python
+X_train = pd.read_csv("data/split/X_train.csv", index_col=0, dtype={"zipcode": str})
+y_train = pd.read_csv("data/split/y_train.csv", index_col=0)["price_category"]
 ```
 
 ## Règles

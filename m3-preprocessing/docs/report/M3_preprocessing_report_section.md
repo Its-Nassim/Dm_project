@@ -27,7 +27,7 @@ La séparation est faite par `train_test_split(test_size=0.2, stratify=y, random
 | 2 — Over priced | 15,99 % | 15,99 % | 15,98 % |
 | 3 — Too over priced | 6,38 % | 6,38 % | 6,39 % |
 
-La stratification est importante car la classe 3 est minoritaire : sans elle, le jeu de test pourrait contenir trop peu d'exemples de cette classe pour une évaluation fiable. Les quatre fichiers `X_train.csv`, `X_test.csv`, `y_train.csv` et `y_test.csv` sont sauvegardés (l'index correspond à la ligne de `house_labeled.csv`).
+La stratification est importante car la classe 3 est minoritaire : sans elle, le jeu de test pourrait contenir trop peu d'exemples de cette classe pour une évaluation fiable. Les quatre fichiers `X_train.csv`, `X_test.csv`, `y_train.csv` et `y_test.csv` sont sauvegardés (l'index correspond à la ligne de `house_labeled.csv`). Attention : `zipcode` doit être relu comme texte (`dtype={"zipcode": str}`), sinon un modèle entraîné sur des entiers traite silencieusement comme inconnus les codes postaux envoyés en texte par le serveur (mesuré : 13 % de prédictions différentes).
 
 ## 5. Prétraitement
 
@@ -47,7 +47,7 @@ Le choix de la mise à l'échelle dépend de la nature de chaque algorithme :
 | MultinomialNB | Min-Max [0, 1] | Exige des valeurs positives ou nulles ; lissage de Laplace (`alpha=1`) |
 | K-NN, SVM | Z-score | Basés sur des distances : `price` (jusqu'à 7,7 M) écraserait les variables à petite échelle comme `condition` (1 à 5) |
 
-Les valeurs vérifiées dans le notebook : après Z-score les variables numériques ont une moyenne de 0 ; après Min-Max elles sont comprises entre 0 et 1. Le Z-score laisse apparaître des valeurs extrêmes (jusqu'à environ 39 écarts-types, dues aux valeurs aberrantes de `price` et `sqft_lot`) ; la consigne du projet interdit de supprimer des observations sans décision collective documentée, elles sont donc conservées.
+Les valeurs vérifiées dans le notebook : après Z-score les variables numériques ont une moyenne de 0 ; après Min-Max elles sont comprises entre 0 et 1. Le Z-score laisse apparaître des valeurs extrêmes (jusqu'à environ 39 écarts-types pour `sqft_lot` et 18 pour `price`, dues à des valeurs aberrantes) ; la consigne du projet interdit de supprimer des observations sans décision collective documentée, elles sont donc conservées.
 
 ## 6. Baseline Zero-R
 
@@ -95,7 +95,7 @@ Chaque famille a été lancée avec ses **paramètres par défaut** (sans optimi
 
 Observations à confirmer après optimisation :
 - Tous les modèles dépassent Zero-R en F1 macro, mais les deux Naïve Bayes et K-NN dépassent à peine l'exactitude de Zero-R : leurs hypothèses (indépendance des variables, distance en 84 dimensions dont 70 issues de `zipcode`) conviennent mal à cette cible.
-- Random Forest et SVM ont la meilleure exactitude et de loin le meilleur ROC-AUC (environ 0,87), mais leur rappel macro (environ 0,51) est plus faible que celui de l'arbre (0,60) : ils prédisent mieux la classe majoritaire et reconnaissent moins bien les classes 2 et 3. L'arbre par défaut obtient le meilleur F1 macro, probablement parce qu'il apprend directement la règle de construction (seuil sur le rapport prix / surface par zone). Un arbre sans limite de profondeur peut aussi surapprendre ; l'optimisation permettra de trancher.
+- Random Forest et SVM ont la meilleure exactitude et de loin le meilleur ROC-AUC (environ 0,87), mais leur rappel macro (environ 0,51) est plus faible que celui de l'arbre (0,60) : ils prédisent mieux la classe majoritaire (rappel de 0,93 à 0,95 pour la classe 1) et reconnaissent moins bien les classes 0, 2 et 3 (par exemple 0,24 à 0,28 pour la classe 2, contre 0,51 pour l'arbre). L'arbre par défaut obtient le meilleur F1 macro, probablement parce qu'il apprend directement la règle de construction (seuil sur le rapport prix / surface par zone). Un arbre sans limite de profondeur peut aussi surapprendre ; l'optimisation permettra de trancher.
 - L'écart entre les scores de validation croisée et de test est faible (au plus 3 points), ce qui indique que la séparation est cohérente.
 
 ## 9. Fichier `feature_schema.json`

@@ -75,7 +75,10 @@ def prepare_input(df):
     if missing:
         raise ValueError(f"Colonnes manquantes : {missing}")
     out = df[FEATURE_ORDER].copy()
-    out["zipcode"] = out["zipcode"].astype(str).str.strip().str.replace(r"\.0$", "", regex=True)
+    zc = out["zipcode"]
+    # astype(str) turns NaN into the text "nan" in pandas 2 but keeps it missing in pandas 3;
+    # masking keeps a missing zipcode missing so the pipeline's imputer behaves the same everywhere.
+    out["zipcode"] = zc.where(zc.isna(), zc.astype(str).str.strip().str.replace(r"\.0$", "", regex=True))
     return out
 
 
@@ -242,9 +245,11 @@ PARAM_GRIDS = {
                       "clf__max_features": ["sqrt", "log2"]},
     "GaussianNB": {"clf__var_smoothing": np.logspace(-11, -5, 7)},
     "MultinomialNB": {"clf__alpha": [0.01, 0.1, 0.5, 1.0, 2.0, 5.0]},
-    "SVM": {"clf__C": [0.1, 1, 10, 100],
-            "clf__kernel": ["rbf", "linear", "poly"],
-            "clf__gamma": ["scale", 0.01, 0.1]},
+    # List of grids: gamma is meaningless for the linear kernel, and linear/poly with C=100
+    # take several minutes per fit on 17k rows (rbf takes ~15 s whatever C).
+    "SVM": [{"clf__kernel": ["rbf"], "clf__C": [0.1, 1, 10, 100], "clf__gamma": ["scale", 0.01, 0.1]},
+            {"clf__kernel": ["linear"], "clf__C": [0.1, 1, 10]},
+            {"clf__kernel": ["poly"], "clf__C": [0.1, 1, 10], "clf__gamma": ["scale", 0.1]}],
 }
 
 
