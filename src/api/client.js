@@ -1,261 +1,237 @@
-import * as mockApi from './mock.js'
-import { MOCK_SCHEMA } from '../config/featureSchema.js'
-import { DEFAULT_CLASSES, getClassById } from '../config/classes.js'
-import { buildResultsCsv } from '../lib/csv.js'
+import { mockRequestPrediction, mockRequestBatchPrediction, mockGetHealth, mockGetModelInfo } from './mock.js'
 
-const BASE = typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL 
-  ? String(import.meta.env.VITE_API_BASE_URL).replace(/\/+$/, '') 
-  : ''
-
-const USE_MOCK = typeof import.meta !== 'undefined' && import.meta.env?.VITE_USE_MOCK === 'true'
-
-const TIMEOUT_SINGLE = typeof import.meta !== 'undefined' && import.meta.env?.VITE_REQUEST_TIMEOUT_MS 
-  ? Number(import.meta.env.VITE_REQUEST_TIMEOUT_MS) 
-  : 30000
-
-const TIMEOUT_BATCH = typeof import.meta !== 'undefined' && import.meta.env?.VITE_BATCH_TIMEOUT_MS 
-  ? Number(import.meta.env.VITE_BATCH_TIMEOUT_MS) 
-  : 120000
-
-export const ENDPOINTS = {
+const BASE = import.meta.env.VITE_API_BASE_URL ?? ''
+const ENDPOINTS = {
   predict: '/predict',
   predictBatch: '/predict_batch',
   health: '/health',
   modelInfo: '/model_info',
-  schema: '/model_info/schema',
+  schema: '/schema',
 }
 
 export class ApiError extends Error {
-  constructor({ kind, status = null, message, fieldErrors = null, raw = null, details = null }) {
+  constructor({ kind, status, message, fieldErrors, raw }) {
     super(message)
-    this.name = 'ApiError'
     this.kind = kind
     this.status = status
+    this.message = message
     this.fieldErrors = fieldErrors
     this.raw = raw
-    this.details = details
   }
 }
 
-async function request(url, options = {}, timeoutMs = TIMEOUT_SINGLE) {
-  const controller = new AbortController()
-  const id = setTimeout(() => controller.abort(), timeoutMs)
-  const fullUrl = `${BASE}${url}`
+export function normalizePrediction(raw) {
+  if (!raw) return null
 
-  try {
-    const res = await fetch(fullUrl, {
-      ...options,
-      signal: controller.signal,
-    })
-    clearTimeout(id)
+  const classId = raw.class_id
+  const className = raw.class_name
 
-    const contentType = res.headers.get('content-type') || ''
-
-    // Detect Vite returning index.html for unproxied API paths
-    if (res.ok && contentType.includes('text/html')) {
-      throw new ApiError({
-        kind: 'proxy',
-        status: res.status,
-        message: 'API route is not proxied. Check vite.config.js and VITE_DEV_PROXY_TARGET.',
-      })
+  let probabilities = null
+  if (raw.probabilities) {
+    if (Array.isArray(raw.probabilities)) {
+      probabilities = raw.probabilities
+    } else if (typeof raw.probabilities === 'object') {
+      probabilities = Object.entries(raw.probabilities).map(([key, value]) => ({
+        classId: isNaN(key) ? key : parseInt(key, 10),
+        label: isNaN(key) ? key : key,
+        value,
+      }))
     }
-
-    if (!res.ok) {
-      let data = null
-      let rawText = ''
-      try {
-        if (contentType.includes('application/json')) {
-          data = await res.json()
-        } else {
-          rawText = await res.text()
-        }
-      } catch {
-        // Failed to parse response body
-      }
-
-      if (res.status === 400 && data && typeof data === 'object') {
-        const errorMsg = data.error || data.message || (typeof data.errors === 'string' ? data.errors : 'Bad request')
-        const fieldErrors = (data.fields && typeof data.fields === 'object') 
-          ? data.fields 
-          : ((data.errors && typeof data.errors === 'object') ? data.errors : null)
-        
-        throw new ApiError({
-          kind: 'validation',
-          status: 400,
-          message: errorMsg,
-          fieldErrors,
-          raw: data,
-        })
-      }
-
-      throw new ApiError({
-        kind: 'server',
-        status: res.status,
-        message: `The server returned an error (HTTP ${res.status}).`,
-        details: rawText || (data ? JSON.stringify(data, null, 2) : ''),
-        raw: data || rawText,
-      })
-    }
-
-    if (contentType.includes('application/json')) {
-      return await res.json()
-    }
-    return await res.text()
-  } catch (err) {
-    clearTimeout(id)
-
-    if (err instanceof ApiError) {
-      throw err
-    }
-
-    if (err.name === 'AbortError') {
-      throw new ApiError({
-        kind: 'timeout',
-        message: 'The request timed out.',
-      })
-    }
-
-    if (err instanceof TypeError) {
-      throw new ApiError({
-        kind: 'network',
-        message: 'Cannot reach the prediction server. Check that the backend is running.',
-        raw: err,
-      })
-    }
-
-    throw new ApiError({
-      kind: 'server',
-      message: err.message || 'An unexpected error occurred.',
-      raw: err,
-    })
   }
+
+  return { classId, className, probabilities }
 }
 
 export async function getSchema() {
-  if (USE_MOCK) {
-    return MOCK_SCHEMA
+  if (import.meta.env.VITE_USE_MOCK === 'true') {
+    throw new Error('Schema not available in mock mode')
   }
-  return await request(ENDPOINTS.schema)
+
+  const response = await fetch(`${BASE}${ENDPOINTS.schema}`)
+  if (!response.ok) {
+    throw new ApiError({
+      kind: 'server',
+      status: response.status,
+      message: `Failed to fetch schema (HTTP ${response.status})`,
+      raw: await response.text(),
+    })
+  }
+  return response.json()
 }
 
 export async function predictSingle(payload) {
-  if (USE_MOCK) {
-    return await mockApi.mockPredictSingle(payload)
+  if (import.meta.env.VITE_USE_MOCK === 'true') {
+    return mockRequestPrediction(payload)
   }
-  return await request(ENDPOINTS.predict, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  }, TIMEOUT_SINGLE)
+
+  const controller = new AbortController()
+  const timeout = setTimeout(
+    () => controller.abort(),
+    import.meta.env.VITE_REQUEST_TIMEOUT_MS || 30000,
+  )
+
+  try {
+    const response = await fetch(`${BASE}${ENDPOINTS.predict}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    })
+    clearTimeout(timeout)
+
+    if (response.status === 400) {
+      const text = await response.text()
+      try {
+        const json = JSON.parse(text)
+        throw new ApiError({
+          kind: 'validation',
+          status: 400,
+          message: json.error || json.message || 'Validation error',
+          fieldErrors: json.fields || json.errors,
+          raw: text,
+        })
+      } catch {
+        throw new ApiError({
+          kind: 'validation',
+          status: 400,
+          message: text,
+          raw: text,
+        })
+      }
+    }
+
+    if (!response.ok) {
+      throw new ApiError({
+        kind: 'server',
+        status: response.status,
+        message: `The server returned an error (HTTP ${response.status})`,
+        raw: await response.text(),
+      })
+    }
+
+    return response.json()
+  } catch (error) {
+    clearTimeout(timeout)
+    if (error.name === 'AbortError') {
+      throw new ApiError({ kind: 'timeout', message: 'The request timed out.' })
+    }
+    if (error instanceof TypeError) {
+      throw new ApiError({ kind: 'network', message: 'Cannot reach the prediction server. Check that the backend is running.' })
+    }
+    throw error
+  }
 }
 
 export async function predictBatch(file) {
-  if (USE_MOCK) {
-    return await mockApi.mockPredictBatch(file)
+  if (import.meta.env.VITE_USE_MOCK === 'true') {
+    return mockRequestBatchPrediction(file)
   }
-  const formData = new FormData()
-  formData.append('file', file)
 
-  return await request(ENDPOINTS.predictBatch, {
-    method: 'POST',
-    body: formData,
-  }, TIMEOUT_BATCH)
-}
+  const controller = new AbortController()
+  const timeout = setTimeout(
+    () => controller.abort(),
+    import.meta.env.VITE_BATCH_TIMEOUT_MS || 120000,
+  )
 
-export async function getHealth() {
-  if (USE_MOCK) {
-    return await mockApi.mockHealth()
-  }
-  return await request(ENDPOINTS.health)
-}
-
-export async function getModelInfo() {
-  if (USE_MOCK) {
-    return await mockApi.mockModelInfo()
-  }
   try {
-    return await request(ENDPOINTS.modelInfo)
-  } catch {
-    return null
-  }
-}
+    const formData = new FormData()
+    formData.append('file', file)
 
-/**
- * Normalizes raw prediction response into standard UI shape:
- * { classId, className, probabilities: [{ classId, label, value }] | null, mock }
- */
-export function normalizePrediction(raw, customLabels) {
-  if (!raw || typeof raw !== 'object') {
-    throw new Error('Prediction response is empty or invalid')
-  }
+    const response = await fetch(`${BASE}${ENDPOINTS.predictBatch}`, {
+      method: 'POST',
+      body: formData,
+      signal: controller.signal,
+    })
+    clearTimeout(timeout)
 
-  const rawId = raw.class_id !== undefined ? raw.class_id : (raw.classId !== undefined ? raw.classId : raw.prediction)
-  const classId = rawId !== undefined && rawId !== null ? Number(rawId) : 1
-  const meta = getClassById(classId, customLabels)
-  const className = raw.class_name || raw.className || meta.name
-
-  let probabilities = null
-  const rawProbs = raw.probabilities || raw.probs || null
-
-  if (rawProbs) {
-    if (Array.isArray(rawProbs)) {
-      probabilities = rawProbs.map((p, idx) => {
-        const itemClass = getClassById(idx, customLabels)
-        return {
-          classId: idx,
-          label: itemClass.name,
-          value: Number(p),
-        }
-      })
-    } else if (typeof rawProbs === 'object') {
-      probabilities = Object.entries(rawProbs).map(([k, v]) => {
-        const id = isNaN(Number(k)) ? (DEFAULT_CLASSES.find((c) => c.name === k)?.id ?? 0) : Number(k)
-        const itemClass = getClassById(id, customLabels)
-        return {
-          classId: id,
-          label: itemClass.name,
-          value: Number(v),
-        }
-      })
-      probabilities.sort((a, b) => a.classId - b.classId)
+    if (response.status === 400) {
+      const text = await response.text()
+      try {
+        const json = JSON.parse(text)
+        throw new ApiError({
+          kind: 'validation',
+          status: 400,
+          message: json.error || json.message || 'Validation error',
+          fieldErrors: json.fields || json.errors,
+          raw: text,
+        })
+      } catch {
+        throw new ApiError({
+          kind: 'validation',
+          status: 400,
+          message: text,
+          raw: text,
+        })
+      }
     }
-  }
 
-  return {
-    classId,
-    className,
-    probabilities,
-    mock: Boolean(raw.mock),
+    if (!response.ok) {
+      throw new ApiError({
+        kind: 'server',
+        status: response.status,
+        message: `The server returned an error (HTTP ${response.status})`,
+        raw: await response.text(),
+      })
+    }
+
+    return response.json()
+  } catch (error) {
+    clearTimeout(timeout)
+    if (error.name === 'AbortError') {
+      throw new ApiError({ kind: 'timeout', message: 'The request timed out.' })
+    }
+    if (error instanceof TypeError) {
+      throw new ApiError({ kind: 'network', message: 'Cannot reach the prediction server. Check that the backend is running.' })
+    }
+    throw error
   }
 }
 
-/**
- * Downloads batch results as a CSV file.
- * Checks for download_url first; falls back to generating CSV from rows.
- */
-export async function downloadResults(batchResponse, filename = 'house_classification_results.csv') {
-  if (!batchResponse) return
-
-  if (batchResponse.download_url) {
+export async function downloadResults(response) {
+  if (response.download_url) {
     const a = document.createElement('a')
-    a.href = `${BASE}${batchResponse.download_url}`
-    a.download = filename
-    document.body.appendChild(a)
+    a.href = `${BASE}${response.download_url}`
+    a.download = 'results.csv'
     a.click()
-    document.body.removeChild(a)
     return
   }
 
-  if (batchResponse.rows && Array.isArray(batchResponse.rows)) {
-    const csvContent = buildResultsCsv(batchResponse.rows)
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = filename
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
+  throw new Error('Download mechanism not configured')
+}
+
+export async function getHealth() {
+  if (import.meta.env.VITE_USE_MOCK === 'true') {
+    return mockGetHealth()
   }
+
+  const response = await fetch(`${BASE}${ENDPOINTS.health}`)
+  if (!response.ok) {
+    throw new ApiError({
+      kind: 'server',
+      status: response.status,
+      message: `Health check failed (HTTP ${response.status})`,
+      raw: await response.text(),
+    })
+  }
+  return response.json()
+}
+
+export async function getModelInfo() {
+  if (import.meta.env.VITE_USE_MOCK === 'true') {
+    return mockGetModelInfo()
+  }
+
+  const response = await fetch(`${BASE}${ENDPOINTS.modelInfo}`)
+  if (response.status === 404) {
+    return null
+  }
+  if (!response.ok) {
+    throw new ApiError({
+      kind: 'server',
+      status: response.status,
+      message: `Failed to fetch model info (HTTP ${response.status})`,
+      raw: await response.text(),
+    })
+  }
+  return response.json()
 }

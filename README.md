@@ -1,159 +1,185 @@
-# HousePrice AI — Housing Price Relevance Classification Platform
+# House Price AI
 
-**HousePrice AI** is a web application that classifies whether a residential house's asking price in King County, Washington is attractive or too expensive relative to comparable houses.
-
-The supervised classification model (Decision Tree) predicts one of four target classes:
-- **Class 0**: Cheaper than average
-- **Class 1**: Reasonable price
-- **Class 2**: Over priced
-- **Class 3**: Too over priced
-
----
+A housing price classification application built with React, Vite, and React Router. Features an interactive 3D visualization and a refined design system using the Hallmark Studio theme.
 
 ## Features
 
-- **Classification Workbench (`/prediction`)**:
-  - **Single house tab**: Schema-driven form with asking price (USD) as a required input feature, number/decimal inputs, categorical selects, binary switches, client validation, and real-time loading/error states. Displays predicted class badge, echoed asking price, and class probabilities when supplied.
-  - **Upload CSV tab**: Bulk property classification via drag-and-drop or file browser. Includes client validation of CSV headers against schema features, downloadable template, summary statistics across classes, paginated results table with class badges and row status, and CSV results export.
-- **Decision Tree Model Diagnostics (`/model`)**: Displays model specifications, target class definitions, feature importances, and evaluation confusion matrix when connected to the backend API (`/model_info`).
-- **Dataset Analytics (`/analytics`)**: Figure gallery connecting to exploratory data analysis (EDA) plots supplied by Member 1 (`public/eda/manifest.json`).
-- **Methodology & Documentation (`/about`)**: Dataset column overview, classification framework, and architectural guidelines.
-- **Live Backend & Mock Simulation**: Built-in mock layer (`VITE_USE_MOCK=true`) for offline frontend development and integration testing before backend deployment.
+- **Price Classification**: Classify property listings into four price-relevance categories
+- **Interactive 3D Model**: Visualize each price class on an interactive 3D house model with Three.js
+- **Class Selection**: Switch between the four price categories (Cheaper than average, Reasonable price, Over priced, Too over priced)
+- **Typography Measurement**: Interactive wordmark with font metrics and construction guides
+- **Interactive Form**: Detailed property input with validation
+- **Batch Processing**: Upload CSV files to classify multiple listings at once
+- **Model Documentation**: View the classification schema and model details
+- **Analytics Dashboard**: View class distribution (data placeholder)
+- **Studio Theme**: Design system inspired by Hallmark's Studio theme with proof paper aesthetics
 
----
+## Routes
 
-## Application Routes
+- `/` - Homepage with 3D class visualization and typography measurement
+- `/prediction` - Property classification form with Single house / Upload CSV tabs
+- `/model` - Model details and class schema
+- `/analytics` - Class distribution analytics
+- `/about` - About the classification tool
 
-| Route | Page | Description |
-| :--- | :--- | :--- |
-| `/` | **Home** | Overview, target class explanations, framework metrics, and interface tour |
-| `/prediction` | **Classification Workbench** | Two tabs: Single house form and Batch CSV upload with results table |
-| `/prediction/result` | *Redirect* | Redirects to `/prediction` (results are rendered inline) |
-| `/analytics` | **Dataset Analytics** | Exploratory data analysis figure gallery from team notebooks |
-| `/model` | **Model Diagnostics** | Decision Tree specifications, class definitions, and metrics |
-| `/about` | **About & Dataset** | King County dataset features, schema rules, and methodology |
+## Tech Stack
 
----
+- **React 18.3.1** - UI library
+- **Vite 8.3.5** - Build tool and dev server
+- **React Router 6.28.0** - Client-side routing
+- **Three.js** - 3D rendering library for house model visualization
+- **Node.js** - Runtime environment
 
-## Architecture & Integration (Assumption A1)
+## Design System
 
-The web frontend is built with React 19 and communicates with a Python Flask backend serving the trained scikit-learn Decision Tree pipeline:
+This project uses the Hallmark Studio theme with:
 
-```text
-Browser (React Single Page App)
-  │
-  ├── Single: POST /predict (JSON payload, exact schema feature names)
-  │     └── returns: { class_id, class_name, probabilities }
-  │
-  ├── Batch:  POST /predict_batch (multipart/form-data, file)
-  │     └── returns: { summary, rows: [...], download_url }
-  │
-  └── Status: GET /health, GET /model_info
-```
-
-- In development: Vite proxies API paths (`^/predict$`, `^/predict_batch$`, `^/health$`, `^/model_info$`) to `http://127.0.0.1:5000`.
-- In production: Flask serves `dist/` with a catch-all route for SPA client-side routing, or the frontend is deployed as a standalone static bundle.
-
----
-
-## Environment Configuration
-
-Copy `.env.example` to `.env.local` to configure your environment:
-
-```bash
-# Set to 'true' to run fully offline with simulated mock responses
-VITE_USE_MOCK=true
-
-# API Base URL (empty = same origin or Vite dev proxy)
-VITE_API_BASE_URL=
-
-# Vite dev proxy target (points to Flask backend)
-VITE_DEV_PROXY_TARGET=http://127.0.0.1:5000
-
-# File size guard for CSV uploads (MB)
-VITE_MAX_CSV_MB=5
-
-# Request timeouts (milliseconds)
-VITE_REQUEST_TIMEOUT_MS=30000
-VITE_BATCH_TIMEOUT_MS=120000
-```
-
----
+- **Typography**: Hedvig Letters Serif (display), Geist (body), Sofia Sans Extra Condensed (outlier)
+- **Color**: Cool studio-white paper, blue-black ink, cadmium orange accent
+- **Surfaces**: Proof texture with dot grid and grain, crop marks on printed pieces
+- **Interactive Elements**: Font measurement tool, construction guides, registration marks
+- **Motion**: Subtle transitions respecting `prefers-reduced-motion`
 
 ## Getting Started
 
-### 1. Prerequisites
+### Prerequisites
 
-- **Node.js**: `v20.0.0` or higher (verified on Node `v24`)
-- **npm**: `v9.0.0` or higher
+- Node.js 18 or higher
+- npm or yarn
 
-### 2. Install Dependencies
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/Its-Nassim/Dm_project.git
+cd Dm_project
+
+# Install dependencies (includes Three.js for 3D model)
 npm install
 ```
 
-### 3. Run Development Server
+### Installing Three.js Separately
+
+If you need to install Three.js separately (already included in package.json):
 
 ```bash
-npm run dev
+npm install three
 ```
 
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+### Development
 
----
+```bash
+# Start the development server
+npm run dev
 
-## Available NPM Scripts
+# The app will be available at http://localhost:4173
+```
 
-| Command | Description |
-| :--- | :--- |
-| `npm run dev` | Starts the Vite local development server with proxying |
-| `npm test` | Runs unit tests using Node's built-in test runner (`node --test`) |
-| `npm run lint` | Runs [Oxlint](https://oxc.rs) to inspect source code |
-| `npm run build` | Compiles and bundles production-ready assets into `dist/` |
-| `npm run preview` | Previews the production build locally |
+### Build
 
----
+```bash
+# Build for production
+npm run build
+
+# Preview the production build
+npm run preview
+```
+
+### Testing
+
+```bash
+# Run tests
+npm run test
+```
 
 ## Project Structure
 
-```text
-house-pred/
-├── public/                 # Static assets (images, icons, favicon)
-├── src/
-│   ├── api/                # API client, error normalization, and mock layer
-│   │   ├── client.js       # Fetch wrappers, timeouts, and ApiError normalization
-│   │   └── mock.js         # Simulated responses with failure toggles for testing
-│   ├── components/         # Reusable UI components
-│   │   ├── ApiStatus.jsx   # Live /health indicator in footer
-│   │   ├── ClassBadge.jsx  # Multi-color accessible class badge (icon + ID + label)
-│   │   ├── ErrorBanner.jsx # Accessible role="alert" error notification
-│   │   ├── Footer.jsx      # Application footer
-│   │   ├── Header.jsx      # Navigation header
-│   │   ├── ProbabilityList.jsx # Bar meter visualization for class probabilities
-│   │   ├── SchemaField.jsx # Schema-driven dynamic field renderer
-│   │   └── Tabs.jsx        # Keyboard-accessible ARIA tablist
-│   ├── config/             # Schema configuration and UI metadata
-│   │   ├── classes.js      # Target classification categories and styles
-│   │   ├── featureSchema.js # feature_schema.json loader, mock schema, and validator
-│   │   └── fieldMeta.js    # Display labels, units, and grouping metadata
-│   ├── lib/                # Pure business logic and unit tests
-│   │   ├── csv.js          # RFC 4180 CSV parser, header validator, and serializer
-│   │   ├── payload.js      # Request payload builder (schema ordering & casting)
-│   │   └── validation.js   # Single house validation rules and soft warnings
-│   ├── pages/              # Application views
-│   │   ├── About.jsx       # System methodology & dataset documentation
-│   │   ├── Analytics.jsx   # Figure gallery from exploratory data analysis
-│   │   ├── BatchUpload.jsx # CSV drag-and-drop, table, pagination, and export
-│   │   ├── Home.jsx        # Executive landing page
-│   │   ├── Model.jsx       # Decision Tree specs, class cards, and evaluation
-│   │   ├── PredictionForm.jsx # Workbench tabs shell (Single house & CSV upload)
-│   │   └── SingleHouse.jsx # Schema-driven single property classification form
-│   ├── styles/             # Design tokens, variables, typography, and base CSS
-│   ├── App.jsx             # React Router routing configuration
-│   └── main.jsx            # React root mount
-├── .env.example            # Environment variables template
-├── index.html              # HTML entry point with web font imports
-├── package.json            # Project dependencies and test/lint scripts
-└── vite.config.js          # Vite configuration with regex-anchored dev proxy
 ```
+src/
+├── api/              # API layer (mock provider)
+│   ├── client.js     # API client with error handling
+│   └── mock.js       # Mock prediction service
+├── components/       # Reusable components
+│   ├── ClassBadge.jsx
+│   ├── Footer.jsx
+│   ├── Header.jsx
+│   ├── House3D.jsx   # Three.js 3D house model
+│   ├── MeasureSheet.jsx
+│   ├── ProbabilityList.jsx
+│   ├── SchemaField.jsx
+│   └── Wordmark.jsx  # Interactive wordmark
+├── config/           # Configuration files
+│   ├── classes.js    # Class definitions
+│   ├── featureSchema.js
+│   └── fieldMeta.js
+├── lib/              # Utility functions
+│   ├── csv.js
+│   ├── fontMetrics.js
+│   ├── measure.js
+│   ├── payload.js
+│   ├── schema.js
+│   └── validation.js
+├── pages/            # Page components
+│   ├── About.jsx
+│   ├── Analytics.jsx
+│   ├── Home.jsx      # Homepage with 3D model
+│   ├── Model.jsx
+│   └── PredictionForm.jsx
+├── styles/           # Design system
+│   ├── base.css
+│   └── tokens.css
+├── App.jsx           # Main app component
+└── main.jsx          # Entry point
+```
+
+## Classification Schema
+
+The model classifies properties into four categories:
+
+|| Class ID | Label | Description |
+||----------|-------|-------------|
+|| 0 | Cheaper than average | Below market price |
+|| 1 | Reasonable price | At market price |
+|| 2 | Over priced | Above market price |
+|| 3 | Too over priced | Significantly above market price |
+
+The homepage features an interactive 3D house model that changes appearance based on the selected class category.
+
+## API Integration
+
+Currently uses a local mock provider for predictions. To connect to a real API:
+
+1. Set `VITE_USE_MOCK=false` in `.env.local`
+2. Configure `VITE_API_BASE_URL` and `VITE_DEV_PROXY_TARGET` in `.env.local`
+3. Update `src/api/client.js` endpoints if needed
+4. The dev server proxies API requests to the Flask backend
+
+## Field Schema
+
+The classification uses the following property fields:
+
+- **Price**: price (required, USD)
+- **Location**: zipcode, lat, long
+- **Size and layout**: bedrooms, bathrooms, floors, sqft_living, sqft_lot, sqft_above, sqft_basement, sqft_living15, sqft_lot15
+- **Quality and history**: waterfront, view, condition, grade, yr_built, yr_renovated
+
+## Browser Support
+
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+
+## License
+
+This project is private and proprietary.
+
+## Contributing
+
+This is a client project. Please contact the maintainers before making changes.
+
+## Credits
+
+- Design system inspired by [Hallmark](https://github.com/cognition-artifex/hallmark)
+- Theme: Studio (proof paper with construction guides)
+- 3D rendering powered by Three.js

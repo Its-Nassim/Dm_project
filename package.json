@@ -1,25 +1,23 @@
 {
-  "name": "house-pred",
+  "name": "house-price-pred",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 0.0.0.0 --port 4173",
     "build": "vite build",
-    "lint": "oxlint",
-    "preview": "vite preview",
-    "test": "node --test"
+    "lint": "eslint .",
+    "test": "node --test",
+    "check:theme": "node scripts/check-theme.mjs"
   },
   "dependencies": {
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "react-router-dom": "^7.18.4"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.18.5",
+    "three": "^0.187.0"
   },
   "devDependencies": {
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.7",
-    "@vitejs/plugin-react": "^6.1.1",
-    "oxlint": "^1.81.0",
-    "vite": "^8.3.0"
+    "@vitejs/plugin-react": "^6.3.0",
+    "vite": "^8.3.5"
   }
 }

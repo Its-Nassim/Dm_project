@@ -1,151 +1,120 @@
-import { DEFAULT_CLASSES } from '../config/classes.js'
-import { parseCsvRows } from '../lib/csv.js'
-
-function getMockQueryFlag() {
-  if (typeof window === 'undefined' || !window.location) return null
+export async function mockRequestPrediction(payload) {
   const params = new URLSearchParams(window.location.search)
-  return params.get('mock')
-}
+  const mockError = params.get('mock')
 
-function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
-
-function hashString(str) {
-  let hash = 0
-  for (let i = 0; i < str.length; i++) {
-    hash = (hash << 5) - hash + str.charCodeAt(i)
-    hash |= 0
+  if (mockError === 'error400') {
+    throw new Error('Validation error: Asking price must be greater than 0')
   }
-  return Math.abs(hash)
-}
-
-export async function mockPredictSingle(payload) {
-  const flag = getMockQueryFlag()
-
-  if (flag === 'slow') {
-    await delay(3500)
-  } else {
-    await delay(600 + Math.random() * 300)
+  if (mockError === 'error500') {
+    throw new Error('Internal server error')
+  }
+  if (mockError === 'network') {
+    throw new TypeError('Network error')
+  }
+  if (mockError === 'slow') {
+    await new Promise((resolve) => setTimeout(resolve, 5000))
   }
 
-  if (flag === 'error400') {
-    const error = new Error('Asking price must be greater than 0')
-    error.status = 400
-    error.fieldErrors = { price: 'Must be greater than 0' }
-    throw error
+  const delay = 600 + Math.random() * 300
+  await new Promise((resolve) => setTimeout(resolve, delay))
+
+  const price = Number(payload.price || 0)
+  const score = Math.min(
+    1,
+    Math.max(
+      0,
+      (price - 350000) / 800000 +
+        (Number(payload.sqft_living || 0) / 8000) * 0.2 +
+        (Number(payload.bedrooms || 0) / 6) * 0.2,
+    ),
+  )
+
+  const raw = [
+    Math.max(0.05, 0.55 - score * 0.42),
+    Math.max(0.1, 0.7 - score * 0.25),
+    Math.max(0.12, 0.3 + score * 0.6),
+    Math.max(0.06, 0.22 + score * 0.55),
+  ]
+
+  const total = raw.reduce((sum, value) => sum + value, 0)
+  const probabilities = raw.map((value) => Number((value / total).toFixed(3)))
+  const classId = probabilities.indexOf(Math.max(...probabilities))
+
+  const classNames = {
+    0: 'Cheaper than average',
+    1: 'Reasonable price',
+    2: 'Over priced',
+    3: 'Too over priced',
   }
-
-  if (flag === 'error500') {
-    const error = new Error('Internal server error during classification')
-    error.status = 500
-    throw error
-  }
-
-  if (flag === 'network') {
-    const error = new TypeError('Failed to fetch')
-    throw error
-  }
-
-  // Deterministic mock class derived from payload
-  const seedStr = JSON.stringify(payload || {})
-  const hash = hashString(seedStr)
-  const classId = hash % 4
-  const cls = DEFAULT_CLASSES.find((c) => c.id === classId) || DEFAULT_CLASSES[1]
-
-  // Mock probabilities summing to 1.0
-  const baseProb = 0.55
-  const probs = { 0: 0.1, 1: 0.1, 2: 0.1, 3: 0.1 }
-  probs[classId] = parseFloat((baseProb + (hash % 15) / 100).toFixed(2))
-  const remainingKeys = [0, 1, 2, 3].filter((k) => k !== classId)
-  const leftover = parseFloat((1 - probs[classId]).toFixed(2))
-  probs[remainingKeys[0]] = parseFloat((leftover * 0.5).toFixed(2))
-  probs[remainingKeys[1]] = parseFloat((leftover * 0.3).toFixed(2))
-  probs[remainingKeys[2]] = parseFloat((1 - (probs[classId] + probs[remainingKeys[0]] + probs[remainingKeys[1]])).toFixed(2))
 
   return {
-    class_id: cls.id,
-    class_name: cls.name,
-    probabilities: probs,
+    class_id: classId,
+    class_name: classNames[classId],
+    probabilities: {
+      0: probabilities[0],
+      1: probabilities[1],
+      2: probabilities[2],
+      3: probabilities[3],
+    },
     mock: true,
   }
 }
 
-export async function mockPredictBatch(file) {
-  const flag = getMockQueryFlag()
-
-  if (flag === 'batcherror') {
-    await delay(800)
-    const err = new Error('Missing required columns: price, bedrooms')
-    err.status = 400
-    throw err
+export async function mockRequestBatchPrediction(file) {
+  const params = new URLSearchParams(window.location.search)
+  if (params.get('mock') === 'batcherror') {
+    throw new Error('Batch validation error')
   }
 
-  if (flag === 'slow') {
-    await delay(4000)
-  } else {
-    await delay(1000 + Math.random() * 500)
-  }
+  const delay = 600 + Math.random() * 300
+  await new Promise((resolve) => setTimeout(resolve, delay))
 
   const text = await file.text()
-  const rows = parseCsvRows(text)
+  const lines = text.split('\n').filter((line) => line.trim())
+  const header = lines[0].split(',')
+  const dataLines = lines.slice(1)
 
-  const classifiedRows = []
-  let predicted = 0
-  let failed = 0
-
-  rows.forEach((row, idx) => {
-    const rowNum = idx + 1
-    const price = row.price ? Number(row.price) : null
-
-    if (!price || isNaN(price) || price <= 0) {
-      failed++
-      classifiedRows.push({
-        row: rowNum,
-        price: row.price || '',
-        error: 'Invalid or missing asking price',
+  const results = await Promise.all(
+    dataLines.map(async (line, index) => {
+      const values = line.split(',')
+      const record = {}
+      header.forEach((key, i) => {
+        record[key.trim()] = values[i]?.trim()
       })
-      return
-    }
 
-    predicted++
-    const hash = hashString(`${rowNum}-${price}`)
-    const classId = hash % 4
-    const cls = DEFAULT_CLASSES.find((c) => c.id === classId) || DEFAULT_CLASSES[1]
-
-    classifiedRows.push({
-      row: rowNum,
-      price,
-      class_id: cls.id,
-      class_name: cls.name,
-      top_prob: 0.65 + ((hash % 25) / 100),
-      probabilities: {
-        0: classId === 0 ? 0.7 : 0.1,
-        1: classId === 1 ? 0.7 : 0.1,
-        2: classId === 2 ? 0.7 : 0.1,
-        3: classId === 3 ? 0.7 : 0.1,
-      },
-    })
-  })
+      try {
+        const prediction = await mockRequestPrediction(record)
+        return {
+          row: index + 1,
+          price: record.price,
+          class_id: prediction.class_id,
+          class_name: prediction.class_name,
+          probabilities: prediction.probabilities,
+          mock: true,
+        }
+      } catch (error) {
+        return {
+          row: index + 1,
+          error: error.message,
+        }
+      }
+    }),
+  )
 
   return {
     summary: {
-      rows: rows.length,
-      predicted,
-      failed,
+      rows: dataLines.length,
+      predicted: results.filter((r) => !r.error).length,
+      failed: results.filter((r) => r.error).length,
     },
-    rows: classifiedRows,
-    mock: true,
+    rows: results,
   }
 }
 
-export async function mockHealth() {
-  await delay(100)
-  return { status: 'ok', mock: true }
+export async function mockGetHealth() {
+  return { status: 'ok' }
 }
 
-export async function mockModelInfo() {
-  // Return null / 404 in mock mode so Model and Analytics show the "not connected" state
-  await delay(150)
+export async function mockGetModelInfo() {
   return null
 }

@@ -1,32 +1,29 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import Header from './components/Header'
-import Footer from './components/Footer'
-import Home from './pages/Home'
-import About from './pages/About'
-import Analytics from './pages/Analytics'
-import Model from './pages/Model'
-import PredictionForm from './pages/PredictionForm'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import Header from './components/Header.jsx'
+import Footer from './components/Footer.jsx'
+import Home from './pages/Home.jsx'
+import PredictionForm from './pages/PredictionForm.jsx'
+import Model from './pages/Model.jsx'
+import Analytics from './pages/Analytics.jsx'
+import About from './pages/About.jsx'
 
-function App() {
+export default function App() {
   return (
-    <Router>
-      <div className="app">
+    <BrowserRouter>
+      <div className="page-shell">
         <Header />
-        <a className="skip-link" href="#main">Skip to content</a>
-        <main className="main" id="main" tabIndex="-1">
+        <main>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/model" element={<Model />} />
             <Route path="/prediction" element={<PredictionForm />} />
-            <Route path="/prediction/result" element={<Navigate to="/prediction" replace />} />
+            <Route path="/model" element={<Model />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/about" element={<About />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
         <Footer />
       </div>
-    </Router>
+    </BrowserRouter>
   )
 }
-
-export default App
