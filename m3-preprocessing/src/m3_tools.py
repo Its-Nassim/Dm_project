@@ -70,15 +70,39 @@ def split_xy(df):
 
 def prepare_input(df):
     """Met un DataFrame brut (formulaire / CSV) dans le format attendu :
-    colonnes dans le bon ordre, zipcode en texte. Leve une erreur claire sinon."""
+    colonnes dans le bon ordre, variables numeriques converties en nombres, zipcode en texte.
+
+    Leve une ValueError claire (a transformer en erreur HTTP 400 cote serveur) si :
+      - une colonne est absente ;
+      - `price` est absent, non numerique ou <= 0 (regle de feature_schema.json) ;
+      - `zipcode` est absent (sinon l'imputeur le remplacerait en silence par le plus frequent) ;
+      - une variable numerique contient une valeur non numerique (ex. "abc").
+    Une valeur numerique absente (autre que price) reste NaN : le pipeline l'impute par la mediane.
+    """
     missing = [c for c in FEATURE_ORDER if c not in df.columns]
     if missing:
         raise ValueError(f"Colonnes manquantes : {missing}")
-    out = df[FEATURE_ORDER].copy()
-    zc = out["zipcode"]
+    raw = df[FEATURE_ORDER].copy()
+    out = raw.copy()
+
+    # Conversion numerique : "abc" devient NaN, on le detecte ensuite (distinct d'une vraie valeur absente)
+    for c in NUMERICAL:
+        out[c] = pd.to_numeric(raw[c], errors="coerce")
+        bad = out[c].isna() & raw[c].notna() & (raw[c].astype(str).str.strip() != "")
+        if bad.any():
+            raise ValueError(f"{c} : valeur non numerique ({raw.loc[bad, c].iloc[0]!r})")
+
+    # Regle du schema : prix obligatoire et strictement positif
+    if out["price"].isna().any() or (out["price"] <= 0).any():
+        raise ValueError("price : obligatoire et strictement positif")
+
+    # zipcode obligatoire (identifiant, pas de valeur de remplacement raisonnable)
+    zc = raw["zipcode"]
+    if zc.isna().any() or (zc.astype(str).str.strip() == "").any():
+        raise ValueError("zipcode : obligatoire")
     # astype(str) turns NaN into the text "nan" in pandas 2 but keeps it missing in pandas 3;
-    # masking keeps a missing zipcode missing so the pipeline's imputer behaves the same everywhere.
-    out["zipcode"] = zc.where(zc.isna(), zc.astype(str).str.strip().str.replace(r"\.0$", "", regex=True))
+    # le masquage garde un comportement identique partout. "98115.0" (CSV/JSON) devient "98115".
+    out["zipcode"] = zc.astype(str).str.strip().str.replace(r"\.0$", "", regex=True)
     return out
 
 
@@ -257,6 +281,9 @@ def tune_model(name, X_train, y_train, search="grid", cv=5, scoring="f1_macro",
                n_iter=20, n_jobs=-1, param_grid=None):
     """GridSearchCV (ou RandomizedSearchCV) stratifie, K >= 5, score par defaut = F1 macro."""
     assert cv >= 5, "Le bareme exige K >= 5"
+    if param_grid is None and name not in PARAM_GRIDS:
+        raise ValueError(f"{name} n'a pas de grille d'hyperparametres "
+                         f"(modele exempte de l'optimisation, ex. Zero-R)")
     pipe = make_model_pipeline(name)
     grid = param_grid or PARAM_GRIDS[name]
     skf = StratifiedKFold(n_splits=cv, shuffle=True, random_state=RANDOM_STATE)
