@@ -1,0 +1,10 @@
+# M3 - preprocessing & evaluation framework
+# scikit-learn MUST be identical for every team member and for the Flask server
+scikit-learn==1.9.1
+pandas>=2.2
+numpy>=1.26
+matplotlib>=3.8
+seaborn>=0.13
+joblib>=1.4
+notebook>=7
+ipykernel>=6
