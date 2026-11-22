@@ -43,6 +43,9 @@ X_train = pd.read_csv("data/split/X_train.csv", index_col=0, dtype={"zipcode": s
 y_train = pd.read_csv("data/split/y_train.csv", index_col=0)["price_category"]
 ```
 
+## Validation des entrées (`prepare_input`)
+`prepare_input(df)` lève une `ValueError` claire (à renvoyer en HTTP 400) si une colonne manque, si `price` est absent / non numérique / <= 0, si `zipcode` est absent, ou si une variable numérique contient du texte. Il ne vérifie pas les plages min/max (voir `model/feature_schema.json`) : à faire côté formulaire / serveur. `tune_model("Zero-R")` lève une `ValueError` (Zero-R n'a pas d'hyperparamètres).
+
 ## Règles
 - Ne jamais mettre `price_per_sqft`, `size_bucket`, `peer_median`, `peer_level`, `ratio` dans X.
 - Le prix demandé (`price`) reste une variable d'entrée.
