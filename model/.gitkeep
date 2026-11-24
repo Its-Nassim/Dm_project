@@ -1,0 +1,3 @@
+# This folder is where the trained model file goes.
+# See how_to_import_the_model.md at the root of the project for instructions.
+# model.pkl and model_meta.json are gitignored — add them manually after training.

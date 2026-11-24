@@ -1,0 +1,28 @@
+# Python virtual environment
+venv/
+.venv/
+env/
+
+# Compiled Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Trained model file (too large for git — add manually or use Git LFS)
+model/*.pkl
+model/*.joblib
+model/*.h5
+
+# Batch result downloads (temporary, generated at runtime)
+tmp_results/
+
+# Environment / secrets
+.env
+*.env
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
